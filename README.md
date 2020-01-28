@@ -2,5 +2,5 @@
 ## Nicholas Smith, Daniel Aranda, Ty Darnell, Alden Towler
 
 ### Scanner Usage:
-  javac Scanner.java Token.java
-  java Scanner tests/simple.c
+  #### javac Scanner.java Token.java
+  #### java Scanner tests/simple.c
