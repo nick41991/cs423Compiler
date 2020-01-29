@@ -14,7 +14,7 @@ public class Scanner {
    			System.exit(1);
 		}
 		BufferedReader br = null;
-		Token t = new Token("Test", "String");
+		Token t = new Token("Test", 1);
 		ArrayList<Token> tokens = new ArrayList<Token>();
 		try {
 			String s;

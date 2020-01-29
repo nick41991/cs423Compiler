@@ -1,22 +1,23 @@
 public class Token {
+
 	private String value;
-	private String type; //Enum of possible tokens??
+	private int type; //Enum of possible tokens??
 
 	public Token(){
 		this.value = null;
 		this.type = null;
 	}
 
-	public Token(String val, String typ){
+	public Token(String val, int typ){
 		this.value = val;
-		this.type = type;
+		this.type = typ;
 	}
 
 	public String getValue(){
 		return this.value;
 	}
 
-	public String getType(){
+	public int getType(){
                 return this.type;
         }
 
@@ -24,7 +25,7 @@ public class Token {
                 this.value = newVal;
         }
 
-	public void setType(String newTyp){
+	public void setType(int newTyp){
                 this.type = newTyp;
         }
 }
