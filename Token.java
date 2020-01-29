@@ -5,7 +5,7 @@ public class Token {
 
 	public Token(){
 		this.value = null;
-		this.type = null;
+		this.type = -1;
 	}
 
 	public Token(String val, int typ){
