@@ -1,0 +1,33 @@
+Make sure you have java
+you can check with:
+	java --version
+
+	(I have openjdk 11.0.6 2020-01-14)
+
+Install javacc
+	sudo apt-get install javacc
+
+Write the jj file, you will define a class (such as Parser) which will handle the input
+The class name is arbitrary but should reflect functionality.
+
+To compile a jj file:
+	javacc jjfileame.jj
+
+It should generate a bunch of java files if successful, then compile them
+	javac *.java
+
+Run the compiled class defined in the jj file (probably parser)
+	java Parser (input)
+
+It will do what it does based on how the Parser class was defined.
+In the future, we will augment the output classes to integrate them into our project
+
+
+Useful resources:
+https://www.engr.mun.ca/~theo/JavaCC-Tutorial/javacc-tutorial.pdf
+https://www.cs.usfca.edu/~galles/cs414S05/lecture/lecture1.java.pdf
+https://javacc.github.io/javacc/
+https://javacc.github.io/javacc/tutorials
+https://cs.lmu.edu/~ray/notes/javacc/
+
+Feel free to add anything you find
