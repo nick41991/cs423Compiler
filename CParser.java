@@ -12,21 +12,21 @@ import java.util.*;
 
 
       if(args.length == 0){
-        System.out.println("C Parser Version 0.1Alpha:  Reading from standard input . . .");
+        System.out.println("C Parser:  Reading from standard input . . .");
         parser = new CParser(System.in);
       }
       else if(args.length == 1){
-        System.out.println("C Parser Version 0.1Alpha:  Reading from file " + args[0] + " . . ." );
+        System.out.println("C Parser:  Reading from file " + args[0] + " . . ." );
       try {
         parser = new CParser(new java.io.FileInputStream(args[0]));
       }
       catch(java.io.FileNotFoundException e){
-        System.out.println("C Parser Version 0.1:  File " + args[0] + " not found.");
+        System.out.println("C Parser:  File " + args[0] + " not found.");
         return ;
         }
       }
       else {
-        System.out.println("C Parser Version 0.1Alpha:  Usage is one of:");
+        System.out.println("C Parser:  Usage is one of:");
         System.out.println("         java CParser < inputfile");
         System.out.println("OR");
         System.out.println("         java CParser inputfile");
@@ -34,10 +34,10 @@ import java.util.*;
       }
       try {
         parser.Program();
-        System.out.println("C Parser Version 0.1Alpha:  Java program parsed successfully.");
+        System.out.println("C Parser:  C program parsed successfully.");
       }
       catch(ParseException e){
-        System.out.println("C Parser Version 0.1Alpha:  Encountered errors during parse.");
+        System.out.println("C Parser:  Encountered errors during parse.");
         e.printStackTrace();
       }
     }
@@ -305,54 +305,7 @@ import java.util.*;
     jj_consume_token(29);
     Expression();
     jj_consume_token(30);
-    switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-    case INTEGER_LITERAL:
-    case CHARACTER_LITERAL:
-    case STRING_LITERAL:
-    case CONTINUE:
-    case RETURN:
-    case WHILE:
-    case BREAK:
-    case IF:
-    case GOTO:
-    case INT:
-    case VOID:
-    case IDENTIFIER:
-    case 28:
-    case 29:
-    case 32:
-    case 35:
-      switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-      case 32:
-        CompoundStatement();
-        break;
-      case INTEGER_LITERAL:
-      case CHARACTER_LITERAL:
-      case STRING_LITERAL:
-      case CONTINUE:
-      case RETURN:
-      case WHILE:
-      case BREAK:
-      case IF:
-      case GOTO:
-      case INT:
-      case VOID:
-      case IDENTIFIER:
-      case 28:
-      case 29:
-      case 35:
-        Statement();
-        break;
-      default:
-        jj_la1[11] = jj_gen;
-        jj_consume_token(-1);
-        throw new ParseException();
-      }
-      break;
-    default:
-      jj_la1[12] = jj_gen;
-      ;
-    }
+    Statement();
   }
 
   static final public void JumpStatement() throws ParseException {
@@ -384,13 +337,13 @@ import java.util.*;
         Expression();
         break;
       default:
-        jj_la1[13] = jj_gen;
+        jj_la1[11] = jj_gen;
         ;
       }
       jj_consume_token(28);
       break;
     default:
-      jj_la1[14] = jj_gen;
+      jj_la1[12] = jj_gen;
       jj_consume_token(-1);
       throw new ParseException();
     }
@@ -415,7 +368,7 @@ import java.util.*;
         LogicalORExpression();
         break;
       default:
-        jj_la1[15] = jj_gen;
+        jj_la1[13] = jj_gen;
         jj_consume_token(-1);
         throw new ParseException();
       }
@@ -454,7 +407,7 @@ import java.util.*;
       jj_consume_token(40);
       break;
     default:
-      jj_la1[16] = jj_gen;
+      jj_la1[14] = jj_gen;
       jj_consume_token(-1);
       throw new ParseException();
     }
@@ -471,7 +424,7 @@ import java.util.*;
       LogicalORExpression();
       break;
     default:
-      jj_la1[17] = jj_gen;
+      jj_la1[15] = jj_gen;
       ;
     }
   }
@@ -484,7 +437,7 @@ import java.util.*;
       LogicalANDExpression();
       break;
     default:
-      jj_la1[18] = jj_gen;
+      jj_la1[16] = jj_gen;
       ;
     }
   }
@@ -497,7 +450,7 @@ import java.util.*;
       InclusiveORExpression();
       break;
     default:
-      jj_la1[19] = jj_gen;
+      jj_la1[17] = jj_gen;
       ;
     }
   }
@@ -510,7 +463,7 @@ import java.util.*;
       ExclusiveORExpression();
       break;
     default:
-      jj_la1[20] = jj_gen;
+      jj_la1[18] = jj_gen;
       ;
     }
   }
@@ -523,7 +476,7 @@ import java.util.*;
       ANDExpression();
       break;
     default:
-      jj_la1[21] = jj_gen;
+      jj_la1[19] = jj_gen;
       ;
     }
   }
@@ -541,14 +494,14 @@ import java.util.*;
         jj_consume_token(47);
         break;
       default:
-        jj_la1[22] = jj_gen;
+        jj_la1[20] = jj_gen;
         jj_consume_token(-1);
         throw new ParseException();
       }
       EqualityExpression();
       break;
     default:
-      jj_la1[23] = jj_gen;
+      jj_la1[21] = jj_gen;
       ;
     }
   }
@@ -574,14 +527,14 @@ import java.util.*;
         jj_consume_token(51);
         break;
       default:
-        jj_la1[24] = jj_gen;
+        jj_la1[22] = jj_gen;
         jj_consume_token(-1);
         throw new ParseException();
       }
       RelationalExpression();
       break;
     default:
-      jj_la1[25] = jj_gen;
+      jj_la1[23] = jj_gen;
       ;
     }
   }
@@ -602,14 +555,14 @@ import java.util.*;
         jj_consume_token(53);
         break;
       default:
-        jj_la1[26] = jj_gen;
+        jj_la1[24] = jj_gen;
         jj_consume_token(-1);
         throw new ParseException();
       }
       ShiftExpression();
       break;
     default:
-      jj_la1[27] = jj_gen;
+      jj_la1[25] = jj_gen;
       ;
     }
   }
@@ -627,14 +580,14 @@ import java.util.*;
         jj_consume_token(55);
         break;
       default:
-        jj_la1[28] = jj_gen;
+        jj_la1[26] = jj_gen;
         jj_consume_token(-1);
         throw new ParseException();
       }
       AdditiveExpression();
       break;
     default:
-      jj_la1[29] = jj_gen;
+      jj_la1[27] = jj_gen;
       ;
     }
   }
@@ -656,14 +609,14 @@ import java.util.*;
         jj_consume_token(58);
         break;
       default:
-        jj_la1[30] = jj_gen;
+        jj_la1[28] = jj_gen;
         jj_consume_token(-1);
         throw new ParseException();
       }
       MultiplicativeExpression();
       break;
     default:
-      jj_la1[31] = jj_gen;
+      jj_la1[29] = jj_gen;
       ;
     }
   }
@@ -676,7 +629,7 @@ import java.util.*;
       jj_consume_token(30);
       break;
     default:
-      jj_la1[32] = jj_gen;
+      jj_la1[30] = jj_gen;
       if (jj_2_8(2147483647)) {
         Call();
       } else {
@@ -692,7 +645,7 @@ import java.util.*;
           Constant();
           break;
         default:
-          jj_la1[33] = jj_gen;
+          jj_la1[31] = jj_gen;
           jj_consume_token(-1);
           throw new ParseException();
         }
@@ -722,7 +675,7 @@ import java.util.*;
         ;
         break;
       default:
-        jj_la1[34] = jj_gen;
+        jj_la1[32] = jj_gen;
         break label_6;
       }
       Expression();
@@ -741,7 +694,7 @@ import java.util.*;
       jj_consume_token(STRING_LITERAL);
       break;
     default:
-      jj_la1[35] = jj_gen;
+      jj_la1[33] = jj_gen;
       jj_consume_token(-1);
       throw new ParseException();
     }
@@ -1169,6 +1122,19 @@ import java.util.*;
     return false;
   }
 
+  static private boolean jj_3R_63() {
+    Token xsp;
+    xsp = jj_scanpos;
+    if (jj_scan_token(12)) {
+    jj_scanpos = xsp;
+    if (jj_scan_token(13)) {
+    jj_scanpos = xsp;
+    if (jj_scan_token(14)) return true;
+    }
+    }
+    return false;
+  }
+
   static private boolean jj_3R_37() {
     if (jj_scan_token(RETURN)) return true;
     return false;
@@ -1219,19 +1185,6 @@ import java.util.*;
     jj_scanpos = xsp;
     if (jj_3R_37()) return true;
     }
-    }
-    }
-    return false;
-  }
-
-  static private boolean jj_3R_63() {
-    Token xsp;
-    xsp = jj_scanpos;
-    if (jj_scan_token(12)) {
-    jj_scanpos = xsp;
-    if (jj_scan_token(13)) {
-    jj_scanpos = xsp;
-    if (jj_scan_token(14)) return true;
     }
     }
     return false;
@@ -1312,7 +1265,7 @@ import java.util.*;
   static private Token jj_scanpos, jj_lastpos;
   static private int jj_la;
   static private int jj_gen;
-  static final private int[] jj_la1 = new int[36];
+  static final private int[] jj_la1 = new int[34];
   static private int[] jj_la1_0;
   static private int[] jj_la1_1;
   static {
@@ -1320,10 +1273,10 @@ import java.util.*;
       jj_la1_init_1();
    }
    private static void jj_la1_init_0() {
-      jj_la1_0 = new int[] {0x1800000,0x1800000,0x1800000,0x1800000,0x80000000,0x1800000,0x1800000,0x1800000,0x33cff000,0x33cff000,0x23807000,0x33cff000,0x33cff000,0x23807000,0x458000,0x23807000,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x20000000,0x3807000,0x23807000,0x7000,};
+      jj_la1_0 = new int[] {0x1800000,0x1800000,0x1800000,0x1800000,0x80000000,0x1800000,0x1800000,0x1800000,0x33cff000,0x33cff000,0x23807000,0x23807000,0x458000,0x23807000,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x20000000,0x3807000,0x23807000,0x7000,};
    }
    private static void jj_la1_init_1() {
-      jj_la1_1 = new int[] {0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x9,0x9,0x8,0x9,0x9,0x8,0x0,0x0,0x1f0,0x200,0x400,0x800,0x1000,0x2000,0xc000,0xc000,0xf0000,0xf0000,0x300000,0x300000,0xc00000,0xc00000,0x7000000,0x7000000,0x0,0x0,0x8,0x0,};
+      jj_la1_1 = new int[] {0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x9,0x9,0x8,0x8,0x0,0x0,0x1f0,0x200,0x400,0x800,0x1000,0x2000,0xc000,0xc000,0xf0000,0xf0000,0x300000,0x300000,0xc00000,0xc00000,0x7000000,0x7000000,0x0,0x0,0x8,0x0,};
    }
   static final private JJCalls[] jj_2_rtns = new JJCalls[8];
   static private boolean jj_rescan = false;
@@ -1347,7 +1300,7 @@ import java.util.*;
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 36; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 34; i++) jj_la1[i] = -1;
     for (int i = 0; i < jj_2_rtns.length; i++) jj_2_rtns[i] = new JJCalls();
   }
 
@@ -1362,7 +1315,7 @@ import java.util.*;
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 36; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 34; i++) jj_la1[i] = -1;
     for (int i = 0; i < jj_2_rtns.length; i++) jj_2_rtns[i] = new JJCalls();
   }
 
@@ -1380,7 +1333,7 @@ import java.util.*;
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 36; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 34; i++) jj_la1[i] = -1;
     for (int i = 0; i < jj_2_rtns.length; i++) jj_2_rtns[i] = new JJCalls();
   }
 
@@ -1391,7 +1344,7 @@ import java.util.*;
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 36; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 34; i++) jj_la1[i] = -1;
     for (int i = 0; i < jj_2_rtns.length; i++) jj_2_rtns[i] = new JJCalls();
   }
 
@@ -1408,7 +1361,7 @@ import java.util.*;
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 36; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 34; i++) jj_la1[i] = -1;
     for (int i = 0; i < jj_2_rtns.length; i++) jj_2_rtns[i] = new JJCalls();
   }
 
@@ -1418,7 +1371,7 @@ import java.util.*;
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 36; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 34; i++) jj_la1[i] = -1;
     for (int i = 0; i < jj_2_rtns.length; i++) jj_2_rtns[i] = new JJCalls();
   }
 
@@ -1538,7 +1491,7 @@ import java.util.*;
       la1tokens[jj_kind] = true;
       jj_kind = -1;
     }
-    for (int i = 0; i < 36; i++) {
+    for (int i = 0; i < 34; i++) {
       if (jj_la1[i] == jj_gen) {
         for (int j = 0; j < 32; j++) {
           if ((jj_la1_0[i] & (1<<j)) != 0) {

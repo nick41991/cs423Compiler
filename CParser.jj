@@ -13,21 +13,21 @@ import java.util.*;
 
 
       if(args.length == 0){
-        System.out.println("C Parser Version 0.1Alpha:  Reading from standard input . . .");
+        System.out.println("C Parser:  Reading from standard input . . .");
         parser = new CParser(System.in);
       }
       else if(args.length == 1){
-        System.out.println("C Parser Version 0.1Alpha:  Reading from file " + args[0] + " . . ." );
+        System.out.println("C Parser:  Reading from file " + args[0] + " . . ." );
       try {
         parser = new CParser(new java.io.FileInputStream(args[0]));
       }
       catch(java.io.FileNotFoundException e){
-        System.out.println("C Parser Version 0.1:  File " + args[0] + " not found.");
+        System.out.println("C Parser:  File " + args[0] + " not found.");
         return ;
         }
       }
       else {
-        System.out.println("C Parser Version 0.1Alpha:  Usage is one of:");
+        System.out.println("C Parser:  Usage is one of:");
         System.out.println("         java CParser < inputfile");
         System.out.println("OR");
         System.out.println("         java CParser inputfile");
@@ -35,10 +35,10 @@ import java.util.*;
       }
       try {
         parser.Program();
-        System.out.println("C Parser Version 0.1Alpha:  Java program parsed successfully.");
+        System.out.println("C Parser:  C program parsed successfully.");
       }
       catch(ParseException e){
-        System.out.println("C Parser Version 0.1Alpha:  Encountered errors during parse.");
+        System.out.println("C Parser:  Encountered errors during parse.");
         e.printStackTrace();
       }
     }
@@ -72,9 +72,9 @@ SKIP : {
 
 
 TOKEN : { //Literals
- <INTEGER_LITERAL: ["1"-"9"] (["0"-"9"])*>
-|  <CHARACTER_LITERAL: "\'" (~["\'","\\","\n","\r"] | "\\" (["n","t","b","r","f","\\","\'","\""] | ["0"-"7"] (["0"-"7"])? | ["0"-"3"] ["0"-"7"] ["0"-"7"])) "\'">
-|  <STRING_LITERAL: "\"" ( ~["\"","\\","\n","\r"] | "\\" ( ["n","t","b","r","f","\\","\'","\""] | ["0"-"7"] (["0"-"7"])?  | ["0"-"3"] ["0"-"7"] ["0"-"7"] | ( ["\n","\r"] | "\r\n")))* "\"">
+ 	<INTEGER_LITERAL: (["1"-"9"])* ["0"-"9"]> |
+	<CHARACTER_LITERAL: "\'" (~["\'","\\","\n","\r"] | "\\" (["n","t","b","r","f","\\","\'","\""] | ["0"-"7"] (["0"-"7"])? | ["0"-"3"] ["0"-"7"] ["0"-"7"])) "\'"> |
+	<STRING_LITERAL: "\"" ( ~["\"","\\","\n","\r"] | "\\" ( ["n","t","b","r","f","\\","\'","\""] | ["0"-"7"] (["0"-"7"])?  | ["0"-"3"] ["0"-"7"] ["0"-"7"] | ( ["\n","\r"] | "\r\n")))* "\"">
 }
 
 TOKEN : { //Keywords
@@ -184,7 +184,7 @@ void SelectionStatement() : {}
 
 void IterationStatement() : {}
 {
-	( <WHILE> "(" Expression() ")" [CompoundStatement() | Statement()] )
+	( <WHILE> "(" Expression() ")" Statement() )
 }
 
 void JumpStatement() : {}
@@ -290,5 +290,5 @@ void Args() : {}
 
 void Constant() : {}
 {
- <INTEGER_LITERAL> | <CHARACTER_LITERAL> | <STRING_LITERAL>
+	<INTEGER_LITERAL> | <CHARACTER_LITERAL> | <STRING_LITERAL>
 }
