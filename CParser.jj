@@ -185,7 +185,7 @@ void SelectionStatement() : {}
 
 void IterationStatement() : {}
 {
-	( <WHILE> "(" Expression() ")" Statement() )
+	( <WHILE> "(" Expression() ")" CompoundStatement() )
 }
 
 void JumpStatement() : {}
@@ -198,12 +198,12 @@ void JumpStatement() : {}
 
 void Expression() : {}
 {
-	AssignmentExpression() ( "," AssignmentExpression() )*
+	LOOKAHEAD(Variable() AssignmentOperator()) Variable() AssignmentOperator() Expression() | LogicalORExpression()
 }
 
-void AssignmentExpression() : {}
+void Variable() : {}
 {
-	  LOOKAHEAD(UnaryExpression() AssignmentOperator()) UnaryExpression() AssignmentOperator() AssignmentExpression()
+	[LOOKAHEAD(TypeSpecifier()) TypeSpecifier()] <IDENTIFIER>
 }
 
 void AssignmentOperator() : {}
@@ -211,6 +211,9 @@ void AssignmentOperator() : {}
 	( "=" | "*=" | "/=" | "+=" | "-=" )
 }
 
+//Boolean Operations have lower precedence than Mathematical Operations so they are higher in the parse tree
+
+//Boolean Operations: Order of precedence (low to high): || -> && -> | -> ^ -> & -> == or != -> <, >, <=, or >=
 void LogicalORExpression() : {}
 {
 	LogicalANDExpression() [ "||" LogicalORExpression() ]
@@ -245,7 +248,9 @@ void RelationalExpression() : {}
 {
 	ShiftExpression() [ ( "<" | ">" | "<=" | ">=" ) RelationalExpression() ]
 }
+//End of Booleans
 
+//Mathematical Operations: Order of precedence (low to high): >> or << -> + or - -> *, /, or %
 void ShiftExpression() : {}
 {
 	AdditiveExpression() [ ( "<<" | ">>" ) ShiftExpression() ]
@@ -258,40 +263,25 @@ void AdditiveExpression() : {}
 
 void MultiplicativeExpression() : {}
 {
-	UnaryExpression() [ ( "*" | "/" | "%" ) MultiplicativeExpression() ]
-}
-void UnaryExpression() : {}
-{
-	( LOOKAHEAD(3) PostfixExpression() |
-	  "++" UnaryExpression() |
-	  "--" UnaryExpression() )
+	Factor() [ ( "*" | "/" | "%" ) MultiplicativeExpression() ]
 }
 
-void UnaryOperator() : {}
+void Factor() : {}
 {
-	( "&" | "*" | "+" | "-" | "~" | "!" )
+	"(" LogicalORExpression() ")" |
+	LOOKAHEAD(Call()) Call() |
+	Variable() |
+	Constant()
 }
 
-void PostfixExpression() : {}
+void Call() : {}
 {
-	PrimaryExpression() ( "[" Expression() "]" |
-	                      "(" [ LOOKAHEAD(ArgumentExpressionList() ) ArgumentExpressionList() ] ")" |
-	  					  "." <IDENTIFIER> |
-	  					  "->" <IDENTIFIER> |
-	  					  "++" |
-	  					  "--" )*
+	<IDENTIFIER> "(" Args() ")"
 }
 
-void PrimaryExpression() : {}
+void Args() : {}
 {
-	( <IDENTIFIER> |
-	  Constant() |
-	  "(" Expression() ")" )
-}
-
-void ArgumentExpressionList() : {}
-{
-	AssignmentExpression() ( "," AssignmentExpression() )*
+	(Expression())*
 }
 
 void Constant() : {}
