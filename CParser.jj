@@ -174,9 +174,8 @@ void LabeledStatement() : {}
 
 void ExpressionStatement() : {}
 {
-	[ Expression() ] ";"
+ 	[ Expression() ] ";"
 }
-
 
 void SelectionStatement() : {}
 {
@@ -185,7 +184,7 @@ void SelectionStatement() : {}
 
 void IterationStatement() : {}
 {
-	( <WHILE> "(" Expression() ")" CompoundStatement() )
+	( <WHILE> "(" Expression() ")" [CompoundStatement() | Statement()] )
 }
 
 void JumpStatement() : {}
@@ -198,7 +197,12 @@ void JumpStatement() : {}
 
 void Expression() : {}
 {
-	LOOKAHEAD(Variable() AssignmentOperator()) Variable() AssignmentOperator() Expression() | LogicalORExpression()
+	LOOKAHEAD(Variable() AssignmentOperator()) Variable() AssignmentOperator() Expression() | LOOKAHEAD(Negation()) Negation() | LogicalORExpression()
+}
+
+void Negation() : {}
+{
+	"!" Expression()
 }
 
 void Variable() : {}
