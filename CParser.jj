@@ -1,0 +1,300 @@
+PARSER_BEGIN(CParser)
+
+import java.util.*;
+
+  public class CParser{
+
+  	private static void printSuccess(){
+  		System.out.println("Input Parsed Successfully!");
+  	}
+    // Run the parser
+    public static void main ( String args [ ] ) {
+      CParser parser ;
+
+
+      if(args.length == 0){
+        System.out.println("C Parser Version 0.1Alpha:  Reading from standard input . . .");
+        parser = new CParser(System.in);
+      }
+      else if(args.length == 1){
+        System.out.println("C Parser Version 0.1Alpha:  Reading from file " + args[0] + " . . ." );
+      try {
+        parser = new CParser(new java.io.FileInputStream(args[0]));
+      }
+      catch(java.io.FileNotFoundException e){
+        System.out.println("C Parser Version 0.1:  File " + args[0] + " not found.");
+        return ;
+        }
+      }
+      else {
+        System.out.println("C Parser Version 0.1Alpha:  Usage is one of:");
+        System.out.println("         java CParser < inputfile");
+        System.out.println("OR");
+        System.out.println("         java CParser inputfile");
+        return ;
+      }
+      try {
+        parser.Program();
+        System.out.println("C Parser Version 0.1Alpha:  Java program parsed successfully.");
+      }
+      catch(ParseException e){
+        System.out.println("C Parser Version 0.1Alpha:  Encountered errors during parse.");
+        e.printStackTrace();
+      }
+    }
+  }
+
+PARSER_END(CParser)
+
+SKIP : {
+ " "
+|  "\t"
+|  "\n"
+|  "\r"
+|  <"//" (~["\n","\r"])* ("\n" | "\r" | "\r\n")>
+|  <"/*" (~["*"])* "*" ("*" | ~["*","/"] (~["*"])* "*")* "/">
+| "#" : PREPROCESSOR_OUTPUT
+}
+
+<PREPROCESSOR_OUTPUT> SKIP:
+{
+     "\n" : DEFAULT
+}
+
+<PREPROCESSOR_OUTPUT> MORE:
+{
+ "\\\n"
+ |
+ "\\\r\n"
+ |
+ < ~[] >
+}
+
+
+TOKEN : { //Literals
+ <INTEGER_LITERAL: ["1"-"9"] (["0"-"9"])*>
+|  <CHARACTER_LITERAL: "\'" (~["\'","\\","\n","\r"] | "\\" (["n","t","b","r","f","\\","\'","\""] | ["0"-"7"] (["0"-"7"])? | ["0"-"3"] ["0"-"7"] ["0"-"7"])) "\'">
+|  <STRING_LITERAL: "\"" ( ~["\"","\\","\n","\r"] | "\\" ( ["n","t","b","r","f","\\","\'","\""] | ["0"-"7"] (["0"-"7"])?  | ["0"-"3"] ["0"-"7"] ["0"-"7"] | ( ["\n","\r"] | "\r\n")))* "\"">
+}
+
+TOKEN : { //Keywords
+	<CONTINUE: "continue"> |
+	<RETURN: "return"> |
+	<WHILE: "while"> |
+	<BREAK: "break"> |
+	<IF: "if"> |
+	<ELSE: "else"> |
+	<CASE: "case"> |
+	<GOTO: "goto"> |
+	<INT: "int">  |
+	<VOID: "void">
+}
+
+TOKEN : { //Identifiers
+ <IDENTIFIER: <LETTER> (<LETTER> | <DIGIT>)*>
+|  <#LETTER: ["$","A"-"Z","_","a"-"z"]>
+|  <#DIGIT: ["0"-"9"]>
+}
+
+void Program() : {}
+{
+	(DeclarationList())+
+	{printSuccess();}
+}
+
+void DeclarationList() : {}
+{
+	(Declaration())+
+}
+
+void Declaration() : {}
+{
+	( LOOKAHEAD( VarDeclaration() ) VarDeclaration() | FuncDeclaration() )
+}
+
+void VarDeclaration() : {}
+{
+	TypeSpecifier() <IDENTIFIER> ";"
+}
+
+void TypeSpecifier() : {}
+{
+	(<INT> | <VOID>)
+}
+
+void FuncDeclaration() : {}
+{
+	TypeSpecifier() <IDENTIFIER> "(" Params() ")" CompoundStatement()
+}
+
+void Params() : {}
+{
+	( LOOKAHEAD( ParamList() ) ParamList() | <VOID> )
+}
+
+void ParamList() : {}
+{
+	[(LOOKAHEAD( Param() )  Param() | Param() ("," Param())+)]
+}
+
+void Param() : {}
+{
+	TypeSpecifier() <IDENTIFIER>
+}
+
+void CompoundStatement() : {}
+{
+	"{" LocalDeclarations() StatementList() "}"
+}
+
+void LocalDeclarations() : {}
+{
+	(VarDeclaration())*
+}
+
+void StatementList() : {}
+{
+	(Statement())+
+}
+
+void Statement() : {}
+{
+	( LOOKAHEAD(2) LabeledStatement() | //Labels for goto
+	  ExpressionStatement() |
+	  CompoundStatement() |
+	  SelectionStatement() |
+	  IterationStatement() |
+	  JumpStatement() ) // goto and returns
+}
+
+void LabeledStatement() : {}
+{
+	( <IDENTIFIER> ":" Statement() )
+}
+
+void ExpressionStatement() : {}
+{
+	[ Expression() ] ";"
+}
+
+
+void SelectionStatement() : {}
+{
+	( <IF> "(" Expression() ")" Statement() [ LOOKAHEAD(2) <ELSE> Statement() ] )
+}
+
+void IterationStatement() : {}
+{
+	( <WHILE> "(" Expression() ")" Statement() )
+}
+
+void JumpStatement() : {}
+{
+	( <GOTO> <IDENTIFIER> ";" |
+	  <CONTINUE> ";" |
+	  <BREAK> ";" |
+	  <RETURN> [ Expression() ] ";" )
+}
+
+void Expression() : {}
+{
+	AssignmentExpression() ( "," AssignmentExpression() )*
+}
+
+void AssignmentExpression() : {}
+{
+	  LOOKAHEAD(UnaryExpression() AssignmentOperator()) UnaryExpression() AssignmentOperator() AssignmentExpression()
+}
+
+void AssignmentOperator() : {}
+{
+	( "=" | "*=" | "/=" | "+=" | "-=" )
+}
+
+void LogicalORExpression() : {}
+{
+	LogicalANDExpression() [ "||" LogicalORExpression() ]
+}
+
+void LogicalANDExpression() : {}
+{
+	InclusiveORExpression() [ "&&" LogicalANDExpression() ]
+}
+
+void InclusiveORExpression() : {}
+{
+	ExclusiveORExpression() [ "|" InclusiveORExpression() ]
+}
+
+void ExclusiveORExpression() : {}
+{
+	ANDExpression() [ "^" ExclusiveORExpression() ]
+}
+
+void ANDExpression() : {}
+{
+	EqualityExpression() [ "&" ANDExpression() ]
+}
+
+void EqualityExpression() : {}
+{
+	RelationalExpression() [ ( "==" | "!=" ) EqualityExpression() ]
+}
+
+void RelationalExpression() : {}
+{
+	ShiftExpression() [ ( "<" | ">" | "<=" | ">=" ) RelationalExpression() ]
+}
+
+void ShiftExpression() : {}
+{
+	AdditiveExpression() [ ( "<<" | ">>" ) ShiftExpression() ]
+}
+
+void AdditiveExpression() : {}
+{
+	MultiplicativeExpression() [ ( "+" | "-" ) AdditiveExpression() ]
+}
+
+void MultiplicativeExpression() : {}
+{
+	UnaryExpression() [ ( "*" | "/" | "%" ) MultiplicativeExpression() ]
+}
+void UnaryExpression() : {}
+{
+	( LOOKAHEAD(3) PostfixExpression() |
+	  "++" UnaryExpression() |
+	  "--" UnaryExpression() )
+}
+
+void UnaryOperator() : {}
+{
+	( "&" | "*" | "+" | "-" | "~" | "!" )
+}
+
+void PostfixExpression() : {}
+{
+	PrimaryExpression() ( "[" Expression() "]" |
+	                      "(" [ LOOKAHEAD(ArgumentExpressionList() ) ArgumentExpressionList() ] ")" |
+	  					  "." <IDENTIFIER> |
+	  					  "->" <IDENTIFIER> |
+	  					  "++" |
+	  					  "--" )*
+}
+
+void PrimaryExpression() : {}
+{
+	( <IDENTIFIER> |
+	  Constant() |
+	  "(" Expression() ")" )
+}
+
+void ArgumentExpressionList() : {}
+{
+	AssignmentExpression() ( "," AssignmentExpression() )*
+}
+
+void Constant() : {}
+{
+ <INTEGER_LITERAL> | <CHARACTER_LITERAL> | <STRING_LITERAL>
+}
