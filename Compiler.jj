@@ -1,8 +1,8 @@
-PARSER_BEGIN(CParser)
+PARSER_BEGIN(Compiler)
 
 import java.util.*;
 
-public class CParser{
+public class Compiler{
 
   	private static void printSuccess(){
   		System.out.println("Input Parsed Successfully!");
@@ -10,17 +10,17 @@ public class CParser{
 
     // Run the parser
 	public static void main ( String args [ ] ) {
-      		CParser parser;
+      		Compiler parser;
 
 
 		if(args.length == 0){
         		System.out.println("C Parser:  Reading from standard input . . .");
-        		parser = new CParser(System.in);
+        		parser = new Compiler(System.in);
       		}
       		else if(args.length == 1){
         		System.out.println("C Parser:  Reading from file " + args[0] + " . . ." );
       			try {
-        			parser = new CParser(new java.io.FileInputStream(args[0]));
+        			parser = new Compiler(new java.io.FileInputStream(args[0]));
       			}
       			catch(java.io.FileNotFoundException e){
         			System.out.println("C Parser:  File " + args[0] + " not found.");
@@ -28,9 +28,9 @@ public class CParser{
         		}
       		} else {
         		System.out.println("C Parser:  Usage is one of:");
-        		System.out.println("         java CParser < inputfile");
+        		System.out.println("         java Compiler < inputfile");
         		System.out.println("OR");
-        		System.out.println("         java CParser inputfile");
+        		System.out.println("         java Compiler inputfile");
         		return;
       		}
       		try {
@@ -44,7 +44,7 @@ public class CParser{
     	}
 }
 
-PARSER_END(CParser)
+PARSER_END(Compiler)
 
 SKIP : {
  " "
