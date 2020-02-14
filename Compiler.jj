@@ -3,10 +3,21 @@ PARSER_BEGIN(Compiler)
 import java.util.*;
 
 public class Compiler{
+	public static ArrayList<SyntaxToken> tokenList = new ArrayList<SyntaxToken>();
 
   	private static void printSuccess(){
   		System.out.println("Input Parsed Successfully!");
   	}
+
+	private static void printTokens(){
+		for(SyntaxToken tok : tokenList){
+			System.out.println(tok.toString());
+		}
+	}
+
+	private static void printParseTree(){
+		System.out.println("Not Yet Implemented");
+	}
 
     // Run the parser
 	public static void main ( String args [ ] ) {
@@ -53,6 +64,12 @@ public class Compiler{
       		}
       		try {
         		parser.Program();
+			if(tokenBool){
+				printTokens();
+			}
+			if(parseTreeBool){
+				printParseTree();
+			}
         		System.out.println("Compiler:  C program parsed successfully.");
       		}
       		catch(ParseException e){
@@ -299,7 +316,9 @@ void Factor() : {}
 void Call() : {Token t;}
 {
 	(t = <IDENTIFIER> "(" Args() ")")
-	{System.out.println(t.image);}
+	{
+		tokenList.add(new SyntaxToken("IDENTIFIER", t.image));
+	}
 }
 
 void Args() : {}

@@ -12,4 +12,8 @@ public class SyntaxToken {
 		image = i;
 	}
 
+	public String toString(){
+		return ("<" + image + ", " + type + ">");
+	}
+
 }
