@@ -300,9 +300,14 @@ void AdditiveExpression() : {}
 	MultiplicativeExpression() [ ( "+" | "-" ) AdditiveExpression() ]
 }
 
-void MultiplicativeExpression() : {}
+void MultiplicativeExpression() : {Token mult; Token div; Token mod}
 {
-	Factor() [ ( "*" | "/" | "%" ) MultiplicativeExpression() ]
+	Factor() [ ( mult = "*" div = "/" mod = "%" ) MultiplicativeExpression() ]
+	{
+		tokenList.add(new SyntaxToken("MULOP", mult.image));
+		tokenList.add(new SyntaxToken("MULOP", div.image));
+		tokenList.add(new SyntaxToken("MULOP", mod.image));
+	}
 }
 
 void Factor() : {}
@@ -328,7 +333,12 @@ void Args() : {}
 	(Expression())*
 }
 
-void Constant() : {}
+void Constant() : {Token i; Token l; Token s}
 {
-	<INTEGER_LITERAL> | <CHARACTER_LITERAL> | <STRING_LITERAL>
+	(i = <INTEGER_LITERAL> l = <CHARACTER_LITERAL> s = <STRING_LITERAL>)
+	{
+		tokenList.add(new SyntaxToken("INTEGER_LITERAL", i.image));
+		tokenList.add(new SyntaxToken("CHARACTER_LITERAL", l.image));
+		tokenList.add(new SyntaxToken("STRING_LITERAL", s.image));
+	}
 }
