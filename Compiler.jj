@@ -313,11 +313,13 @@ void Factor() : {}
 	Constant()
 }
 
-void Call() : {Token t;}
+void Call() : {Token t; Token l; Token r;}
 {
-	(t = <IDENTIFIER> "(" Args() ")")
+	(t = <IDENTIFIER> l = "(" Args() r = ")")
 	{
 		tokenList.add(new SyntaxToken("IDENTIFIER", t.image));
+		tokenList.add(new SyntaxToken("LPAREN", l.image));
+		tokenList.add(new SyntaxToken("RPAREN", r.image));
 	}
 }
 

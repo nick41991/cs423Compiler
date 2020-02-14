@@ -689,13 +689,14 @@ public class Compiler implements CompilerConstants {
   }
 
   static final public void Call() throws ParseException {
-               Token t;
+               Token t; Token l; Token r;
     t = jj_consume_token(IDENTIFIER);
-    jj_consume_token(29);
+    l = jj_consume_token(29);
     Args();
-    jj_consume_token(30);
-                System.out.println(t.image);
+    r = jj_consume_token(30);
                 tokenList.add(new SyntaxToken("IDENTIFIER", t.image));
+                tokenList.add(new SyntaxToken("LPAREN", l.image));
+                tokenList.add(new SyntaxToken("RPAREN", r.image));
   }
 
   static final public void Args() throws ParseException {
@@ -968,17 +969,17 @@ public class Compiler implements CompilerConstants {
     return false;
   }
 
-  static private boolean jj_3R_37() {
-    if (jj_scan_token(RETURN)) return true;
-    return false;
-  }
-
   static private boolean jj_3R_23() {
     Token xsp;
     while (true) {
       xsp = jj_scanpos;
       if (jj_3R_32()) { jj_scanpos = xsp; break; }
     }
+    return false;
+  }
+
+  static private boolean jj_3R_37() {
+    if (jj_scan_token(RETURN)) return true;
     return false;
   }
 
