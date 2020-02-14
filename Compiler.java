@@ -233,8 +233,6 @@ public class Compiler implements CompilerConstants {
       Statement();
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
       case INTEGER_LITERAL:
-      case CHARACTER_LITERAL:
-      case STRING_LITERAL:
       case CONTINUE:
       case RETURN:
       case WHILE:
@@ -263,8 +261,6 @@ public class Compiler implements CompilerConstants {
     } else {
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
       case INTEGER_LITERAL:
-      case CHARACTER_LITERAL:
-      case STRING_LITERAL:
       case INT:
       case VOID:
       case IDENTIFIER:
@@ -305,8 +301,6 @@ public class Compiler implements CompilerConstants {
   static final public void ExpressionStatement() throws ParseException {
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
     case INTEGER_LITERAL:
-    case CHARACTER_LITERAL:
-    case STRING_LITERAL:
     case INT:
     case VOID:
     case IDENTIFIER:
@@ -362,8 +356,6 @@ public class Compiler implements CompilerConstants {
       jj_consume_token(RETURN);
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
       case INTEGER_LITERAL:
-      case CHARACTER_LITERAL:
-      case STRING_LITERAL:
       case INT:
       case VOID:
       case IDENTIFIER:
@@ -394,8 +386,6 @@ public class Compiler implements CompilerConstants {
     } else {
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
       case INTEGER_LITERAL:
-      case CHARACTER_LITERAL:
-      case STRING_LITERAL:
       case INT:
       case VOID:
       case IDENTIFIER:
@@ -542,34 +532,22 @@ public class Compiler implements CompilerConstants {
   }
 
   static final public void RelationalExpression() throws ParseException {
+                               Token l; Token g; Token le; Token ge;
     ShiftExpression();
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
     case 48:
-    case 49:
-    case 50:
-    case 51:
-      switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-      case 48:
-        jj_consume_token(48);
-        break;
-      case 49:
-        jj_consume_token(49);
-        break;
-      case 50:
-        jj_consume_token(50);
-        break;
-      case 51:
-        jj_consume_token(51);
-        break;
-      default:
-        jj_la1[22] = jj_gen;
-        jj_consume_token(-1);
-        throw new ParseException();
-      }
+      l = jj_consume_token(48);
+      g = jj_consume_token(49);
+      le = jj_consume_token(50);
+      ge = jj_consume_token(51);
+                tokenList.add(new SyntaxToken("RELOP", l.image));
+                tokenList.add(new SyntaxToken("RELOP", g.image));
+                tokenList.add(new SyntaxToken("RELOP", le.image));
+                tokenList.add(new SyntaxToken("RELOP", ge.image));
       RelationalExpression();
       break;
     default:
-      jj_la1[23] = jj_gen;
+      jj_la1[22] = jj_gen;
       ;
     }
   }
@@ -590,11 +568,28 @@ public class Compiler implements CompilerConstants {
         jj_consume_token(53);
         break;
       default:
-        jj_la1[24] = jj_gen;
+        jj_la1[23] = jj_gen;
         jj_consume_token(-1);
         throw new ParseException();
       }
       ShiftExpression();
+      break;
+    default:
+      jj_la1[24] = jj_gen;
+      ;
+    }
+  }
+
+  static final public void AdditiveExpression() throws ParseException {
+                             Token p; Token m;
+    MultiplicativeExpression();
+    switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+    case 54:
+      p = jj_consume_token(54);
+      m = jj_consume_token(55);
+                tokenList.add(new SyntaxToken("ADDOP", p.image));
+                tokenList.add(new SyntaxToken("ADDOP", m.image));
+      AdditiveExpression();
       break;
     default:
       jj_la1[25] = jj_gen;
@@ -602,56 +597,21 @@ public class Compiler implements CompilerConstants {
     }
   }
 
-  static final public void AdditiveExpression() throws ParseException {
-    MultiplicativeExpression();
-    switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-    case 54:
-    case 55:
-      switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-      case 54:
-        jj_consume_token(54);
-        break;
-      case 55:
-        jj_consume_token(55);
-        break;
-      default:
-        jj_la1[26] = jj_gen;
-        jj_consume_token(-1);
-        throw new ParseException();
-      }
-      AdditiveExpression();
-      break;
-    default:
-      jj_la1[27] = jj_gen;
-      ;
-    }
-  }
-
   static final public void MultiplicativeExpression() throws ParseException {
+                                   Token mult; Token div; Token mod;
     Factor();
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
     case 56:
-    case 57:
-    case 58:
-      switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-      case 56:
-        jj_consume_token(56);
-        break;
-      case 57:
-        jj_consume_token(57);
-        break;
-      case 58:
-        jj_consume_token(58);
-        break;
-      default:
-        jj_la1[28] = jj_gen;
-        jj_consume_token(-1);
-        throw new ParseException();
-      }
+      mult = jj_consume_token(56);
+      div = jj_consume_token(57);
+      mod = jj_consume_token(58);
+                tokenList.add(new SyntaxToken("MULOP", mult.image));
+                tokenList.add(new SyntaxToken("MULOP", div.image));
+                tokenList.add(new SyntaxToken("MULOP", mod.image));
       MultiplicativeExpression();
       break;
     default:
-      jj_la1[29] = jj_gen;
+      jj_la1[26] = jj_gen;
       ;
     }
   }
@@ -664,7 +624,7 @@ public class Compiler implements CompilerConstants {
       jj_consume_token(30);
       break;
     default:
-      jj_la1[30] = jj_gen;
+      jj_la1[27] = jj_gen;
       if (jj_2_8(2147483647)) {
         Call();
       } else {
@@ -675,12 +635,10 @@ public class Compiler implements CompilerConstants {
           Variable();
           break;
         case INTEGER_LITERAL:
-        case CHARACTER_LITERAL:
-        case STRING_LITERAL:
           Constant();
           break;
         default:
-          jj_la1[31] = jj_gen;
+          jj_la1[28] = jj_gen;
           jj_consume_token(-1);
           throw new ParseException();
         }
@@ -704,8 +662,6 @@ public class Compiler implements CompilerConstants {
     while (true) {
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
       case INTEGER_LITERAL:
-      case CHARACTER_LITERAL:
-      case STRING_LITERAL:
       case INT:
       case VOID:
       case IDENTIFIER:
@@ -714,7 +670,7 @@ public class Compiler implements CompilerConstants {
         ;
         break;
       default:
-        jj_la1[32] = jj_gen;
+        jj_la1[29] = jj_gen;
         break label_6;
       }
       Expression();
@@ -722,21 +678,13 @@ public class Compiler implements CompilerConstants {
   }
 
   static final public void Constant() throws ParseException {
-    switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-    case INTEGER_LITERAL:
-      jj_consume_token(INTEGER_LITERAL);
-      break;
-    case CHARACTER_LITERAL:
-      jj_consume_token(CHARACTER_LITERAL);
-      break;
-    case STRING_LITERAL:
-      jj_consume_token(STRING_LITERAL);
-      break;
-    default:
-      jj_la1[33] = jj_gen;
-      jj_consume_token(-1);
-      throw new ParseException();
-    }
+                   Token i; Token l; Token s;
+    i = jj_consume_token(INTEGER_LITERAL);
+    l = jj_consume_token(CHARACTER_LITERAL);
+    s = jj_consume_token(STRING_LITERAL);
+                tokenList.add(new SyntaxToken("INTEGER_LITERAL", i.image));
+                tokenList.add(new SyntaxToken("CHARACTER_LITERAL", l.image));
+                tokenList.add(new SyntaxToken("STRING_LITERAL", s.image));
   }
 
   static private boolean jj_2_1(int xla) {
@@ -830,6 +778,13 @@ public class Compiler implements CompilerConstants {
     return false;
   }
 
+  static private boolean jj_3R_63() {
+    if (jj_scan_token(INTEGER_LITERAL)) return true;
+    if (jj_scan_token(CHARACTER_LITERAL)) return true;
+    if (jj_scan_token(STRING_LITERAL)) return true;
+    return false;
+  }
+
   static private boolean jj_3_4() {
     if (jj_scan_token(ELSE)) return true;
     if (jj_3R_10()) return true;
@@ -851,6 +806,20 @@ public class Compiler implements CompilerConstants {
 
   static private boolean jj_3_1() {
     if (jj_3R_7()) return true;
+    return false;
+  }
+
+  static private boolean jj_3R_32() {
+    if (jj_3R_22()) return true;
+    return false;
+  }
+
+  static private boolean jj_3R_23() {
+    Token xsp;
+    while (true) {
+      xsp = jj_scanpos;
+      if (jj_3R_32()) { jj_scanpos = xsp; break; }
+    }
     return false;
   }
 
@@ -890,6 +859,11 @@ public class Compiler implements CompilerConstants {
     return false;
   }
 
+  static private boolean jj_3_8() {
+    if (jj_3R_15()) return true;
+    return false;
+  }
+
   static private boolean jj_3R_21() {
     if (jj_3R_14()) return true;
     return false;
@@ -909,6 +883,21 @@ public class Compiler implements CompilerConstants {
     return false;
   }
 
+  static private boolean jj_3R_15() {
+    if (jj_scan_token(IDENTIFIER)) return true;
+    if (jj_scan_token(29)) return true;
+    if (jj_3R_23()) return true;
+    if (jj_scan_token(30)) return true;
+    return false;
+  }
+
+  static private boolean jj_3R_56() {
+    if (jj_scan_token(54)) return true;
+    if (jj_scan_token(55)) return true;
+    if (jj_3R_53()) return true;
+    return false;
+  }
+
   static private boolean jj_3R_13() {
     if (jj_scan_token(35)) return true;
     if (jj_3R_22()) return true;
@@ -920,16 +909,49 @@ public class Compiler implements CompilerConstants {
     return false;
   }
 
-  static private boolean jj_3R_63() {
+  static private boolean jj_3R_62() {
+    if (jj_3R_63()) return true;
+    return false;
+  }
+
+  static private boolean jj_3R_61() {
+    if (jj_3R_11()) return true;
+    return false;
+  }
+
+  static private boolean jj_3R_60() {
+    if (jj_3R_15()) return true;
+    return false;
+  }
+
+  static private boolean jj_3R_59() {
+    if (jj_scan_token(29)) return true;
+    if (jj_3R_38()) return true;
+    if (jj_scan_token(30)) return true;
+    return false;
+  }
+
+  static private boolean jj_3R_57() {
     Token xsp;
     xsp = jj_scanpos;
-    if (jj_scan_token(12)) {
+    if (jj_3R_59()) {
     jj_scanpos = xsp;
-    if (jj_scan_token(13)) {
+    if (jj_3R_60()) {
     jj_scanpos = xsp;
-    if (jj_scan_token(14)) return true;
+    if (jj_3R_61()) {
+    jj_scanpos = xsp;
+    if (jj_3R_62()) return true;
     }
     }
+    }
+    return false;
+  }
+
+  static private boolean jj_3R_58() {
+    if (jj_scan_token(56)) return true;
+    if (jj_scan_token(57)) return true;
+    if (jj_scan_token(58)) return true;
+    if (jj_3R_55()) return true;
     return false;
   }
 
@@ -953,33 +975,19 @@ public class Compiler implements CompilerConstants {
     return false;
   }
 
-  static private boolean jj_3R_56() {
-    Token xsp;
-    xsp = jj_scanpos;
-    if (jj_scan_token(54)) {
-    jj_scanpos = xsp;
-    if (jj_scan_token(55)) return true;
-    }
-    if (jj_3R_53()) return true;
-    return false;
-  }
-
-  static private boolean jj_3R_32() {
-    if (jj_3R_22()) return true;
-    return false;
-  }
-
-  static private boolean jj_3R_23() {
-    Token xsp;
-    while (true) {
-      xsp = jj_scanpos;
-      if (jj_3R_32()) { jj_scanpos = xsp; break; }
-    }
-    return false;
-  }
-
   static private boolean jj_3R_37() {
     if (jj_scan_token(RETURN)) return true;
+    return false;
+  }
+
+  static private boolean jj_3R_54() {
+    Token xsp;
+    xsp = jj_scanpos;
+    if (jj_scan_token(52)) {
+    jj_scanpos = xsp;
+    if (jj_scan_token(53)) return true;
+    }
+    if (jj_3R_51()) return true;
     return false;
   }
 
@@ -1019,27 +1027,11 @@ public class Compiler implements CompilerConstants {
     return false;
   }
 
-  static private boolean jj_3_8() {
-    if (jj_3R_15()) return true;
-    return false;
-  }
-
-  static private boolean jj_3R_54() {
+  static private boolean jj_3R_55() {
+    if (jj_3R_57()) return true;
     Token xsp;
     xsp = jj_scanpos;
-    if (jj_scan_token(52)) {
-    jj_scanpos = xsp;
-    if (jj_scan_token(53)) return true;
-    }
-    if (jj_3R_51()) return true;
-    return false;
-  }
-
-  static private boolean jj_3R_15() {
-    if (jj_scan_token(IDENTIFIER)) return true;
-    if (jj_scan_token(29)) return true;
-    if (jj_3R_23()) return true;
-    if (jj_scan_token(30)) return true;
+    if (jj_3R_58()) jj_scanpos = xsp;
     return false;
   }
 
@@ -1048,60 +1040,8 @@ public class Compiler implements CompilerConstants {
     return false;
   }
 
-  static private boolean jj_3R_58() {
-    Token xsp;
-    xsp = jj_scanpos;
-    if (jj_scan_token(56)) {
-    jj_scanpos = xsp;
-    if (jj_scan_token(57)) {
-    jj_scanpos = xsp;
-    if (jj_scan_token(58)) return true;
-    }
-    }
-    if (jj_3R_55()) return true;
-    return false;
-  }
-
-  static private boolean jj_3R_62() {
-    if (jj_3R_63()) return true;
-    return false;
-  }
-
-  static private boolean jj_3R_61() {
-    if (jj_3R_11()) return true;
-    return false;
-  }
-
   static private boolean jj_3R_26() {
     if (jj_scan_token(IF)) return true;
-    return false;
-  }
-
-  static private boolean jj_3R_60() {
-    if (jj_3R_15()) return true;
-    return false;
-  }
-
-  static private boolean jj_3R_59() {
-    if (jj_scan_token(29)) return true;
-    if (jj_3R_38()) return true;
-    if (jj_scan_token(30)) return true;
-    return false;
-  }
-
-  static private boolean jj_3R_57() {
-    Token xsp;
-    xsp = jj_scanpos;
-    if (jj_3R_59()) {
-    jj_scanpos = xsp;
-    if (jj_3R_60()) {
-    jj_scanpos = xsp;
-    if (jj_3R_61()) {
-    jj_scanpos = xsp;
-    if (jj_3R_62()) return true;
-    }
-    }
-    }
     return false;
   }
 
@@ -1110,19 +1050,19 @@ public class Compiler implements CompilerConstants {
     return false;
   }
 
-  static private boolean jj_3R_52() {
+  static private boolean jj_3R_53() {
+    if (jj_3R_55()) return true;
     Token xsp;
     xsp = jj_scanpos;
-    if (jj_scan_token(48)) {
-    jj_scanpos = xsp;
-    if (jj_scan_token(49)) {
-    jj_scanpos = xsp;
-    if (jj_scan_token(50)) {
-    jj_scanpos = xsp;
+    if (jj_3R_56()) jj_scanpos = xsp;
+    return false;
+  }
+
+  static private boolean jj_3R_52() {
+    if (jj_scan_token(48)) return true;
+    if (jj_scan_token(49)) return true;
+    if (jj_scan_token(50)) return true;
     if (jj_scan_token(51)) return true;
-    }
-    }
-    }
     if (jj_3R_49()) return true;
     return false;
   }
@@ -1146,11 +1086,11 @@ public class Compiler implements CompilerConstants {
     return false;
   }
 
-  static private boolean jj_3R_55() {
-    if (jj_3R_57()) return true;
+  static private boolean jj_3R_51() {
+    if (jj_3R_53()) return true;
     Token xsp;
     xsp = jj_scanpos;
-    if (jj_3R_58()) jj_scanpos = xsp;
+    if (jj_3R_54()) jj_scanpos = xsp;
     return false;
   }
 
@@ -1163,14 +1103,6 @@ public class Compiler implements CompilerConstants {
   static private boolean jj_3R_48() {
     if (jj_scan_token(45)) return true;
     if (jj_3R_45()) return true;
-    return false;
-  }
-
-  static private boolean jj_3R_53() {
-    if (jj_3R_55()) return true;
-    Token xsp;
-    xsp = jj_scanpos;
-    if (jj_3R_56()) jj_scanpos = xsp;
     return false;
   }
 
@@ -1191,14 +1123,6 @@ public class Compiler implements CompilerConstants {
 
   static private boolean jj_3R_17() {
     if (jj_3R_25()) return true;
-    return false;
-  }
-
-  static private boolean jj_3R_51() {
-    if (jj_3R_53()) return true;
-    Token xsp;
-    xsp = jj_scanpos;
-    if (jj_3R_54()) jj_scanpos = xsp;
     return false;
   }
 
@@ -1304,7 +1228,7 @@ public class Compiler implements CompilerConstants {
   static private Token jj_scanpos, jj_lastpos;
   static private int jj_la;
   static private int jj_gen;
-  static final private int[] jj_la1 = new int[34];
+  static final private int[] jj_la1 = new int[30];
   static private int[] jj_la1_0;
   static private int[] jj_la1_1;
   static {
@@ -1312,10 +1236,10 @@ public class Compiler implements CompilerConstants {
       jj_la1_init_1();
    }
    private static void jj_la1_init_0() {
-      jj_la1_0 = new int[] {0x1800000,0x1800000,0x1800000,0x1800000,0x80000000,0x1800000,0x1800000,0x1800000,0x33cff000,0x33cff000,0x23807000,0x23807000,0x458000,0x23807000,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x20000000,0x3807000,0x23807000,0x7000,};
+      jj_la1_0 = new int[] {0x1800000,0x1800000,0x1800000,0x1800000,0x80000000,0x1800000,0x1800000,0x1800000,0x33cf9000,0x33cf9000,0x23801000,0x23801000,0x458000,0x23801000,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x20000000,0x3801000,0x23801000,};
    }
    private static void jj_la1_init_1() {
-      jj_la1_1 = new int[] {0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x9,0x9,0x8,0x8,0x0,0x0,0x1f0,0x200,0x400,0x800,0x1000,0x2000,0xc000,0xc000,0xf0000,0xf0000,0x300000,0x300000,0xc00000,0xc00000,0x7000000,0x7000000,0x0,0x0,0x8,0x0,};
+      jj_la1_1 = new int[] {0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x9,0x9,0x8,0x8,0x0,0x0,0x1f0,0x200,0x400,0x800,0x1000,0x2000,0xc000,0xc000,0x10000,0x300000,0x300000,0x400000,0x1000000,0x0,0x0,0x8,};
    }
   static final private JJCalls[] jj_2_rtns = new JJCalls[8];
   static private boolean jj_rescan = false;
@@ -1339,7 +1263,7 @@ public class Compiler implements CompilerConstants {
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 34; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 30; i++) jj_la1[i] = -1;
     for (int i = 0; i < jj_2_rtns.length; i++) jj_2_rtns[i] = new JJCalls();
   }
 
@@ -1354,7 +1278,7 @@ public class Compiler implements CompilerConstants {
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 34; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 30; i++) jj_la1[i] = -1;
     for (int i = 0; i < jj_2_rtns.length; i++) jj_2_rtns[i] = new JJCalls();
   }
 
@@ -1372,7 +1296,7 @@ public class Compiler implements CompilerConstants {
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 34; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 30; i++) jj_la1[i] = -1;
     for (int i = 0; i < jj_2_rtns.length; i++) jj_2_rtns[i] = new JJCalls();
   }
 
@@ -1383,7 +1307,7 @@ public class Compiler implements CompilerConstants {
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 34; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 30; i++) jj_la1[i] = -1;
     for (int i = 0; i < jj_2_rtns.length; i++) jj_2_rtns[i] = new JJCalls();
   }
 
@@ -1400,7 +1324,7 @@ public class Compiler implements CompilerConstants {
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 34; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 30; i++) jj_la1[i] = -1;
     for (int i = 0; i < jj_2_rtns.length; i++) jj_2_rtns[i] = new JJCalls();
   }
 
@@ -1410,7 +1334,7 @@ public class Compiler implements CompilerConstants {
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 34; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 30; i++) jj_la1[i] = -1;
     for (int i = 0; i < jj_2_rtns.length; i++) jj_2_rtns[i] = new JJCalls();
   }
 
@@ -1530,7 +1454,7 @@ public class Compiler implements CompilerConstants {
       la1tokens[jj_kind] = true;
       jj_kind = -1;
     }
-    for (int i = 0; i < 34; i++) {
+    for (int i = 0; i < 30; i++) {
       if (jj_la1[i] == jj_gen) {
         for (int j = 0; j < 32; j++) {
           if ((jj_la1_0[i] & (1<<j)) != 0) {

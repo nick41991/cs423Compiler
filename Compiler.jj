@@ -283,9 +283,17 @@ void EqualityExpression() : {}
 	RelationalExpression() [ ( "==" | "!=" ) EqualityExpression() ]
 }
 
-void RelationalExpression() : {}
+void RelationalExpression() : {Token l; Token g; Token le; Token ge;}
 {
-	ShiftExpression() [ ( "<" | ">" | "<=" | ">=" ) RelationalExpression() ]
+	ShiftExpression() [ ( l = "<" g = ">" le = "<=" ge = ">=" )
+	{
+		tokenList.add(new SyntaxToken("RELOP", l.image));
+		tokenList.add(new SyntaxToken("RELOP", g.image));
+		tokenList.add(new SyntaxToken("RELOP", le.image));
+		tokenList.add(new SyntaxToken("RELOP", ge.image));
+	}
+	RelationalExpression() ]
+
 }
 //End of Booleans
 
@@ -295,19 +303,27 @@ void ShiftExpression() : {}
 	AdditiveExpression() [ ( "<<" | ">>" ) ShiftExpression() ]
 }
 
-void AdditiveExpression() : {}
+void AdditiveExpression() : {Token p; Token m;}
 {
-	MultiplicativeExpression() [ ( "+" | "-" ) AdditiveExpression() ]
+	MultiplicativeExpression() [ ( p = "+" m = "-" )
+	{
+		tokenList.add(new SyntaxToken("ADDOP", p.image));
+		tokenList.add(new SyntaxToken("ADDOP", m.image));
+	}
+	AdditiveExpression() ]
+
 }
 
-void MultiplicativeExpression() : {Token mult; Token div; Token mod}
+void MultiplicativeExpression() : {Token mult; Token div; Token mod;}
 {
-	Factor() [ ( mult = "*" div = "/" mod = "%" ) MultiplicativeExpression() ]
+	Factor() [ ( mult = "*" div = "/" mod = "%" )
 	{
 		tokenList.add(new SyntaxToken("MULOP", mult.image));
 		tokenList.add(new SyntaxToken("MULOP", div.image));
 		tokenList.add(new SyntaxToken("MULOP", mod.image));
 	}
+	MultiplicativeExpression() ]
+
 }
 
 void Factor() : {}
@@ -333,7 +349,7 @@ void Args() : {}
 	(Expression())*
 }
 
-void Constant() : {Token i; Token l; Token s}
+void Constant() : {Token i; Token l; Token s;}
 {
 	(i = <INTEGER_LITERAL> l = <CHARACTER_LITERAL> s = <STRING_LITERAL>)
 	{
