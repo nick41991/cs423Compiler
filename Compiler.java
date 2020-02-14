@@ -672,10 +672,12 @@ public class Compiler implements CompilerConstants {
   }
 
   static final public void Call() throws ParseException {
-    jj_consume_token(IDENTIFIER);
+               Token t;
+    t = jj_consume_token(IDENTIFIER);
     jj_consume_token(29);
     Args();
     jj_consume_token(30);
+         System.out.println(t.image);
   }
 
   static final public void Args() throws ParseException {
@@ -993,17 +995,6 @@ public class Compiler implements CompilerConstants {
     return false;
   }
 
-  static private boolean jj_3R_56() {
-    Token xsp;
-    xsp = jj_scanpos;
-    if (jj_scan_token(54)) {
-    jj_scanpos = xsp;
-    if (jj_scan_token(55)) return true;
-    }
-    if (jj_3R_53()) return true;
-    return false;
-  }
-
   static private boolean jj_3R_63() {
     Token xsp;
     xsp = jj_scanpos;
@@ -1014,6 +1005,17 @@ public class Compiler implements CompilerConstants {
     if (jj_scan_token(14)) return true;
     }
     }
+    return false;
+  }
+
+  static private boolean jj_3R_56() {
+    Token xsp;
+    xsp = jj_scanpos;
+    if (jj_scan_token(54)) {
+    jj_scanpos = xsp;
+    if (jj_scan_token(55)) return true;
+    }
+    if (jj_3R_53()) return true;
     return false;
   }
 
@@ -1037,13 +1039,13 @@ public class Compiler implements CompilerConstants {
     return false;
   }
 
-  static private boolean jj_3R_34() {
-    if (jj_scan_token(GOTO)) return true;
+  static private boolean jj_3R_32() {
+    if (jj_3R_22()) return true;
     return false;
   }
 
-  static private boolean jj_3R_32() {
-    if (jj_3R_22()) return true;
+  static private boolean jj_3R_34() {
+    if (jj_scan_token(GOTO)) return true;
     return false;
   }
 

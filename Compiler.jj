@@ -296,9 +296,10 @@ void Factor() : {}
 	Constant()
 }
 
-void Call() : {}
+void Call() : {Token t;}
 {
-	<IDENTIFIER> "(" Args() ")"
+	(t = <IDENTIFIER> "(" Args() ")")
+	{System.out.println(t.image);}
 }
 
 void Args() : {}
