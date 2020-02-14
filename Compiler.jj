@@ -11,34 +11,52 @@ public class Compiler{
     // Run the parser
 	public static void main ( String args [ ] ) {
       		Compiler parser;
+		boolean tokenBool = false;
+		boolean parseTreeBool = false;
+		boolean fileSet = false;
+		String fileName = null;
 
 
-		if(args.length == 0){
+		for(String s : args){
+			if(s.equals("-t")){
+				tokenBool = true;
+			} else if (s.equals("-pt")){
+				parseTreeBool = true;
+			} else if (!fileSet){
+				fileName = s;
+				fileSet = true;
+			} else {
+				System.out.println("Error: More than one file passed as argument.");
+				return;
+			}
+		}
+
+		//Mostly for easy debugging, may not be in final version
+		if(!fileSet){
         		System.out.println("C Parser:  Reading from standard input . . .");
         		parser = new Compiler(System.in);
       		}
-      		else if(args.length == 1){
-        		System.out.println("C Parser:  Reading from file " + args[0] + " . . ." );
+
+      		else if(fileSet){
+        		System.out.println("C Parser:  Reading from file " + fileName + " . . ." );
       			try {
-        			parser = new Compiler(new java.io.FileInputStream(args[0]));
+        			parser = new Compiler(new java.io.FileInputStream(fileName));
       			}
       			catch(java.io.FileNotFoundException e){
         			System.out.println("C Parser:  File " + args[0] + " not found.");
         			return;
         		}
       		} else {
-        		System.out.println("C Parser:  Usage is one of:");
-        		System.out.println("         java Compiler < inputfile");
-        		System.out.println("OR");
-        		System.out.println("         java Compiler inputfile");
+        		System.out.println("Compiler:  Usage is one of:");
+        		System.out.println("         java Compiler [-t] [-pt] [fileName]");
         		return;
       		}
       		try {
         		parser.Program();
-        		System.out.println("C Parser:  C program parsed successfully.");
+        		System.out.println("Compiler:  C program parsed successfully.");
       		}
       		catch(ParseException e){
-        		System.out.println("C Parser:  Encountered errors during parse.");
+        		System.out.println("Compiler:  Encountered errors during parse.");
         		e.printStackTrace();
       		}
     	}
