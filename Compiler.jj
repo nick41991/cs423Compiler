@@ -253,34 +253,53 @@ void AssignmentOperator() : {}
 //Boolean Operations have lower precedence than Mathematical Operations so they are higher in the parse tree
 
 //Boolean Operations: Order of precedence (low to high): || -> && -> | -> ^ -> & -> == or != -> <, >, <=, or >=
-void LogicalORExpression() : {}
+void LogicalORExpression() : {Token lor;}
 {
-	LogicalANDExpression() [ "||" LogicalORExpression() ]
+	LogicalANDExpression() [ lor = "||" LogicalORExpression() ]
+	{
+		tokenList.add(new SyntaxToken("LOGICOP", lor.image));
+	}
 }
 
-void LogicalANDExpression() : {}
+void LogicalANDExpression() : {Token land;}
 {
-	InclusiveORExpression() [ "&&" LogicalANDExpression() ]
+	InclusiveORExpression() [ land = "&&" LogicalANDExpression() ]
+	{
+		tokenList.add(new SyntaxToken("LOGICOP", land.image));
+	}
 }
 
-void InclusiveORExpression() : {}
+void InclusiveORExpression() : {Token o;}
 {
-	ExclusiveORExpression() [ "|" InclusiveORExpression() ]
+	ExclusiveORExpression() [ o = "|" InclusiveORExpression() ]
+	{
+		tokenList.add(new SyntaxToken("BINARYOP", o.image));
+	}
 }
 
-void ExclusiveORExpression() : {}
+void ExclusiveORExpression(Token e;) : {}
 {
-	ANDExpression() [ "^" ExclusiveORExpression() ]
+	ANDExpression() [ e = "^" ExclusiveORExpression() ]
+	{
+		tokenList.add(new SyntaxToken("BINARYOP", e.image));
+	}
 }
 
-void ANDExpression() : {}
+void ANDExpression() : {Token a;}
 {
-	EqualityExpression() [ "&" ANDExpression() ]
+	EqualityExpression() [ a = "&" ANDExpression() ]
+	{
+		tokenList.add(new SyntaxToken("BINARYOP", a.image));
+	}
 }
 
-void EqualityExpression() : {}
+void EqualityExpression() : {Token e; Token n;}
 {
-	RelationalExpression() [ ( "==" | "!=" ) EqualityExpression() ]
+	RelationalExpression() [ ( e = "==" n = "!=" )
+	{
+		tokenList.add(new SyntaxToken("RELOP", e.image));
+		tokenList.add(new SyntaxToken("RELOP", n.image));
+	} EqualityExpression() ]
 }
 
 void RelationalExpression() : {Token l; Token g; Token le; Token ge;}
