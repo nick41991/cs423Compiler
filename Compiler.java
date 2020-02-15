@@ -83,6 +83,7 @@ public class Compiler implements CompilerConstants {
       DeclarationList();
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
       case INT:
+      case VOID:
         ;
         break;
       default:
@@ -99,6 +100,7 @@ public class Compiler implements CompilerConstants {
       Declaration();
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
       case INT:
+      case VOID:
         ;
         break;
       default:
@@ -114,6 +116,7 @@ public class Compiler implements CompilerConstants {
     } else {
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
       case INT:
+      case VOID:
         FuncDeclaration();
         break;
       default:
@@ -125,78 +128,105 @@ public class Compiler implements CompilerConstants {
   }
 
   static final public void VarDeclaration() throws ParseException {
+                         Token i; Token s;
     TypeSpecifier();
-    jj_consume_token(IDENTIFIER);
-    jj_consume_token(28);
+    i = jj_consume_token(IDENTIFIER);
+    s = jj_consume_token(28);
+                tokenList.add(new SyntaxToken("IDENTIFIER", i.image));
+                tokenList.add(new SyntaxToken("SEMICOLON", s.image));
   }
 
   static final public void TypeSpecifier() throws ParseException {
                         Token i; Token v;
-    i = jj_consume_token(INT);
-    v = jj_consume_token(VOID);
-                tokenList.add(new SyntaxToken("TYPE_SPECIFIER", i.image));
-                tokenList.add(new SyntaxToken("TYPE_SPECIFIER", v.image));
+    switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+    case INT:
+      i = jj_consume_token(INT);
+         tokenList.add(new SyntaxToken("TYPE_SPECIFIER", i.image));
+      break;
+    case VOID:
+      v = jj_consume_token(VOID);
+         tokenList.add(new SyntaxToken("TYPE_SPECIFIER", v.image));
+      break;
+    default:
+      jj_la1[3] = jj_gen;
+      jj_consume_token(-1);
+      throw new ParseException();
+    }
   }
 
   static final public void FuncDeclaration() throws ParseException {
+                          Token i; Token l; Token r;
     TypeSpecifier();
-    jj_consume_token(IDENTIFIER);
-    jj_consume_token(29);
+    i = jj_consume_token(IDENTIFIER);
+    l = jj_consume_token(29);
     Params();
-    jj_consume_token(30);
+    r = jj_consume_token(30);
     CompoundStatement();
+                tokenList.add(new SyntaxToken("IDENTIFIER", i.image));
+                tokenList.add(new SyntaxToken("LPAREN", l.image));
+                tokenList.add(new SyntaxToken("RPAREN", r.image));
   }
 
   static final public void Params() throws ParseException {
+                 Token v;
     ParamList();
   }
 
   static final public void ParamList() throws ParseException {
+                    Token c;
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
     case INT:
+    case VOID:
       if (jj_2_2(2147483647)) {
         Param();
       } else {
         switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
         case INT:
+        case VOID:
           Param();
           label_3:
           while (true) {
-            jj_consume_token(31);
+            c = jj_consume_token(31);
             Param();
+         tokenList.add(new SyntaxToken("COMMA", c.image));
             switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
             case 31:
               ;
               break;
             default:
-              jj_la1[3] = jj_gen;
+              jj_la1[4] = jj_gen;
               break label_3;
             }
           }
           break;
         default:
-          jj_la1[4] = jj_gen;
+          jj_la1[5] = jj_gen;
           jj_consume_token(-1);
           throw new ParseException();
         }
       }
       break;
     default:
-      jj_la1[5] = jj_gen;
+      jj_la1[6] = jj_gen;
       ;
     }
   }
 
   static final public void Param() throws ParseException {
+                Token i;
     TypeSpecifier();
-    jj_consume_token(IDENTIFIER);
+    i = jj_consume_token(IDENTIFIER);
+         tokenList.add(new SyntaxToken("IDENTIFIER", i.image));
   }
 
   static final public void CompoundStatement() throws ParseException {
-    jj_consume_token(32);
+                            Token l; Token r;
+    l = jj_consume_token(32);
     LocalDeclarations();
     StatementList();
-    jj_consume_token(33);
+    r = jj_consume_token(33);
+                tokenList.add(new SyntaxToken("LBRACKET", l.image));
+                tokenList.add(new SyntaxToken("RBRACKET", r.image));
   }
 
   static final public void LocalDeclarations() throws ParseException {
@@ -204,10 +234,11 @@ public class Compiler implements CompilerConstants {
     while (true) {
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
       case INT:
+      case VOID:
         ;
         break;
       default:
-        jj_la1[6] = jj_gen;
+        jj_la1[7] = jj_gen;
         break label_4;
       }
       VarDeclaration();
@@ -220,6 +251,8 @@ public class Compiler implements CompilerConstants {
       Statement();
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
       case INTEGER_LITERAL:
+      case CHARACTER_LITERAL:
+      case STRING_LITERAL:
       case CONTINUE:
       case RETURN:
       case WHILE:
@@ -227,6 +260,7 @@ public class Compiler implements CompilerConstants {
       case IF:
       case GOTO:
       case INT:
+      case VOID:
       case IDENTIFIER:
       case 28:
       case 29:
@@ -235,7 +269,7 @@ public class Compiler implements CompilerConstants {
         ;
         break;
       default:
-        jj_la1[7] = jj_gen;
+        jj_la1[8] = jj_gen;
         break label_5;
       }
     }
@@ -247,7 +281,10 @@ public class Compiler implements CompilerConstants {
     } else {
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
       case INTEGER_LITERAL:
+      case CHARACTER_LITERAL:
+      case STRING_LITERAL:
       case INT:
+      case VOID:
       case IDENTIFIER:
       case 28:
       case 29:
@@ -270,7 +307,7 @@ public class Compiler implements CompilerConstants {
         JumpStatement();
         break;
       default:
-        jj_la1[8] = jj_gen;
+        jj_la1[9] = jj_gen;
         jj_consume_token(-1);
         throw new ParseException();
       }
@@ -278,82 +315,112 @@ public class Compiler implements CompilerConstants {
   }
 
   static final public void LabeledStatement() throws ParseException {
-    jj_consume_token(IDENTIFIER);
-    jj_consume_token(34);
+                           Token i; Token c;
+    i = jj_consume_token(IDENTIFIER);
+    c = jj_consume_token(34);
     Statement();
+                tokenList.add(new SyntaxToken("IDENTIFIER", i.image));
+                tokenList.add(new SyntaxToken("COLON", c.image));
   }
 
   static final public void ExpressionStatement() throws ParseException {
+                              Token s;
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
     case INTEGER_LITERAL:
+    case CHARACTER_LITERAL:
+    case STRING_LITERAL:
     case INT:
+    case VOID:
     case IDENTIFIER:
     case 29:
     case 35:
       Expression();
       break;
     default:
-      jj_la1[9] = jj_gen;
+      jj_la1[10] = jj_gen;
       ;
     }
-    jj_consume_token(28);
+    s = jj_consume_token(28);
+         tokenList.add(new SyntaxToken("SEMICOLON", s.image));
   }
 
   static final public void SelectionStatement() throws ParseException {
-    jj_consume_token(IF);
-    jj_consume_token(29);
+                             Token i; Token l; Token r; Token e;
+    i = jj_consume_token(IF);
+    l = jj_consume_token(29);
     Expression();
-    jj_consume_token(30);
+    r = jj_consume_token(30);
     Statement();
+                tokenList.add(new SyntaxToken("IF", i.image));
+                tokenList.add(new SyntaxToken("LPAREN", l.image));
+                tokenList.add(new SyntaxToken("RPAREN", r.image));
     if (jj_2_4(2)) {
-      jj_consume_token(ELSE);
+      e = jj_consume_token(ELSE);
       Statement();
+         tokenList.add(new SyntaxToken("ELSE", e.image));
     } else {
       ;
     }
   }
 
   static final public void IterationStatement() throws ParseException {
-    jj_consume_token(WHILE);
-    jj_consume_token(29);
+                             Token w; Token l; Token r;
+    w = jj_consume_token(WHILE);
+    l = jj_consume_token(29);
     Expression();
-    jj_consume_token(30);
+    r = jj_consume_token(30);
     Statement();
+                tokenList.add(new SyntaxToken("WHILE", w.image));
+                tokenList.add(new SyntaxToken("LPAREN", l.image));
+                tokenList.add(new SyntaxToken("RPAREN", r.image));
   }
 
   static final public void JumpStatement() throws ParseException {
+                        Token t; Token id; Token s;
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
     case GOTO:
-      jj_consume_token(GOTO);
-      jj_consume_token(IDENTIFIER);
-      jj_consume_token(28);
+      t = jj_consume_token(GOTO);
+      id = jj_consume_token(IDENTIFIER);
+      s = jj_consume_token(28);
+                tokenList.add(new SyntaxToken("GOTO", t.image));
+                tokenList.add(new SyntaxToken("IDENTIFIER", id.image));
+                tokenList.add(new SyntaxToken("SEMICOLON", s.image));
       break;
     case CONTINUE:
-      jj_consume_token(CONTINUE);
-      jj_consume_token(28);
+      t = jj_consume_token(CONTINUE);
+      s = jj_consume_token(28);
+                tokenList.add(new SyntaxToken("CONTINUE", t.image));
+                tokenList.add(new SyntaxToken("SEMICOLON", s.image));
       break;
     case BREAK:
-      jj_consume_token(BREAK);
-      jj_consume_token(28);
+      t = jj_consume_token(BREAK);
+      s = jj_consume_token(28);
+                tokenList.add(new SyntaxToken("BREAK", t.image));
+                tokenList.add(new SyntaxToken("SEMICOLON", s.image));
       break;
     case RETURN:
-      jj_consume_token(RETURN);
+      t = jj_consume_token(RETURN);
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
       case INTEGER_LITERAL:
+      case CHARACTER_LITERAL:
+      case STRING_LITERAL:
       case INT:
+      case VOID:
       case IDENTIFIER:
       case 29:
       case 35:
         Expression();
         break;
       default:
-        jj_la1[10] = jj_gen;
+        jj_la1[11] = jj_gen;
         ;
       }
-      jj_consume_token(28);
+      s = jj_consume_token(28);
+                tokenList.add(new SyntaxToken("RETURN", t.image));
+                tokenList.add(new SyntaxToken("SEMICOLON", s.image));
       break;
     default:
-      jj_la1[11] = jj_gen;
+      jj_la1[12] = jj_gen;
       jj_consume_token(-1);
       throw new ParseException();
     }
@@ -369,13 +436,16 @@ public class Compiler implements CompilerConstants {
     } else {
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
       case INTEGER_LITERAL:
+      case CHARACTER_LITERAL:
+      case STRING_LITERAL:
       case INT:
+      case VOID:
       case IDENTIFIER:
       case 29:
         LogicalORExpression();
         break;
       default:
-        jj_la1[12] = jj_gen;
+        jj_la1[13] = jj_gen;
         jj_consume_token(-1);
         throw new ParseException();
       }
@@ -383,76 +453,64 @@ public class Compiler implements CompilerConstants {
   }
 
   static final public void Negation() throws ParseException {
-                   Token n;
-    n = jj_consume_token(35);
-                tokenList.add(new SyntaxToken("NEGATION", n.image));
+                   Token t;
+    t = jj_consume_token(35);
+                tokenList.add(new SyntaxToken("NEGATION", t.image));
     Expression();
   }
 
   static final public void Variable() throws ParseException {
+                   Token i;
     if (jj_2_7(2147483647)) {
       TypeSpecifier();
     } else {
       ;
     }
-    jj_consume_token(IDENTIFIER);
+    i = jj_consume_token(IDENTIFIER);
+         tokenList.add(new SyntaxToken("IDENTIFIER", i.image));
   }
 
   static final public void AssignmentOperator() throws ParseException {
-                             Token eq; Token em; Token ed; Token ea; Token es;
-    eq = jj_consume_token(36);
-    em = jj_consume_token(37);
-    ed = jj_consume_token(38);
-    ea = jj_consume_token(39);
-    es = jj_consume_token(40);
-                tokenList.add(new SyntaxToken("ASSIGNMENTOP", eq.image));
-                tokenList.add(new SyntaxToken("ASSIGNMENTOP", em.image));
-                tokenList.add(new SyntaxToken("ASSIGNMENTOP", ed.image));
-                tokenList.add(new SyntaxToken("ASSIGNMENTOP", ea.image));
-                tokenList.add(new SyntaxToken("ASSIGNMENTOP", es.image));
+                             Token t;
+    switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+    case 36:
+      t = jj_consume_token(36);
+         tokenList.add(new SyntaxToken("ASSIGNMENTOP", t.image));
+      break;
+    case 37:
+      t = jj_consume_token(37);
+         tokenList.add(new SyntaxToken("ASSIGNMENTOP", t.image));
+      break;
+    case 38:
+      t = jj_consume_token(38);
+         tokenList.add(new SyntaxToken("ASSIGNMENTOP", t.image));
+      break;
+    case 39:
+      t = jj_consume_token(39);
+         tokenList.add(new SyntaxToken("ASSIGNMENTOP", t.image));
+      break;
+    case 40:
+      t = jj_consume_token(40);
+         tokenList.add(new SyntaxToken("ASSIGNMENTOP", t.image));
+      break;
+    default:
+      jj_la1[14] = jj_gen;
+      jj_consume_token(-1);
+      throw new ParseException();
+    }
   }
 
 //Boolean Operations have lower precedence than Mathematical Operations so they are higher in the parse tree
 
 //Boolean Operations: Order of precedence (low to high): || -> && -> | -> ^ -> & -> == or != -> <, >, <=, or >=
   static final public void LogicalORExpression() throws ParseException {
-                              Token lor;
+                              Token t;
     LogicalANDExpression();
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
     case 41:
-      lor = jj_consume_token(41);
-                tokenList.add(new SyntaxToken("LOGICOP", lor.image));
+      t = jj_consume_token(41);
+                tokenList.add(new SyntaxToken("LOGICOP", t.image));
       LogicalORExpression();
-      break;
-    default:
-      jj_la1[13] = jj_gen;
-      ;
-    }
-  }
-
-  static final public void LogicalANDExpression() throws ParseException {
-                               Token land;
-    InclusiveORExpression();
-    switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-    case 42:
-      land = jj_consume_token(42);
-                tokenList.add(new SyntaxToken("LOGICOP", land.image));
-      LogicalANDExpression();
-      break;
-    default:
-      jj_la1[14] = jj_gen;
-      ;
-    }
-  }
-
-  static final public void InclusiveORExpression() throws ParseException {
-                                Token o;
-    ExclusiveORExpression();
-    switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-    case 43:
-      o = jj_consume_token(43);
-                tokenList.add(new SyntaxToken("BINARYOP", o.image));
-      InclusiveORExpression();
       break;
     default:
       jj_la1[15] = jj_gen;
@@ -460,14 +518,14 @@ public class Compiler implements CompilerConstants {
     }
   }
 
-  static final public void ExclusiveORExpression() throws ParseException {
-                                Token e;
-    ANDExpression();
+  static final public void LogicalANDExpression() throws ParseException {
+                               Token t;
+    InclusiveORExpression();
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-    case 44:
-      e = jj_consume_token(44);
-                tokenList.add(new SyntaxToken("BINARYOP", e.image));
-      ExclusiveORExpression();
+    case 42:
+      t = jj_consume_token(42);
+                tokenList.add(new SyntaxToken("LOGICOP", t.image));
+      LogicalANDExpression();
       break;
     default:
       jj_la1[16] = jj_gen;
@@ -475,14 +533,14 @@ public class Compiler implements CompilerConstants {
     }
   }
 
-  static final public void ANDExpression() throws ParseException {
-                        Token a;
-    EqualityExpression();
+  static final public void InclusiveORExpression() throws ParseException {
+                                Token t;
+    ExclusiveORExpression();
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-    case 45:
-      a = jj_consume_token(45);
-                tokenList.add(new SyntaxToken("BINARYOP", a.image));
-      ANDExpression();
+    case 43:
+      t = jj_consume_token(43);
+                tokenList.add(new SyntaxToken("BINARYOP", t.image));
+      InclusiveORExpression();
       break;
     default:
       jj_la1[17] = jj_gen;
@@ -490,16 +548,14 @@ public class Compiler implements CompilerConstants {
     }
   }
 
-  static final public void EqualityExpression() throws ParseException {
-                             Token e; Token n;
-    RelationalExpression();
+  static final public void ExclusiveORExpression() throws ParseException {
+                                Token t;
+    ANDExpression();
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-    case 46:
-      e = jj_consume_token(46);
-      n = jj_consume_token(47);
-                tokenList.add(new SyntaxToken("RELOP", e.image));
-                tokenList.add(new SyntaxToken("RELOP", n.image));
-      EqualityExpression();
+    case 44:
+      t = jj_consume_token(44);
+                tokenList.add(new SyntaxToken("BINARYOP", t.image));
+      ExclusiveORExpression();
       break;
     default:
       jj_la1[18] = jj_gen;
@@ -507,23 +563,83 @@ public class Compiler implements CompilerConstants {
     }
   }
 
-  static final public void RelationalExpression() throws ParseException {
-                               Token l; Token g; Token le; Token ge;
-    ShiftExpression();
+  static final public void ANDExpression() throws ParseException {
+                        Token t;
+    EqualityExpression();
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-    case 48:
-      l = jj_consume_token(48);
-      g = jj_consume_token(49);
-      le = jj_consume_token(50);
-      ge = jj_consume_token(51);
-                tokenList.add(new SyntaxToken("RELOP", l.image));
-                tokenList.add(new SyntaxToken("RELOP", g.image));
-                tokenList.add(new SyntaxToken("RELOP", le.image));
-                tokenList.add(new SyntaxToken("RELOP", ge.image));
-      RelationalExpression();
+    case 45:
+      t = jj_consume_token(45);
+                tokenList.add(new SyntaxToken("BINARYOP", t.image));
+      ANDExpression();
       break;
     default:
       jj_la1[19] = jj_gen;
+      ;
+    }
+  }
+
+  static final public void EqualityExpression() throws ParseException {
+                             Token t;
+    RelationalExpression();
+    switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+    case 46:
+    case 47:
+      switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+      case 46:
+        t = jj_consume_token(46);
+         tokenList.add(new SyntaxToken("RELOP", t.image));
+        break;
+      case 47:
+        t = jj_consume_token(47);
+         tokenList.add(new SyntaxToken("RELOP", t.image));
+        break;
+      default:
+        jj_la1[20] = jj_gen;
+        jj_consume_token(-1);
+        throw new ParseException();
+      }
+      EqualityExpression();
+      break;
+    default:
+      jj_la1[21] = jj_gen;
+      ;
+    }
+  }
+
+  static final public void RelationalExpression() throws ParseException {
+                               Token t;
+    ShiftExpression();
+    switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+    case 48:
+    case 49:
+    case 50:
+    case 51:
+      switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+      case 48:
+        t = jj_consume_token(48);
+         tokenList.add(new SyntaxToken("RELOP", t.image));
+        break;
+      case 49:
+        t = jj_consume_token(49);
+         tokenList.add(new SyntaxToken("RELOP", t.image));
+        break;
+      case 50:
+        t = jj_consume_token(50);
+         tokenList.add(new SyntaxToken("RELOP", t.image));
+        break;
+      case 51:
+        t = jj_consume_token(51);
+         tokenList.add(new SyntaxToken("RELOP", t.image));
+        break;
+      default:
+        jj_la1[22] = jj_gen;
+        jj_consume_token(-1);
+        throw new ParseException();
+      }
+      RelationalExpression();
+      break;
+    default:
+      jj_la1[23] = jj_gen;
       ;
     }
   }
@@ -532,88 +648,122 @@ public class Compiler implements CompilerConstants {
 
 //Mathematical Operations: Order of precedence (low to high): >> or << -> + or - -> *, /, or %
   static final public void ShiftExpression() throws ParseException {
+                          Token l; Token r;
     AdditiveExpression();
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
     case 52:
     case 53:
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
       case 52:
-        jj_consume_token(52);
+        l = jj_consume_token(52);
+         tokenList.add(new SyntaxToken("LSHIFT", l.image));
         break;
       case 53:
-        jj_consume_token(53);
+        r = jj_consume_token(53);
+         tokenList.add(new SyntaxToken("RSHIFT", r.image));
         break;
       default:
-        jj_la1[20] = jj_gen;
+        jj_la1[24] = jj_gen;
         jj_consume_token(-1);
         throw new ParseException();
       }
       ShiftExpression();
       break;
     default:
-      jj_la1[21] = jj_gen;
+      jj_la1[25] = jj_gen;
       ;
     }
   }
 
   static final public void AdditiveExpression() throws ParseException {
-                             Token p; Token m;
+                             Token t;
     MultiplicativeExpression();
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
     case 54:
-      p = jj_consume_token(54);
-      m = jj_consume_token(55);
-                tokenList.add(new SyntaxToken("ADDOP", p.image));
-                tokenList.add(new SyntaxToken("ADDOP", m.image));
+    case 55:
+      switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+      case 54:
+        t = jj_consume_token(54);
+         tokenList.add(new SyntaxToken("ADDOP", t.image));
+        break;
+      case 55:
+        t = jj_consume_token(55);
+         tokenList.add(new SyntaxToken("ADDOP", t.image));
+        break;
+      default:
+        jj_la1[26] = jj_gen;
+        jj_consume_token(-1);
+        throw new ParseException();
+      }
       AdditiveExpression();
       break;
     default:
-      jj_la1[22] = jj_gen;
+      jj_la1[27] = jj_gen;
       ;
     }
   }
 
   static final public void MultiplicativeExpression() throws ParseException {
-                                   Token mult; Token div; Token mod;
+                                   Token t;
     Factor();
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
     case 56:
-      mult = jj_consume_token(56);
-      div = jj_consume_token(57);
-      mod = jj_consume_token(58);
-                tokenList.add(new SyntaxToken("MULOP", mult.image));
-                tokenList.add(new SyntaxToken("MULOP", div.image));
-                tokenList.add(new SyntaxToken("MULOP", mod.image));
+    case 57:
+    case 58:
+      switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+      case 56:
+        t = jj_consume_token(56);
+         tokenList.add(new SyntaxToken("MULOP", t.image));
+        break;
+      case 57:
+        t = jj_consume_token(57);
+         tokenList.add(new SyntaxToken("MULOP", t.image));
+        break;
+      case 58:
+        t = jj_consume_token(58);
+         tokenList.add(new SyntaxToken("MULOP",t.image));
+        break;
+      default:
+        jj_la1[28] = jj_gen;
+        jj_consume_token(-1);
+        throw new ParseException();
+      }
       MultiplicativeExpression();
       break;
     default:
-      jj_la1[23] = jj_gen;
+      jj_la1[29] = jj_gen;
       ;
     }
   }
 
   static final public void Factor() throws ParseException {
+                 Token l; Token r;
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
     case 29:
-      jj_consume_token(29);
+      l = jj_consume_token(29);
       LogicalORExpression();
-      jj_consume_token(30);
+      r = jj_consume_token(30);
+                tokenList.add(new SyntaxToken("LPAREN", l.image));
+                tokenList.add(new SyntaxToken("RPAREN", r.image));
       break;
     default:
-      jj_la1[24] = jj_gen;
+      jj_la1[30] = jj_gen;
       if (jj_2_8(2147483647)) {
         Call();
       } else {
         switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
         case INT:
+        case VOID:
         case IDENTIFIER:
           Variable();
           break;
         case INTEGER_LITERAL:
+        case CHARACTER_LITERAL:
+        case STRING_LITERAL:
           Constant();
           break;
         default:
-          jj_la1[25] = jj_gen;
+          jj_la1[31] = jj_gen;
           jj_consume_token(-1);
           throw new ParseException();
         }
@@ -637,14 +787,17 @@ public class Compiler implements CompilerConstants {
     while (true) {
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
       case INTEGER_LITERAL:
+      case CHARACTER_LITERAL:
+      case STRING_LITERAL:
       case INT:
+      case VOID:
       case IDENTIFIER:
       case 29:
       case 35:
         ;
         break;
       default:
-        jj_la1[26] = jj_gen;
+        jj_la1[32] = jj_gen;
         break label_6;
       }
       Expression();
@@ -652,13 +805,25 @@ public class Compiler implements CompilerConstants {
   }
 
   static final public void Constant() throws ParseException {
-                   Token i; Token l; Token s;
-    i = jj_consume_token(INTEGER_LITERAL);
-    l = jj_consume_token(CHARACTER_LITERAL);
-    s = jj_consume_token(STRING_LITERAL);
-                tokenList.add(new SyntaxToken("INTEGER_LITERAL", i.image));
-                tokenList.add(new SyntaxToken("CHARACTER_LITERAL", l.image));
-                tokenList.add(new SyntaxToken("STRING_LITERAL", s.image));
+                   Token t;
+    switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+    case INTEGER_LITERAL:
+      t = jj_consume_token(INTEGER_LITERAL);
+                tokenList.add(new SyntaxToken("INTEGER_LITERAL", t.image));
+      break;
+    case CHARACTER_LITERAL:
+      t = jj_consume_token(CHARACTER_LITERAL);
+                tokenList.add(new SyntaxToken("CHARACTER_LITERAL", t.image));
+      break;
+    case STRING_LITERAL:
+      t = jj_consume_token(STRING_LITERAL);
+                tokenList.add(new SyntaxToken("STRING_LITERAL", t.image));
+      break;
+    default:
+      jj_la1[33] = jj_gen;
+      jj_consume_token(-1);
+      throw new ParseException();
+    }
   }
 
   static private boolean jj_2_1(int xla) {
@@ -717,72 +882,51 @@ public class Compiler implements CompilerConstants {
     finally { jj_save(7, xla); }
   }
 
-  static private boolean jj_3R_54() {
-    Token xsp;
-    xsp = jj_scanpos;
-    if (jj_scan_token(52)) {
-    jj_scanpos = xsp;
-    if (jj_scan_token(53)) return true;
-    }
-    if (jj_3R_51()) return true;
-    return false;
-  }
-
-  static private boolean jj_3R_38() {
-    if (jj_3R_39()) return true;
-    Token xsp;
-    xsp = jj_scanpos;
-    if (jj_3R_40()) jj_scanpos = xsp;
-    return false;
-  }
-
-  static private boolean jj_3R_31() {
-    if (jj_3R_38()) return true;
-    return false;
-  }
-
-  static private boolean jj_3R_55() {
-    if (jj_3R_57()) return true;
-    Token xsp;
-    xsp = jj_scanpos;
-    if (jj_3R_58()) jj_scanpos = xsp;
-    return false;
-  }
-
-  static private boolean jj_3_7() {
-    if (jj_3R_14()) return true;
-    return false;
-  }
-
-  static private boolean jj_3_4() {
-    if (jj_scan_token(ELSE)) return true;
-    if (jj_3R_10()) return true;
-    return false;
-  }
-
-  static private boolean jj_3R_12() {
-    if (jj_scan_token(36)) return true;
-    if (jj_scan_token(37)) return true;
-    if (jj_scan_token(38)) return true;
-    if (jj_scan_token(39)) return true;
-    if (jj_scan_token(40)) return true;
-    return false;
-  }
-
-  static private boolean jj_3R_53() {
-    if (jj_3R_55()) return true;
-    Token xsp;
-    xsp = jj_scanpos;
-    if (jj_3R_56()) jj_scanpos = xsp;
-    return false;
-  }
-
   static private boolean jj_3R_52() {
-    if (jj_scan_token(48)) return true;
-    if (jj_scan_token(49)) return true;
-    if (jj_scan_token(50)) return true;
-    if (jj_scan_token(51)) return true;
-    if (jj_3R_49()) return true;
+    if (jj_3R_54()) return true;
+    Token xsp;
+    xsp = jj_scanpos;
+    if (jj_3R_55()) jj_scanpos = xsp;
+    return false;
+  }
+
+  static private boolean jj_3R_49() {
+    if (jj_scan_token(42)) return true;
+    if (jj_3R_46()) return true;
+    return false;
+  }
+
+  static private boolean jj_3R_50() {
+    if (jj_3R_52()) return true;
+    Token xsp;
+    xsp = jj_scanpos;
+    if (jj_3R_53()) jj_scanpos = xsp;
+    return false;
+  }
+
+  static private boolean jj_3R_29() {
+    if (jj_scan_token(VOID)) return true;
+    return false;
+  }
+
+  static private boolean jj_3R_47() {
+    if (jj_scan_token(41)) return true;
+    if (jj_3R_45()) return true;
+    return false;
+  }
+
+  static private boolean jj_3R_28() {
+    if (jj_scan_token(INT)) return true;
+    return false;
+  }
+
+  static private boolean jj_3R_14() {
+    Token xsp;
+    xsp = jj_scanpos;
+    if (jj_3R_28()) {
+    jj_scanpos = xsp;
+    if (jj_3R_29()) return true;
+    }
     return false;
   }
 
@@ -791,15 +935,88 @@ public class Compiler implements CompilerConstants {
     return false;
   }
 
-  static private boolean jj_3R_21() {
+  static private boolean jj_3R_48() {
+    if (jj_3R_50()) return true;
+    Token xsp;
+    xsp = jj_scanpos;
+    if (jj_3R_51()) jj_scanpos = xsp;
+    return false;
+  }
+
+  static private boolean jj_3R_7() {
+    if (jj_3R_14()) return true;
+    if (jj_scan_token(IDENTIFIER)) return true;
+    if (jj_scan_token(28)) return true;
+    return false;
+  }
+
+  static private boolean jj_3R_46() {
+    if (jj_3R_48()) return true;
+    Token xsp;
+    xsp = jj_scanpos;
+    if (jj_3R_49()) jj_scanpos = xsp;
+    return false;
+  }
+
+  static private boolean jj_3R_45() {
+    if (jj_3R_46()) return true;
+    Token xsp;
+    xsp = jj_scanpos;
+    if (jj_3R_47()) jj_scanpos = xsp;
+    return false;
+  }
+
+  static private boolean jj_3R_26() {
+    if (jj_scan_token(40)) return true;
+    return false;
+  }
+
+  static private boolean jj_3R_25() {
+    if (jj_scan_token(39)) return true;
+    return false;
+  }
+
+  static private boolean jj_3R_24() {
+    if (jj_scan_token(38)) return true;
+    return false;
+  }
+
+  static private boolean jj_3_7() {
     if (jj_3R_14()) return true;
     return false;
   }
 
-  static private boolean jj_3R_50() {
-    if (jj_scan_token(46)) return true;
-    if (jj_scan_token(47)) return true;
-    if (jj_3R_47()) return true;
+  static private boolean jj_3R_23() {
+    if (jj_scan_token(37)) return true;
+    return false;
+  }
+
+  static private boolean jj_3R_22() {
+    if (jj_scan_token(36)) return true;
+    return false;
+  }
+
+  static private boolean jj_3R_12() {
+    Token xsp;
+    xsp = jj_scanpos;
+    if (jj_3R_22()) {
+    jj_scanpos = xsp;
+    if (jj_3R_23()) {
+    jj_scanpos = xsp;
+    if (jj_3R_24()) {
+    jj_scanpos = xsp;
+    if (jj_3R_25()) {
+    jj_scanpos = xsp;
+    if (jj_3R_26()) return true;
+    }
+    }
+    }
+    }
+    return false;
+  }
+
+  static private boolean jj_3R_21() {
+    if (jj_3R_14()) return true;
     return false;
   }
 
@@ -811,173 +1028,262 @@ public class Compiler implements CompilerConstants {
     return false;
   }
 
-  static private boolean jj_3R_51() {
-    if (jj_3R_53()) return true;
-    Token xsp;
-    xsp = jj_scanpos;
-    if (jj_3R_54()) jj_scanpos = xsp;
-    return false;
-  }
-
-  static private boolean jj_3R_14() {
-    if (jj_scan_token(INT)) return true;
-    if (jj_scan_token(VOID)) return true;
-    return false;
-  }
-
   static private boolean jj_3_5() {
     if (jj_3R_11()) return true;
     if (jj_3R_12()) return true;
     return false;
   }
 
-  static private boolean jj_3R_7() {
-    if (jj_3R_14()) return true;
-    if (jj_scan_token(IDENTIFIER)) return true;
-    if (jj_scan_token(28)) return true;
-    return false;
-  }
-
   static private boolean jj_3R_13() {
     if (jj_scan_token(35)) return true;
-    if (jj_3R_22()) return true;
+    if (jj_3R_27()) return true;
     return false;
   }
 
-  static private boolean jj_3_6() {
-    if (jj_3R_13()) return true;
-    return false;
-  }
-
-  static private boolean jj_3R_48() {
-    if (jj_scan_token(45)) return true;
-    if (jj_3R_45()) return true;
-    return false;
-  }
-
-  static private boolean jj_3R_22() {
-    Token xsp;
-    xsp = jj_scanpos;
-    if (jj_3R_29()) {
-    jj_scanpos = xsp;
-    if (jj_3R_30()) {
-    jj_scanpos = xsp;
-    if (jj_3R_31()) return true;
-    }
-    }
-    return false;
-  }
-
-  static private boolean jj_3R_29() {
-    if (jj_3R_11()) return true;
-    if (jj_3R_12()) return true;
-    if (jj_3R_22()) return true;
-    return false;
-  }
-
-  static private boolean jj_3R_49() {
-    if (jj_3R_51()) return true;
-    Token xsp;
-    xsp = jj_scanpos;
-    if (jj_3R_52()) jj_scanpos = xsp;
-    return false;
-  }
-
-  static private boolean jj_3R_37() {
-    if (jj_scan_token(RETURN)) return true;
-    return false;
-  }
-
-  static private boolean jj_3R_36() {
-    if (jj_scan_token(BREAK)) return true;
-    return false;
-  }
-
-  static private boolean jj_3R_35() {
-    if (jj_scan_token(CONTINUE)) return true;
-    return false;
-  }
-
-  static private boolean jj_3R_30() {
-    if (jj_3R_13()) return true;
-    return false;
-  }
-
-  static private boolean jj_3R_34() {
-    if (jj_scan_token(GOTO)) return true;
-    return false;
-  }
-
-  static private boolean jj_3R_28() {
-    Token xsp;
-    xsp = jj_scanpos;
-    if (jj_3R_34()) {
-    jj_scanpos = xsp;
-    if (jj_3R_35()) {
-    jj_scanpos = xsp;
-    if (jj_3R_36()) {
-    jj_scanpos = xsp;
-    if (jj_3R_37()) return true;
-    }
-    }
-    }
-    return false;
-  }
-
-  static private boolean jj_3R_47() {
-    if (jj_3R_49()) return true;
-    Token xsp;
-    xsp = jj_scanpos;
-    if (jj_3R_50()) jj_scanpos = xsp;
-    return false;
-  }
-
-  static private boolean jj_3R_46() {
-    if (jj_scan_token(44)) return true;
-    if (jj_3R_43()) return true;
+  static private boolean jj_3R_79() {
+    if (jj_3R_83()) return true;
     return false;
   }
 
   static private boolean jj_3R_27() {
-    if (jj_scan_token(WHILE)) return true;
+    Token xsp;
+    xsp = jj_scanpos;
+    if (jj_3R_36()) {
+    jj_scanpos = xsp;
+    if (jj_3R_37()) {
+    jj_scanpos = xsp;
+    if (jj_3R_38()) return true;
+    }
+    }
+    return false;
+  }
+
+  static private boolean jj_3R_36() {
+    if (jj_3R_11()) return true;
+    if (jj_3R_12()) return true;
+    if (jj_3R_27()) return true;
     return false;
   }
 
   static private boolean jj_3R_44() {
-    if (jj_scan_token(43)) return true;
-    if (jj_3R_41()) return true;
+    if (jj_scan_token(RETURN)) return true;
     return false;
   }
 
-  static private boolean jj_3R_26() {
-    if (jj_scan_token(IF)) return true;
+  static private boolean jj_3R_86() {
+    if (jj_scan_token(STRING_LITERAL)) return true;
     return false;
   }
 
-  static private boolean jj_3R_45() {
-    if (jj_3R_47()) return true;
-    Token xsp;
-    xsp = jj_scanpos;
-    if (jj_3R_48()) jj_scanpos = xsp;
+  static private boolean jj_3R_78() {
+    if (jj_3R_11()) return true;
     return false;
   }
 
-  static private boolean jj_3R_33() {
-    if (jj_3R_22()) return true;
+  static private boolean jj_3R_43() {
+    if (jj_scan_token(BREAK)) return true;
     return false;
   }
 
-  static private boolean jj_3R_24() {
-    Token xsp;
-    xsp = jj_scanpos;
-    if (jj_3R_33()) jj_scanpos = xsp;
-    if (jj_scan_token(28)) return true;
+  static private boolean jj_3R_85() {
+    if (jj_scan_token(CHARACTER_LITERAL)) return true;
     return false;
   }
 
   static private boolean jj_3R_42() {
-    if (jj_scan_token(42)) return true;
-    if (jj_3R_39()) return true;
+    if (jj_scan_token(CONTINUE)) return true;
+    return false;
+  }
+
+  static private boolean jj_3R_84() {
+    if (jj_scan_token(INTEGER_LITERAL)) return true;
+    return false;
+  }
+
+  static private boolean jj_3R_83() {
+    Token xsp;
+    xsp = jj_scanpos;
+    if (jj_3R_84()) {
+    jj_scanpos = xsp;
+    if (jj_3R_85()) {
+    jj_scanpos = xsp;
+    if (jj_3R_86()) return true;
+    }
+    }
+    return false;
+  }
+
+  static private boolean jj_3R_41() {
+    if (jj_scan_token(GOTO)) return true;
+    return false;
+  }
+
+  static private boolean jj_3R_35() {
+    Token xsp;
+    xsp = jj_scanpos;
+    if (jj_3R_41()) {
+    jj_scanpos = xsp;
+    if (jj_3R_42()) {
+    jj_scanpos = xsp;
+    if (jj_3R_43()) {
+    jj_scanpos = xsp;
+    if (jj_3R_44()) return true;
+    }
+    }
+    }
+    return false;
+  }
+
+  static private boolean jj_3R_39() {
+    if (jj_3R_27()) return true;
+    return false;
+  }
+
+  static private boolean jj_3R_30() {
+    Token xsp;
+    while (true) {
+      xsp = jj_scanpos;
+      if (jj_3R_39()) { jj_scanpos = xsp; break; }
+    }
+    return false;
+  }
+
+  static private boolean jj_3_8() {
+    if (jj_3R_15()) return true;
+    return false;
+  }
+
+  static private boolean jj_3R_34() {
+    if (jj_scan_token(WHILE)) return true;
+    return false;
+  }
+
+  static private boolean jj_3R_15() {
+    if (jj_scan_token(IDENTIFIER)) return true;
+    if (jj_scan_token(29)) return true;
+    if (jj_3R_30()) return true;
+    if (jj_scan_token(30)) return true;
+    return false;
+  }
+
+  static private boolean jj_3R_74() {
+    if (jj_scan_token(54)) return true;
+    return false;
+  }
+
+  static private boolean jj_3R_77() {
+    if (jj_3R_15()) return true;
+    return false;
+  }
+
+  static private boolean jj_3R_69() {
+    Token xsp;
+    xsp = jj_scanpos;
+    if (jj_3R_74()) {
+    jj_scanpos = xsp;
+    if (jj_3R_75()) return true;
+    }
+    if (jj_3R_62()) return true;
+    return false;
+  }
+
+  static private boolean jj_3_4() {
+    if (jj_scan_token(ELSE)) return true;
+    if (jj_3R_10()) return true;
+    return false;
+  }
+
+  static private boolean jj_3R_80() {
+    if (jj_scan_token(56)) return true;
+    return false;
+  }
+
+  static private boolean jj_3R_76() {
+    if (jj_scan_token(29)) return true;
+    if (jj_3R_45()) return true;
+    if (jj_scan_token(30)) return true;
+    return false;
+  }
+
+  static private boolean jj_3R_72() {
+    Token xsp;
+    xsp = jj_scanpos;
+    if (jj_3R_76()) {
+    jj_scanpos = xsp;
+    if (jj_3R_77()) {
+    jj_scanpos = xsp;
+    if (jj_3R_78()) {
+    jj_scanpos = xsp;
+    if (jj_3R_79()) return true;
+    }
+    }
+    }
+    return false;
+  }
+
+  static private boolean jj_3R_73() {
+    Token xsp;
+    xsp = jj_scanpos;
+    if (jj_3R_80()) {
+    jj_scanpos = xsp;
+    if (jj_3R_81()) {
+    jj_scanpos = xsp;
+    if (jj_3R_82()) return true;
+    }
+    }
+    if (jj_3R_68()) return true;
+    return false;
+  }
+
+  static private boolean jj_3R_33() {
+    if (jj_scan_token(IF)) return true;
+    return false;
+  }
+
+  static private boolean jj_3R_82() {
+    if (jj_scan_token(58)) return true;
+    return false;
+  }
+
+  static private boolean jj_3R_70() {
+    if (jj_scan_token(52)) return true;
+    return false;
+  }
+
+  static private boolean jj_3R_40() {
+    if (jj_3R_27()) return true;
+    return false;
+  }
+
+  static private boolean jj_3R_81() {
+    if (jj_scan_token(57)) return true;
+    return false;
+  }
+
+  static private boolean jj_3R_31() {
+    Token xsp;
+    xsp = jj_scanpos;
+    if (jj_3R_40()) jj_scanpos = xsp;
+    if (jj_scan_token(28)) return true;
+    return false;
+  }
+
+  static private boolean jj_3R_63() {
+    Token xsp;
+    xsp = jj_scanpos;
+    if (jj_3R_70()) {
+    jj_scanpos = xsp;
+    if (jj_3R_71()) return true;
+    }
+    if (jj_3R_58()) return true;
+    return false;
+  }
+
+  static private boolean jj_3R_68() {
+    if (jj_3R_72()) return true;
+    Token xsp;
+    xsp = jj_scanpos;
+    if (jj_3R_73()) jj_scanpos = xsp;
     return false;
   }
 
@@ -987,54 +1293,46 @@ public class Compiler implements CompilerConstants {
     return false;
   }
 
-  static private boolean jj_3R_63() {
-    if (jj_scan_token(INTEGER_LITERAL)) return true;
-    if (jj_scan_token(CHARACTER_LITERAL)) return true;
-    if (jj_scan_token(STRING_LITERAL)) return true;
+  static private boolean jj_3R_75() {
+    if (jj_scan_token(55)) return true;
     return false;
   }
 
-  static private boolean jj_3R_43() {
+  static private boolean jj_3R_38() {
     if (jj_3R_45()) return true;
-    Token xsp;
-    xsp = jj_scanpos;
-    if (jj_3R_46()) jj_scanpos = xsp;
     return false;
   }
 
   static private boolean jj_3R_20() {
-    if (jj_3R_28()) return true;
+    if (jj_3R_35()) return true;
     return false;
   }
 
   static private boolean jj_3R_19() {
-    if (jj_3R_27()) return true;
+    if (jj_3R_34()) return true;
     return false;
   }
 
   static private boolean jj_3R_18() {
-    if (jj_3R_26()) return true;
+    if (jj_3R_33()) return true;
+    return false;
+  }
+
+  static private boolean jj_3R_62() {
+    if (jj_3R_68()) return true;
+    Token xsp;
+    xsp = jj_scanpos;
+    if (jj_3R_69()) jj_scanpos = xsp;
     return false;
   }
 
   static private boolean jj_3R_17() {
-    if (jj_3R_25()) return true;
+    if (jj_3R_32()) return true;
     return false;
   }
 
   static private boolean jj_3R_16() {
-    if (jj_3R_24()) return true;
-    return false;
-  }
-
-  static private boolean jj_3R_32() {
-    if (jj_3R_22()) return true;
-    return false;
-  }
-
-  static private boolean jj_3R_40() {
-    if (jj_scan_token(41)) return true;
-    if (jj_3R_38()) return true;
+    if (jj_3R_31()) return true;
     return false;
   }
 
@@ -1043,12 +1341,13 @@ public class Compiler implements CompilerConstants {
     return false;
   }
 
-  static private boolean jj_3R_23() {
-    Token xsp;
-    while (true) {
-      xsp = jj_scanpos;
-      if (jj_3R_32()) { jj_scanpos = xsp; break; }
-    }
+  static private boolean jj_3R_64() {
+    if (jj_scan_token(48)) return true;
+    return false;
+  }
+
+  static private boolean jj_3R_71() {
+    if (jj_scan_token(53)) return true;
     return false;
   }
 
@@ -1074,31 +1373,75 @@ public class Compiler implements CompilerConstants {
     return false;
   }
 
-  static private boolean jj_3R_41() {
-    if (jj_3R_43()) return true;
+  static private boolean jj_3R_59() {
     Token xsp;
     xsp = jj_scanpos;
-    if (jj_3R_44()) jj_scanpos = xsp;
+    if (jj_3R_64()) {
+    jj_scanpos = xsp;
+    if (jj_3R_65()) {
+    jj_scanpos = xsp;
+    if (jj_3R_66()) {
+    jj_scanpos = xsp;
+    if (jj_3R_67()) return true;
+    }
+    }
+    }
+    if (jj_3R_56()) return true;
     return false;
   }
 
-  static private boolean jj_3_8() {
-    if (jj_3R_15()) return true;
+  static private boolean jj_3R_60() {
+    if (jj_scan_token(46)) return true;
     return false;
   }
 
-  static private boolean jj_3R_15() {
-    if (jj_scan_token(IDENTIFIER)) return true;
-    if (jj_scan_token(29)) return true;
-    if (jj_3R_23()) return true;
-    if (jj_scan_token(30)) return true;
+  static private boolean jj_3R_57() {
+    Token xsp;
+    xsp = jj_scanpos;
+    if (jj_3R_60()) {
+    jj_scanpos = xsp;
+    if (jj_3R_61()) return true;
+    }
+    if (jj_3R_54()) return true;
     return false;
   }
 
-  static private boolean jj_3R_56() {
-    if (jj_scan_token(54)) return true;
-    if (jj_scan_token(55)) return true;
-    if (jj_3R_53()) return true;
+  static private boolean jj_3R_58() {
+    if (jj_3R_62()) return true;
+    Token xsp;
+    xsp = jj_scanpos;
+    if (jj_3R_63()) jj_scanpos = xsp;
+    return false;
+  }
+
+  static private boolean jj_3R_67() {
+    if (jj_scan_token(51)) return true;
+    return false;
+  }
+
+  static private boolean jj_3R_66() {
+    if (jj_scan_token(50)) return true;
+    return false;
+  }
+
+  static private boolean jj_3R_55() {
+    if (jj_scan_token(45)) return true;
+    if (jj_3R_52()) return true;
+    return false;
+  }
+
+  static private boolean jj_3R_65() {
+    if (jj_scan_token(49)) return true;
+    return false;
+  }
+
+  static private boolean jj_3_6() {
+    if (jj_3R_13()) return true;
+    return false;
+  }
+
+  static private boolean jj_3R_32() {
+    if (jj_scan_token(32)) return true;
     return false;
   }
 
@@ -1107,68 +1450,47 @@ public class Compiler implements CompilerConstants {
     return false;
   }
 
-  static private boolean jj_3R_62() {
-    if (jj_3R_63()) return true;
-    return false;
-  }
-
-  static private boolean jj_3R_39() {
-    if (jj_3R_41()) return true;
+  static private boolean jj_3R_56() {
+    if (jj_3R_58()) return true;
     Token xsp;
     xsp = jj_scanpos;
-    if (jj_3R_42()) jj_scanpos = xsp;
-    return false;
-  }
-
-  static private boolean jj_3R_61() {
-    if (jj_3R_11()) return true;
-    return false;
-  }
-
-  static private boolean jj_3R_60() {
-    if (jj_3R_15()) return true;
-    return false;
-  }
-
-  static private boolean jj_3R_25() {
-    if (jj_scan_token(32)) return true;
-    return false;
-  }
-
-  static private boolean jj_3R_59() {
-    if (jj_scan_token(29)) return true;
-    if (jj_3R_38()) return true;
-    if (jj_scan_token(30)) return true;
-    return false;
-  }
-
-  static private boolean jj_3R_57() {
-    Token xsp;
-    xsp = jj_scanpos;
-    if (jj_3R_59()) {
-    jj_scanpos = xsp;
-    if (jj_3R_60()) {
-    jj_scanpos = xsp;
-    if (jj_3R_61()) {
-    jj_scanpos = xsp;
-    if (jj_3R_62()) return true;
-    }
-    }
-    }
-    return false;
-  }
-
-  static private boolean jj_3R_58() {
-    if (jj_scan_token(56)) return true;
-    if (jj_scan_token(57)) return true;
-    if (jj_scan_token(58)) return true;
-    if (jj_3R_55()) return true;
+    if (jj_3R_59()) jj_scanpos = xsp;
     return false;
   }
 
   static private boolean jj_3R_8() {
     if (jj_3R_14()) return true;
     if (jj_scan_token(IDENTIFIER)) return true;
+    return false;
+  }
+
+  static private boolean jj_3R_61() {
+    if (jj_scan_token(47)) return true;
+    return false;
+  }
+
+  static private boolean jj_3R_37() {
+    if (jj_3R_13()) return true;
+    return false;
+  }
+
+  static private boolean jj_3R_54() {
+    if (jj_3R_56()) return true;
+    Token xsp;
+    xsp = jj_scanpos;
+    if (jj_3R_57()) jj_scanpos = xsp;
+    return false;
+  }
+
+  static private boolean jj_3R_53() {
+    if (jj_scan_token(44)) return true;
+    if (jj_3R_50()) return true;
+    return false;
+  }
+
+  static private boolean jj_3R_51() {
+    if (jj_scan_token(43)) return true;
+    if (jj_3R_48()) return true;
     return false;
   }
 
@@ -1184,7 +1506,7 @@ public class Compiler implements CompilerConstants {
   static private Token jj_scanpos, jj_lastpos;
   static private int jj_la;
   static private int jj_gen;
-  static final private int[] jj_la1 = new int[27];
+  static final private int[] jj_la1 = new int[34];
   static private int[] jj_la1_0;
   static private int[] jj_la1_1;
   static {
@@ -1192,10 +1514,10 @@ public class Compiler implements CompilerConstants {
       jj_la1_init_1();
    }
    private static void jj_la1_init_0() {
-      jj_la1_0 = new int[] {0x800000,0x800000,0x800000,0x80000000,0x800000,0x800000,0x800000,0x32cf9000,0x32cf9000,0x22801000,0x22801000,0x458000,0x22801000,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x20000000,0x2801000,0x22801000,};
+      jj_la1_0 = new int[] {0x1800000,0x1800000,0x1800000,0x1800000,0x80000000,0x1800000,0x1800000,0x1800000,0x33cff000,0x33cff000,0x23807000,0x23807000,0x458000,0x23807000,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x20000000,0x3807000,0x23807000,0x7000,};
    }
    private static void jj_la1_init_1() {
-      jj_la1_1 = new int[] {0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x9,0x9,0x8,0x8,0x0,0x0,0x200,0x400,0x800,0x1000,0x2000,0x4000,0x10000,0x300000,0x300000,0x400000,0x1000000,0x0,0x0,0x8,};
+      jj_la1_1 = new int[] {0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x9,0x9,0x8,0x8,0x0,0x0,0x1f0,0x200,0x400,0x800,0x1000,0x2000,0xc000,0xc000,0xf0000,0xf0000,0x300000,0x300000,0xc00000,0xc00000,0x7000000,0x7000000,0x0,0x0,0x8,0x0,};
    }
   static final private JJCalls[] jj_2_rtns = new JJCalls[8];
   static private boolean jj_rescan = false;
@@ -1219,7 +1541,7 @@ public class Compiler implements CompilerConstants {
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 27; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 34; i++) jj_la1[i] = -1;
     for (int i = 0; i < jj_2_rtns.length; i++) jj_2_rtns[i] = new JJCalls();
   }
 
@@ -1234,7 +1556,7 @@ public class Compiler implements CompilerConstants {
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 27; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 34; i++) jj_la1[i] = -1;
     for (int i = 0; i < jj_2_rtns.length; i++) jj_2_rtns[i] = new JJCalls();
   }
 
@@ -1252,7 +1574,7 @@ public class Compiler implements CompilerConstants {
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 27; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 34; i++) jj_la1[i] = -1;
     for (int i = 0; i < jj_2_rtns.length; i++) jj_2_rtns[i] = new JJCalls();
   }
 
@@ -1263,7 +1585,7 @@ public class Compiler implements CompilerConstants {
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 27; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 34; i++) jj_la1[i] = -1;
     for (int i = 0; i < jj_2_rtns.length; i++) jj_2_rtns[i] = new JJCalls();
   }
 
@@ -1280,7 +1602,7 @@ public class Compiler implements CompilerConstants {
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 27; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 34; i++) jj_la1[i] = -1;
     for (int i = 0; i < jj_2_rtns.length; i++) jj_2_rtns[i] = new JJCalls();
   }
 
@@ -1290,7 +1612,7 @@ public class Compiler implements CompilerConstants {
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 27; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 34; i++) jj_la1[i] = -1;
     for (int i = 0; i < jj_2_rtns.length; i++) jj_2_rtns[i] = new JJCalls();
   }
 
@@ -1410,7 +1732,7 @@ public class Compiler implements CompilerConstants {
       la1tokens[jj_kind] = true;
       jj_kind = -1;
     }
-    for (int i = 0; i < 27; i++) {
+    for (int i = 0; i < 34; i++) {
       if (jj_la1[i] == jj_gen) {
         for (int j = 0; j < 32; j++) {
           if ((jj_la1_0[i] & (1<<j)) != 0) {
