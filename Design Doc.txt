@@ -4,6 +4,7 @@
         For our compiler we decided to use java as the java virtual machine allows for the program to be widely used as well as the language was widely understood by our team members. We also used the JavaCC parser generator in order to help us generate our parser, as the program offers a very understandable way to implement our generated grammer. Both of these factors should make it easier to develop the compiler and allow for ease of use by users. The compiler will be usable from the command line of linux systems.  
 
 
+Compiler.java is the core function for the program, containing the code for command line reading and flags as well as the code linking the parser to the rest of the program. Our complete parser logic is located in Compiler.jj
 
 
 
@@ -26,18 +27,8 @@ Here is a list of what each flag does:
 
 -t : will output a token and label list
 -pt : will output a  abstract syntax parse tree
-
-
-
-
-
-
 Design Discussion
         For the parser we read in character by character, ignoring whitespaces, till we recognize a token. As we take in tokens we add them to a call stack as the program looks at the parameters of that token in the grammar. The parser then looks ahead at other tokens to see if they meet these grammar rules. This process continues until we hit a base case, where no other inputs are needed. The parser then works back up the call stack building the tree incorporating in the grammar specifications. This system is simple to produce and add too, but comes with the trade of un-optimized, as the parser must search recursively through the whole program. We expect a big O(n), with a linear growth rate. This can be seen as a limitation but the capacity for expansion we think makes this limitation worth it.
-
-
-
-
 Language Specification
 Currently we recognize:
         Identifiers, variables, functions
