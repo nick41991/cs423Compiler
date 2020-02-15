@@ -21,7 +21,7 @@ LABEL:
 		a = a;
 		goto LABEL;	
 	}
-	
+	int b;
 	a = my_func(a);
 	
 	return a;
