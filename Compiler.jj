@@ -22,7 +22,7 @@ public class Compiler{
 			System.out.print("\t");
 		}
 		if(height != 0){
-			System.out.println("--------" + node.getPayload());
+			System.out.println("-------- " + node.getPayload());
 		} else {
 			System.out.println(node.getPayload());
 		}
@@ -599,13 +599,15 @@ void Factor(Node parent) : {Token l; Token r;}
 {
 	l = "("
 	{
+		Node exp = new Node(parent, "Expression");
+		parent.addChild(exp);
 		tokenList.add(new SyntaxToken("LPAREN", l.image));
 	}
-	LogicalORExpression(parent) r = ")"
+	LogicalORExpression(exp) r = ")"
 	{
 		tokenList.add(new SyntaxToken("RPAREN", r.image));
 	}
-	| LOOKAHEAD(Call()) Call(parent) | Variable(parent) | Constant(parent)
+	| LOOKAHEAD(Call(parent)) Call(parent) | Variable(parent) | Constant(parent)
 }
 
 void Call(Node parent) : {Token t; Token l; Token r;}
