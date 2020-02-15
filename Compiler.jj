@@ -15,8 +15,24 @@ public class Compiler{
 		}
 	}
 
-	private static void printParseTree(){
-		System.out.println("Not Yet Implemented");
+	private static void printParseTree(int height){
+		int i;
+		for(i = 0; i < height; i++) {
+			System.out.print("\t");
+		}
+		System.out.println("--------" + node.getPayload());
+		for(Node n : node.children) {
+			for(i = 0; i < height + 1; i++) {
+				System.out.print("\t");
+			}
+			System.out.println("|");
+			for(i = 0; i < height + 1; i++) {
+				System.out.print("\t");
+			}
+			System.out.println("|");
+
+			printParseTree(height + 1);
+		}
 	}
 
     // Run the parser
@@ -68,7 +84,7 @@ public class Compiler{
 				printTokens();
 			}
 			if(parseTreeBool){
-				printParseTree();
+				printParseTree(0);
 			}
         		System.out.println("Compiler:  C program parsed successfully.");
       		}
