@@ -298,9 +298,12 @@ void JumpStatement() : {Token t; Token id; Token s;}
 		tokenList.add(new SyntaxToken("BREAK", t.image));
 		tokenList.add(new SyntaxToken("SEMICOLON", s.image));
 	}
-	| t = <RETURN> [ Expression() ] s = ";"
+	| t = <RETURN>
 	{
 		tokenList.add(new SyntaxToken("RETURN", t.image));
+	}
+	[ Expression() ] s = ";"
+	{
 		tokenList.add(new SyntaxToken("SEMICOLON", s.image));
 	}
 	)
@@ -452,9 +455,12 @@ void MultiplicativeExpression() : {Token t;}
 
 void Factor() : {Token l; Token r;}
 {
-	l = "(" LogicalORExpression() r = ")"
+	l = "("
 	{
 		tokenList.add(new SyntaxToken("LPAREN", l.image));
+	}
+	LogicalORExpression() r = ")"
+	{
 		tokenList.add(new SyntaxToken("RPAREN", r.image));
 	}
 	| LOOKAHEAD(Call()) Call() | Variable() | Constant()
@@ -462,12 +468,13 @@ void Factor() : {Token l; Token r;}
 
 void Call() : {Token t; Token l; Token r;}
 {
-	(t = <IDENTIFIER> l = "(" Args() r = ")")
+	(t = <IDENTIFIER> l = "("
 	{
 		tokenList.add(new SyntaxToken("IDENTIFIER", t.image));
 		tokenList.add(new SyntaxToken("LPAREN", l.image));
-		tokenList.add(new SyntaxToken("RPAREN", r.image));
 	}
+	Args() r = ")")
+	{tokenList.add(new SyntaxToken("RPAREN", r.image));}
 }
 
 void Args() : {}
