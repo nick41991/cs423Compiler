@@ -152,9 +152,13 @@ void VarDeclaration() : {}
 	TypeSpecifier() <IDENTIFIER> ";"
 }
 
-void TypeSpecifier() : {}
+void TypeSpecifier() : {Token i; Token v;}
 {
-	(<INT> | <VOID>)
+	(i = <INT> v = <VOID>)
+	{
+		tokenList.add(new SyntaxToken("TYPE_SPECIFIER", i.image));
+		tokenList.add(new SyntaxToken("TYPE_SPECIFIER", v.image));
+	}
 }
 
 void FuncDeclaration() : {}
@@ -245,9 +249,16 @@ void Variable() : {}
 	[LOOKAHEAD(TypeSpecifier()) TypeSpecifier()] <IDENTIFIER>
 }
 
-void AssignmentOperator() : {}
+void AssignmentOperator() : {Token eq; Token em; Token ed; Token ea; Token es;}
 {
-	( "=" | "*=" | "/=" | "+=" | "-=" )
+	( eq = "=" em = "*=" ed = "/=" ea = "+=" es = "-=" )
+	{
+		tokenList.add(new SyntaxToken("ASSIGNMENTOP", eq.image));
+		tokenList.add(new SyntaxToken("ASSIGNMENTOP", em.image));
+		tokenList.add(new SyntaxToken("ASSIGNMENTOP", ed.image));
+		tokenList.add(new SyntaxToken("ASSIGNMENTOP", ea.image));
+		tokenList.add(new SyntaxToken("ASSIGNMENTOP", es.image));
+	}
 }
 
 //Boolean Operations have lower precedence than Mathematical Operations so they are higher in the parse tree
@@ -255,42 +266,52 @@ void AssignmentOperator() : {}
 //Boolean Operations: Order of precedence (low to high): || -> && -> | -> ^ -> & -> == or != -> <, >, <=, or >=
 void LogicalORExpression() : {Token lor;}
 {
-	LogicalANDExpression() [ lor = "||" LogicalORExpression() ]
+	LogicalANDExpression() [ lor = "||"
 	{
 		tokenList.add(new SyntaxToken("LOGICOP", lor.image));
 	}
+	LogicalORExpression() ]
+
 }
 
 void LogicalANDExpression() : {Token land;}
 {
-	InclusiveORExpression() [ land = "&&" LogicalANDExpression() ]
+	InclusiveORExpression() [ land = "&&"
 	{
 		tokenList.add(new SyntaxToken("LOGICOP", land.image));
 	}
+	LogicalANDExpression() ]
+
 }
 
 void InclusiveORExpression() : {Token o;}
 {
-	ExclusiveORExpression() [ o = "|" InclusiveORExpression() ]
+	ExclusiveORExpression() [ o = "|"
 	{
 		tokenList.add(new SyntaxToken("BINARYOP", o.image));
 	}
+	InclusiveORExpression() ]
+
 }
 
-void ExclusiveORExpression(Token e;) : {}
+void ExclusiveORExpression() : {Token e;}
 {
-	ANDExpression() [ e = "^" ExclusiveORExpression() ]
+	ANDExpression() [ e = "^"
 	{
 		tokenList.add(new SyntaxToken("BINARYOP", e.image));
 	}
+	ExclusiveORExpression() ]
+
 }
 
 void ANDExpression() : {Token a;}
 {
-	EqualityExpression() [ a = "&" ANDExpression() ]
+	EqualityExpression() [ a = "&"
 	{
 		tokenList.add(new SyntaxToken("BINARYOP", a.image));
 	}
+	ANDExpression() ]
+
 }
 
 void EqualityExpression() : {Token e; Token n;}
