@@ -239,9 +239,13 @@ void Expression() : {}
 	LOOKAHEAD(Variable() AssignmentOperator()) Variable() AssignmentOperator() Expression() | LOOKAHEAD(Negation()) Negation() | LogicalORExpression()
 }
 
-void Negation() : {}
+void Negation() : {Token n;}
 {
-	"!" Expression()
+	(n = "!")
+	{
+		tokenList.add(new SyntaxToken("NEGATION", n.image));
+	}
+	Expression()
 }
 
 void Variable() : {}
