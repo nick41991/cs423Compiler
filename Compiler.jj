@@ -167,12 +167,16 @@ void TypeSpecifier() : {Token i; Token v;}
 
 void FuncDeclaration() : {Token i; Token l; Token r;}
 {
-	TypeSpecifier() i = <IDENTIFIER> l = "(" Params() r = ")" CompoundStatement()
+	TypeSpecifier() i = <IDENTIFIER> l = "("
 	{
 		tokenList.add(new SyntaxToken("IDENTIFIER", i.image));
 		tokenList.add(new SyntaxToken("LPAREN", l.image));
+	}
+	Params() r = ")"
+	{
 		tokenList.add(new SyntaxToken("RPAREN", r.image));
 	}
+	CompoundStatement()
 }
 
 void Params() : {Token v;}
@@ -184,9 +188,11 @@ void Params() : {Token v;}
 
 void ParamList() : {Token c;}
 {
-	[(LOOKAHEAD( Param() )  Param() | Param() (c = "," Param()
-	{tokenList.add(new SyntaxToken("COMMA", c.image));}
-	)+)]
+	[(LOOKAHEAD( Param() )  Param() | Param() (c = ","
+	{
+		tokenList.add(new SyntaxToken("COMMA", c.image));
+	}
+	Param())+)]
 }
 
 void Param() : {Token i;}
@@ -197,9 +203,13 @@ void Param() : {Token i;}
 
 void CompoundStatement() : {Token l; Token r;}
 {
-	(l = "{" LocalDeclarations() StatementList() r = "}")
+	(l = "{"
 	{
 		tokenList.add(new SyntaxToken("LBRACKET", l.image));
+	}
+	LocalDeclarations() StatementList()
+	r = "}")
+	{
 		tokenList.add(new SyntaxToken("RBRACKET", r.image));
 	}
 }
@@ -226,11 +236,12 @@ void Statement() : {}
 
 void LabeledStatement() : {Token i; Token c;}
 {
-	( i = <IDENTIFIER> c = ":" Statement() )
+	( i = <IDENTIFIER> c = ":"
 	{
 		tokenList.add(new SyntaxToken("IDENTIFIER", i.image));
 		tokenList.add(new SyntaxToken("COLON", c.image));
 	}
+	Statement() )
 }
 
 void ExpressionStatement() : {Token s;}
@@ -241,10 +252,13 @@ void ExpressionStatement() : {Token s;}
 
 void SelectionStatement() : {Token i; Token l; Token r; Token e;}
 {
-	( i = <IF> l = "(" Expression() r = ")" Statement()
+	( i = <IF> l = "("
 	{
 		tokenList.add(new SyntaxToken("IF", i.image));
 		tokenList.add(new SyntaxToken("LPAREN", l.image));
+	}
+	Expression() r = ")" Statement()
+	{
 		tokenList.add(new SyntaxToken("RPAREN", r.image));
 	}
 	[ LOOKAHEAD(2) e = <ELSE> Statement()
@@ -254,10 +268,14 @@ void SelectionStatement() : {Token i; Token l; Token r; Token e;}
 
 void IterationStatement() : {Token w; Token l; Token r;}
 {
-	( w = <WHILE> l = "(" Expression() r = ")" Statement() )
+	( w = <WHILE> l = "("
 	{
 		tokenList.add(new SyntaxToken("WHILE", w.image));
 		tokenList.add(new SyntaxToken("LPAREN", l.image));
+	}
+	Expression()
+	r = ")" Statement() )
+	{
 		tokenList.add(new SyntaxToken("RPAREN", r.image));
 	}
 }
