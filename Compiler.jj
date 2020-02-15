@@ -16,7 +16,7 @@ public class Compiler{
 		}
 	}
 
-	private static void printParseTree(int height){
+	private static void printParseTree(ArrayList<Node> node, int height){
 		int i;
 		for(i = 0; i < height; i++) {
 			System.out.print("\t");
@@ -85,7 +85,7 @@ public class Compiler{
 				printTokens();
 			}
 			if(parseTreeBool){
-				printParseTree(0);
+				printParseTree(root, 0);
 			}
         		System.out.println("Compiler:  C program parsed successfully.");
       		}
