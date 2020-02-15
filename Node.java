@@ -7,7 +7,7 @@ public class Node{
 
 	public Node(){
 		parent = null;
-		children =  = new ArrayList<Node>();
+		children = new ArrayList<Node>();
 		payload = "";
 	}
 
