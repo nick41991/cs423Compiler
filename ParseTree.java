@@ -7,7 +7,7 @@ public class ParseTree {
 		image = null;
 	}
 
-	public SyntaxToken (String t, String i){
+	public ParseTree (String t, String i){
 		type = t;
 		image = i;
 	}
