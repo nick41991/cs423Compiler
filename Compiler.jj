@@ -16,18 +16,16 @@ public class Compiler{
 		}
 	}
 
-	/**Prints the Abstract Syntax Tree
-	*
-	* param node : the root node
-	* param height : the height of the current node
-	*
-	*/
 	private static void printParseTree(Node node, int height){
 		int i;
 		for(i = 0; i < height; i++) {
 			System.out.print("\t");
 		}
-		System.out.println("--------" + node.getPayload());
+		if(height != 0){
+			System.out.println("--------" + node.getPayload());
+		} else {
+			System.out.println(node.getPayload());
+		}
 		for(Node n : node.children) {
 			for(i = 0; i < height + 1; i++) {
 				System.out.print("\t");
@@ -51,7 +49,7 @@ public class Compiler{
 		String fileName = null;
 
 
-		for(String s : args){						//set flags for tokenizer or parse tree
+		for(String s : args){
 			if(s.equals("-t")){
 				tokenBool = true;
 			} else if (s.equals("-pt")){
@@ -67,12 +65,12 @@ public class Compiler{
 
 		//Mostly for easy debugging, may not be in final version
 		if(!fileSet){
-        		System.out.println("Compiler:  Reading from standard input . . .");
+        		System.out.println("C Parser:  Reading from standard input . . .");
         		parser = new Compiler(System.in);
       		}
 
       		else if(fileSet){
-        		System.out.println("Compiler:  Reading from file " + fileName + " . . ." );
+        		System.out.println("C Parser:  Reading from file " + fileName + " . . ." );
       			try {
         			parser = new Compiler(new java.io.FileInputStream(fileName));
       			}
@@ -210,9 +208,8 @@ void FuncDeclaration(Node parent) : {Token i; Token l; Token r;}
 		Node id = new Node(parent, "");
 		parent.addChild(id);
 		Node params = new Node(id, "params");
-		id.addChild(params);
 		Node cs = new Node(id, "Compound Statement");
-		id.addChild(cs);
+
 	}
 	TypeSpecifier(id) i = <IDENTIFIER> l = "("
 	{
@@ -223,6 +220,8 @@ void FuncDeclaration(Node parent) : {Token i; Token l; Token r;}
 	Params(params) r = ")"
 	{
 		tokenList.add(new SyntaxToken("RPAREN", r.image));
+		id.addChild(params);
+		id.addChild(cs);
 	}
 	CompoundStatement(cs)
 }
@@ -398,11 +397,9 @@ void JumpStatement(Node parent) : {Token t; Token id; Token s;}
 	| t = <RETURN>
 	{
 		jump.setPayload("Return");
-		Node exp = new Node(jump, "Expression");
-		jump.addChild(exp);
 		tokenList.add(new SyntaxToken("RETURN", t.image));
 	}
-	[ Expression(exp) ] s = ";"
+	[ Expression(jump) ] s = ";"
 	{
 		tokenList.add(new SyntaxToken("SEMICOLON", s.image));
 	}
@@ -411,9 +408,13 @@ void JumpStatement(Node parent) : {Token t; Token id; Token s;}
 
 void Expression(Node parent) : {}
 {
-	LOOKAHEAD(Variable(parent) AssignmentOperator(parent)) Variable(parent) AssignmentOperator(parent) Expression(parent) |
-	LOOKAHEAD(Negation(parent)) Negation(parent) |
-	LogicalORExpression(parent)
+	{
+		Node exp = new Node(parent, "Expression");
+		parent.addChild(exp);
+	}
+	(LOOKAHEAD(Variable(exp) AssignmentOperator(exp)) Variable(exp) AssignmentOperator(exp) Expression(exp) |
+	LOOKAHEAD(Negation(exp)) Negation(exp) |
+	LogicalORExpression(exp))
 }
 
 void Negation(Node parent) : {Token t;}
@@ -616,6 +617,7 @@ void Call(Node parent) : {Token t; Token l; Token r;}
 	}
 	(t = <IDENTIFIER> l = "("
 	{
+		id.setPayload(t.image);
 		tokenList.add(new SyntaxToken("IDENTIFIER", t.image));
 		tokenList.add(new SyntaxToken("LPAREN", l.image));
 	}

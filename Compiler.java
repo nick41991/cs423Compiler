@@ -20,7 +20,11 @@ public class Compiler implements CompilerConstants {
                 for(i = 0; i < height; i++) {
                         System.out.print("\u005ct");
                 }
-                System.out.println("--------" + node.getPayload());
+                if(height != 0){
+                        System.out.println("--------" + node.getPayload());
+                } else {
+                        System.out.println(node.getPayload());
+                }
                 for(Node n : node.children) {
                         for(i = 0; i < height + 1; i++) {
                                 System.out.print("\u005ct");
@@ -184,9 +188,7 @@ public class Compiler implements CompilerConstants {
                 Node id = new Node(parent, "");
                 parent.addChild(id);
                 Node params = new Node(id, "params");
-                id.addChild(params);
                 Node cs = new Node(id, "Compound Statement");
-                id.addChild(cs);
     TypeSpecifier(id);
     i = jj_consume_token(IDENTIFIER);
     l = jj_consume_token(29);
@@ -196,6 +198,8 @@ public class Compiler implements CompilerConstants {
     Params(params);
     r = jj_consume_token(30);
                 tokenList.add(new SyntaxToken("RPAREN", r.image));
+                id.addChild(params);
+                id.addChild(cs);
     CompoundStatement(cs);
   }
 
@@ -467,8 +471,6 @@ public class Compiler implements CompilerConstants {
     case RETURN:
       t = jj_consume_token(RETURN);
                 jump.setPayload("Return");
-                Node exp = new Node(jump, "Expression");
-                jump.addChild(exp);
                 tokenList.add(new SyntaxToken("RETURN", t.image));
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
       case INTEGER_LITERAL:
@@ -479,7 +481,7 @@ public class Compiler implements CompilerConstants {
       case IDENTIFIER:
       case 29:
       case 35:
-        Expression(exp);
+        Expression(jump);
         break;
       default:
         jj_la1[11] = jj_gen;
@@ -496,12 +498,14 @@ public class Compiler implements CompilerConstants {
   }
 
   static final public void Expression(Node parent) throws ParseException {
+                Node exp = new Node(parent, "Expression");
+                parent.addChild(exp);
     if (jj_2_5(2147483647)) {
-      Variable(parent);
-      AssignmentOperator(parent);
-      Expression(parent);
+      Variable(exp);
+      AssignmentOperator(exp);
+      Expression(exp);
     } else if (jj_2_6(2147483647)) {
-      Negation(parent);
+      Negation(exp);
     } else {
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
       case INTEGER_LITERAL:
@@ -511,7 +515,7 @@ public class Compiler implements CompilerConstants {
       case VOID:
       case IDENTIFIER:
       case 29:
-        LogicalORExpression(parent);
+        LogicalORExpression(exp);
         break;
       default:
         jj_la1[13] = jj_gen;
@@ -863,6 +867,7 @@ public class Compiler implements CompilerConstants {
                 parent.addChild(id);
     t = jj_consume_token(IDENTIFIER);
     l = jj_consume_token(29);
+                id.setPayload(t.image);
                 tokenList.add(new SyntaxToken("IDENTIFIER", t.image));
                 tokenList.add(new SyntaxToken("LPAREN", l.image));
     Args(id);
@@ -975,40 +980,6 @@ public class Compiler implements CompilerConstants {
     finally { jj_save(7, xla); }
   }
 
-  static private boolean jj_3R_64() {
-    if (jj_3R_65()) return true;
-    return false;
-  }
-
-  static private boolean jj_3_1() {
-    if (jj_3R_7()) return true;
-    return false;
-  }
-
-  static private boolean jj_3R_40() {
-    if (jj_3R_41()) return true;
-    Token xsp;
-    xsp = jj_scanpos;
-    if (jj_3R_42()) jj_scanpos = xsp;
-    return false;
-  }
-
-  static private boolean jj_3R_30() {
-    Token xsp;
-    xsp = jj_scanpos;
-    if (jj_3R_36()) {
-    jj_scanpos = xsp;
-    if (jj_3R_37()) {
-    jj_scanpos = xsp;
-    if (jj_3R_38()) {
-    jj_scanpos = xsp;
-    if (jj_3R_39()) return true;
-    }
-    }
-    }
-    return false;
-  }
-
   static private boolean jj_3R_53() {
     if (jj_3R_55()) return true;
     Token xsp;
@@ -1028,15 +999,15 @@ public class Compiler implements CompilerConstants {
     return false;
   }
 
+  static private boolean jj_3R_68() {
+    if (jj_scan_token(STRING_LITERAL)) return true;
+    return false;
+  }
+
   static private boolean jj_3R_7() {
     if (jj_3R_14()) return true;
     if (jj_scan_token(IDENTIFIER)) return true;
     if (jj_scan_token(28)) return true;
-    return false;
-  }
-
-  static private boolean jj_3R_68() {
-    if (jj_scan_token(STRING_LITERAL)) return true;
     return false;
   }
 
@@ -1050,19 +1021,24 @@ public class Compiler implements CompilerConstants {
     return false;
   }
 
-  static private boolean jj_3R_27() {
-    if (jj_scan_token(32)) return true;
+  static private boolean jj_3_7() {
+    if (jj_3R_14()) return true;
     return false;
   }
 
-  static private boolean jj_3_7() {
-    if (jj_3R_14()) return true;
+  static private boolean jj_3R_66() {
+    if (jj_scan_token(INTEGER_LITERAL)) return true;
     return false;
   }
 
   static private boolean jj_3R_50() {
     if (jj_scan_token(45)) return true;
     if (jj_3R_47()) return true;
+    return false;
+  }
+
+  static private boolean jj_3R_27() {
+    if (jj_scan_token(32)) return true;
     return false;
   }
 
@@ -1085,21 +1061,11 @@ public class Compiler implements CompilerConstants {
     return false;
   }
 
-  static private boolean jj_3R_66() {
-    if (jj_scan_token(INTEGER_LITERAL)) return true;
-    return false;
-  }
-
   static private boolean jj_3R_51() {
     if (jj_3R_53()) return true;
     Token xsp;
     xsp = jj_scanpos;
     if (jj_3R_54()) jj_scanpos = xsp;
-    return false;
-  }
-
-  static private boolean jj_3R_29() {
-    if (jj_scan_token(WHILE)) return true;
     return false;
   }
 
@@ -1116,8 +1082,8 @@ public class Compiler implements CompilerConstants {
     return false;
   }
 
-  static private boolean jj_3_2() {
-    if (jj_3R_8()) return true;
+  static private boolean jj_3R_29() {
+    if (jj_scan_token(WHILE)) return true;
     return false;
   }
 
@@ -1131,9 +1097,8 @@ public class Compiler implements CompilerConstants {
     return false;
   }
 
-  static private boolean jj_3R_8() {
-    if (jj_3R_14()) return true;
-    if (jj_scan_token(IDENTIFIER)) return true;
+  static private boolean jj_3_2() {
+    if (jj_3R_8()) return true;
     return false;
   }
 
@@ -1146,9 +1111,9 @@ public class Compiler implements CompilerConstants {
     return false;
   }
 
-  static private boolean jj_3_4() {
-    if (jj_scan_token(ELSE)) return true;
-    if (jj_3R_10()) return true;
+  static private boolean jj_3R_8() {
+    if (jj_3R_14()) return true;
+    if (jj_scan_token(IDENTIFIER)) return true;
     return false;
   }
 
@@ -1157,6 +1122,12 @@ public class Compiler implements CompilerConstants {
     xsp = jj_scanpos;
     if (jj_3R_21()) jj_scanpos = xsp;
     if (jj_scan_token(IDENTIFIER)) return true;
+    return false;
+  }
+
+  static private boolean jj_3_4() {
+    if (jj_scan_token(ELSE)) return true;
+    if (jj_3R_10()) return true;
     return false;
   }
 
@@ -1185,14 +1156,14 @@ public class Compiler implements CompilerConstants {
     return false;
   }
 
-  static private boolean jj_3_6() {
-    if (jj_3R_13()) return true;
-    return false;
-  }
-
   static private boolean jj_3_5() {
     if (jj_3R_11()) return true;
     if (jj_3R_12()) return true;
+    return false;
+  }
+
+  static private boolean jj_3_6() {
+    if (jj_3R_13()) return true;
     return false;
   }
 
@@ -1229,31 +1200,8 @@ public class Compiler implements CompilerConstants {
     return false;
   }
 
-  static private boolean jj_3R_28() {
-    if (jj_scan_token(IF)) return true;
-    return false;
-  }
-
   static private boolean jj_3R_33() {
     if (jj_3R_40()) return true;
-    return false;
-  }
-
-  static private boolean jj_3R_32() {
-    if (jj_3R_13()) return true;
-    return false;
-  }
-
-  static private boolean jj_3R_22() {
-    Token xsp;
-    xsp = jj_scanpos;
-    if (jj_3R_31()) {
-    jj_scanpos = xsp;
-    if (jj_3R_32()) {
-    jj_scanpos = xsp;
-    if (jj_3R_33()) return true;
-    }
-    }
     return false;
   }
 
@@ -1264,8 +1212,13 @@ public class Compiler implements CompilerConstants {
     return false;
   }
 
-  static private boolean jj_3R_35() {
-    if (jj_3R_22()) return true;
+  static private boolean jj_3R_32() {
+    if (jj_3R_13()) return true;
+    return false;
+  }
+
+  static private boolean jj_3R_28() {
+    if (jj_scan_token(IF)) return true;
     return false;
   }
 
@@ -1283,11 +1236,21 @@ public class Compiler implements CompilerConstants {
     return false;
   }
 
-  static private boolean jj_3R_26() {
+  static private boolean jj_3R_35() {
+    if (jj_3R_22()) return true;
+    return false;
+  }
+
+  static private boolean jj_3R_22() {
     Token xsp;
     xsp = jj_scanpos;
-    if (jj_3R_35()) jj_scanpos = xsp;
-    if (jj_scan_token(28)) return true;
+    if (jj_3R_31()) {
+    jj_scanpos = xsp;
+    if (jj_3R_32()) {
+    jj_scanpos = xsp;
+    if (jj_3R_33()) return true;
+    }
+    }
     return false;
   }
 
@@ -1319,6 +1282,14 @@ public class Compiler implements CompilerConstants {
     Token xsp;
     xsp = jj_scanpos;
     if (jj_3R_48()) jj_scanpos = xsp;
+    return false;
+  }
+
+  static private boolean jj_3R_26() {
+    Token xsp;
+    xsp = jj_scanpos;
+    if (jj_3R_35()) jj_scanpos = xsp;
+    if (jj_scan_token(28)) return true;
     return false;
   }
 
@@ -1396,6 +1367,14 @@ public class Compiler implements CompilerConstants {
     return false;
   }
 
+  static private boolean jj_3R_41() {
+    if (jj_3R_43()) return true;
+    Token xsp;
+    xsp = jj_scanpos;
+    if (jj_3R_44()) jj_scanpos = xsp;
+    return false;
+  }
+
   static private boolean jj_3R_17() {
     if (jj_3R_27()) return true;
     return false;
@@ -1406,11 +1385,19 @@ public class Compiler implements CompilerConstants {
     return false;
   }
 
-  static private boolean jj_3R_41() {
-    if (jj_3R_43()) return true;
+  static private boolean jj_3_3() {
+    if (jj_3R_9()) return true;
+    return false;
+  }
+
+  static private boolean jj_3R_58() {
     Token xsp;
     xsp = jj_scanpos;
-    if (jj_3R_44()) jj_scanpos = xsp;
+    if (jj_scan_token(54)) {
+    jj_scanpos = xsp;
+    if (jj_scan_token(55)) return true;
+    }
+    if (jj_3R_55()) return true;
     return false;
   }
 
@@ -1419,8 +1406,11 @@ public class Compiler implements CompilerConstants {
     return false;
   }
 
-  static private boolean jj_3_3() {
-    if (jj_3R_9()) return true;
+  static private boolean jj_3R_55() {
+    if (jj_3R_57()) return true;
+    Token xsp;
+    xsp = jj_scanpos;
+    if (jj_3R_58()) jj_scanpos = xsp;
     return false;
   }
 
@@ -1446,40 +1436,6 @@ public class Compiler implements CompilerConstants {
     return false;
   }
 
-  static private boolean jj_3R_58() {
-    Token xsp;
-    xsp = jj_scanpos;
-    if (jj_scan_token(54)) {
-    jj_scanpos = xsp;
-    if (jj_scan_token(55)) return true;
-    }
-    if (jj_3R_55()) return true;
-    return false;
-  }
-
-  static private boolean jj_3R_55() {
-    if (jj_3R_57()) return true;
-    Token xsp;
-    xsp = jj_scanpos;
-    if (jj_3R_58()) jj_scanpos = xsp;
-    return false;
-  }
-
-  static private boolean jj_3R_14() {
-    Token xsp;
-    xsp = jj_scanpos;
-    if (jj_3R_23()) {
-    jj_scanpos = xsp;
-    if (jj_3R_24()) return true;
-    }
-    return false;
-  }
-
-  static private boolean jj_3R_36() {
-    if (jj_scan_token(GOTO)) return true;
-    return false;
-  }
-
   static private boolean jj_3R_54() {
     Token xsp;
     xsp = jj_scanpos;
@@ -1494,6 +1450,55 @@ public class Compiler implements CompilerConstants {
     }
     }
     if (jj_3R_51()) return true;
+    return false;
+  }
+
+  static private boolean jj_3R_36() {
+    if (jj_scan_token(GOTO)) return true;
+    return false;
+  }
+
+  static private boolean jj_3R_14() {
+    Token xsp;
+    xsp = jj_scanpos;
+    if (jj_3R_23()) {
+    jj_scanpos = xsp;
+    if (jj_3R_24()) return true;
+    }
+    return false;
+  }
+
+  static private boolean jj_3R_64() {
+    if (jj_3R_65()) return true;
+    return false;
+  }
+
+  static private boolean jj_3R_40() {
+    if (jj_3R_41()) return true;
+    Token xsp;
+    xsp = jj_scanpos;
+    if (jj_3R_42()) jj_scanpos = xsp;
+    return false;
+  }
+
+  static private boolean jj_3_1() {
+    if (jj_3R_7()) return true;
+    return false;
+  }
+
+  static private boolean jj_3R_30() {
+    Token xsp;
+    xsp = jj_scanpos;
+    if (jj_3R_36()) {
+    jj_scanpos = xsp;
+    if (jj_3R_37()) {
+    jj_scanpos = xsp;
+    if (jj_3R_38()) {
+    jj_scanpos = xsp;
+    if (jj_3R_39()) return true;
+    }
+    }
+    }
     return false;
   }
 
