@@ -152,6 +152,7 @@ TOKEN : { //Identifiers
 |  <#DIGIT: ["0"-"9"]>
 }
 
+// Rule defining a program, sets root of ast and prints success message upon return
 void Program() : {}
 {
 	{root.setPayload("Program");}
@@ -159,16 +160,19 @@ void Program() : {}
 	{printSuccess();}
 }
 
+// A program is a list of declarations
 void DeclarationList(Node parent) : {}
 {
 	(Declaration(parent))+
 }
 
+// A declaration is a variable or function
 void Declaration(Node parent) : {}
 {
 	( LOOKAHEAD( VarDeclaration(parent) ) VarDeclaration(parent) | FuncDeclaration(parent) )
 }
 
+// Variables are declared by a type and identifier
 void VarDeclaration(Node parent) : {Token i; Token s;}
 {
 	{
@@ -183,6 +187,7 @@ void VarDeclaration(Node parent) : {Token i; Token s;}
 	}
 }
 
+// A type is int or void
 void TypeSpecifier(Node parent) : {Token i; Token v;}
 {
 	{
@@ -202,6 +207,7 @@ void TypeSpecifier(Node parent) : {Token i; Token v;}
 	)
 }
 
+// A function has a type, an id, parameters, and a compound statement
 void FuncDeclaration(Node parent) : {Token i; Token l; Token r;}
 {
 	{
@@ -226,6 +232,7 @@ void FuncDeclaration(Node parent) : {Token i; Token l; Token r;}
 	CompoundStatement(cs)
 }
 
+// Parameters are in a list
 void Params(Node parent) : {Token v;}
 {
 	( LOOKAHEAD( ParamList(parent) ) ParamList(parent) | v = <VOID>
@@ -233,6 +240,7 @@ void Params(Node parent) : {Token v;}
 	)
 }
 
+// Defines the list of parameters
 void ParamList(Node parent) : {Token c;}
 {
 	[(LOOKAHEAD( Param(parent) )  Param(parent) | Param(parent) (c = ","
@@ -242,6 +250,7 @@ void ParamList(Node parent) : {Token c;}
 	Param(parent))+)]
 }
 
+// a parameter has a type and a name
 void Param(Node parent) : {Token i;}
 {
 	{
@@ -255,6 +264,7 @@ void Param(Node parent) : {Token i;}
 	}
 }
 
+// A Compound Statement is a set of local declarations and statements enclosed in parenthesis
 void CompoundStatement(Node parent) : {Token l; Token r;}
 {
 	(l = "{"
@@ -272,16 +282,19 @@ void CompoundStatement(Node parent) : {Token l; Token r;}
 	}
 }
 
+// Variable declarations
 void LocalDeclarations(Node parent) : {}
 {
 	(VarDeclaration(parent))*
 }
 
+// List of statements
 void StatementList(Node parent) : {}
 {
 	(Statement(parent))+
 }
 
+// Defines the various types of statements
 void Statement(Node parent) : {}
 {
 	( LOOKAHEAD(2) LabeledStatement(parent) | //Labels for goto
@@ -292,6 +305,7 @@ void Statement(Node parent) : {}
 	  JumpStatement(parent) ) // goto and returns
 }
 
+// Labels for goto
 void LabeledStatement(Node parent) : {Token i; Token c;}
 {
 	{
@@ -309,12 +323,14 @@ void LabeledStatement(Node parent) : {Token i; Token c;}
 	Statement(stmt) )
 }
 
+// Expression Statements
 void ExpressionStatement(Node parent) : {Token s;}
 {
  	[ Expression(parent) ] s = ";"
 	{tokenList.add(new SyntaxToken("SEMICOLON", s.image));}
 }
 
+//Selection Statements (if else)
 void SelectionStatement(Node parent) : {Token i; Token l; Token r; Token e;}
 {
 	{
@@ -343,6 +359,7 @@ void SelectionStatement(Node parent) : {Token i; Token l; Token r; Token e;}
 	] )
 }
 
+// Iteration (while)
 void IterationStatement(Node parent) : {Token w; Token l; Token r;}
 {
 	{
@@ -366,6 +383,7 @@ void IterationStatement(Node parent) : {Token w; Token l; Token r;}
 	}
 }
 
+//Various jumps (goto, continue, break, return)
 void JumpStatement(Node parent) : {Token t; Token id; Token s;}
 {
 	{
@@ -406,6 +424,7 @@ void JumpStatement(Node parent) : {Token t; Token id; Token s;}
 	)
 }
 
+//Expression
 void Expression(Node parent) : {}
 {
 	{
@@ -595,6 +614,7 @@ void MultiplicativeExpression(Node parent) : {Token t;}
 
 }
 
+// A factor can be an expression, call, variable or a constant
 void Factor(Node parent) : {Token l; Token r;}
 {
 	l = "("
@@ -610,6 +630,7 @@ void Factor(Node parent) : {Token l; Token r;}
 	| LOOKAHEAD(Call(parent)) Call(parent) | Variable(parent) | Constant(parent)
 }
 
+// A call has an id and a argument list
 void Call(Node parent) : {Token t; Token l; Token r;}
 {
 	{
@@ -627,11 +648,13 @@ void Call(Node parent) : {Token t; Token l; Token r;}
 	{tokenList.add(new SyntaxToken("RPAREN", r.image));}
 }
 
+// An argument list can have 0 or more expressions
 void Args(Node parent) : {}
 {
 	(Expression(parent))*
 }
 
+//Constant
 void Constant(Node parent) : {Token t;}
 {
 	{
