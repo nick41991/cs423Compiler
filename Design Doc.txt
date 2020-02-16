@@ -53,3 +53,9 @@ Preprocessor statements
 Struct, enum
 Casting, type promotion
 Type specs
+
+Error Handling
+	The first instance of non-grammatically correct code throws an error message.
+	This message says what was encountered and where in the file it was encountered.
+	It then says what the parser was expecting. 
+	It finishes with a stack trace which may help the user understand how the parser is structured.
