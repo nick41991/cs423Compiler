@@ -1,33 +1,26 @@
 ﻿Program Overview
 
-
-        For our compiler we decided to use java as the java virtual machine allows for the program to be widely used as well as it is the language was widely understood by our team members. We also used the JavaCC parser generator in order to help us generate our parser, as the program offers a very understandable way to implement our generated grammar. Both of these factors should make it easier to develop the compiler and allow for ease of use by users. The compiler will be usable from the command line of linux systems.  
-
+	For our compiler we decided to use java as the java virtual machine allows for the program to be widely used as well as the language was widely understood by our team members. We also used the JavaCC parser generator in order to help us generate our parser, as the program offers a very understandable way to implement our generated grammer. Both of these factors should make it easier to develop the compiler and allow for ease of use by users. The compiler will be usable from the command line of linux systems.  
 
 Compiler.java is the core function for the program, containing the code for command line reading and flags as well as the code linking the parser to the rest of the program. Our complete parser logic is located in Compiler.jj
 Usage
-        
-For  our compiler, we are targeting the linux command line. Since we are using java the user needs to install the java virtual machine, jdk 11, onto their computer. 
+	
+For  our compiler, we are targeting the linux command line. Since we are using java, the user needs to install the java virtual machine, jdk 11, onto their computer. 
 To compile the java program for the compiler navigate to the compiler directory and in the command line type:
-javac *.java
-
-To use the compiler type:
-java Compiler [flags] (path of your c file).
- 
+javac Compiler.java
+To use the compiler
+Type: java Compiler  [flags] (path of your c file).
 If no flags are given the compilation will proceed under assumed parameters
-
 
 Here is a list of what each flag does:
 
 -t : will output a token and label list
--pt : will output a  abstract syntax parse tree
-
+-pt : will output a abstract syntax tree from the parse tree
 Design Discussion
-        For the parser we read in character by character, ignoring whitespaces, till we recognize a token. As we take in tokens we add them to a call stack as the program looks at the parameters of that token in the grammar. The parser then looks ahead at other tokens to see if they meet these grammar rules. This process continues until we hit a base case, where no other inputs are needed. The parser then works back up the call stack building the tree incorporating in the grammar specifications. This system is simple to produce and add too, but comes with the trade of un-optimized, as the parser must search recursively through the whole program. We expect a big O(n), with a linear growth rate. This can be seen as a limitation but the capacity for expansion we think makes this limitation worth it.
-
+	For the parser we read in character by character, ignoring whitespaces, till we recognize a token. As we take in tokens we add them to a call stack as the program looks at the parameters of that token in the grammar. The parser then looks ahead at other tokens to see if they meet these grammar rules. This process continues until we hit a base case, where no other inputs are needed. The parser then works back up the call stack building the tree incorporating in the grammar specifications. This system is simple to produce and add to, but comes with the trade of un-optimized, as the parser must search recursively through the whole program. We expect a big O(n), with a linear growth rate. This can be seen as a limitation but the capacity for expansion we think makes this limitation worth it.
 Language Specification
 Currently we recognize:
-        Identifiers, variables, functions
+	Identifiers, variables, functions
 Keywords
 Arithmetic expressions
 Assignment
@@ -41,7 +34,6 @@ While loops
 += ,-= ,*= ,and  /=
 >,<, >=, <=, and  ==
 
-
 Currently we do Not recognize
 ++ and  --
 Types other than integers
@@ -54,8 +46,5 @@ Struct, enum
 Casting, type promotion
 Type specs
 
-Error Handling
-	The first instance of non-grammatically correct code throws an error message.
-	This message says what was encountered and where in the file it was encountered.
-	It then says what the parser was expecting. 
-	It finishes with a stack trace which may help the user understand how the parser is structured.
+
+
