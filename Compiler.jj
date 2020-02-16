@@ -21,7 +21,11 @@ public class Compiler{
 		for(i = 0; i < height; i++) {
 			System.out.print("\t");
 		}
-		System.out.println("--------" + node.getPayload());
+		if(height != 0){
+			System.out.println("-------- " + node.getPayload());
+		} else {
+			System.out.println(node.getPayload());
+		}
 		for(Node n : node.children) {
 			for(i = 0; i < height + 1; i++) {
 				System.out.print("\t");
@@ -204,9 +208,8 @@ void FuncDeclaration(Node parent) : {Token i; Token l; Token r;}
 		Node id = new Node(parent, "");
 		parent.addChild(id);
 		Node params = new Node(id, "params");
-		id.addChild(params);
 		Node cs = new Node(id, "Compound Statement");
-		id.addChild(cs);
+
 	}
 	TypeSpecifier(id) i = <IDENTIFIER> l = "("
 	{
@@ -217,6 +220,8 @@ void FuncDeclaration(Node parent) : {Token i; Token l; Token r;}
 	Params(params) r = ")"
 	{
 		tokenList.add(new SyntaxToken("RPAREN", r.image));
+		id.addChild(params);
+		id.addChild(cs);
 	}
 	CompoundStatement(cs)
 }
@@ -392,11 +397,9 @@ void JumpStatement(Node parent) : {Token t; Token id; Token s;}
 	| t = <RETURN>
 	{
 		jump.setPayload("Return");
-		Node exp = new Node(jump, "Expression");
-		jump.addChild(exp);
 		tokenList.add(new SyntaxToken("RETURN", t.image));
 	}
-	[ Expression(exp) ] s = ";"
+	[ Expression(jump) ] s = ";"
 	{
 		tokenList.add(new SyntaxToken("SEMICOLON", s.image));
 	}
@@ -405,9 +408,13 @@ void JumpStatement(Node parent) : {Token t; Token id; Token s;}
 
 void Expression(Node parent) : {}
 {
-	LOOKAHEAD(Variable(parent) AssignmentOperator(parent)) Variable(parent) AssignmentOperator(parent) Expression(parent) |
-	LOOKAHEAD(Negation(parent)) Negation(parent) |
-	LogicalORExpression(parent)
+	{
+		Node exp = new Node(parent, "Expression");
+		parent.addChild(exp);
+	}
+	(LOOKAHEAD(Variable(exp) AssignmentOperator(exp)) Variable(exp) AssignmentOperator(exp) Expression(exp) |
+	LOOKAHEAD(Negation(exp)) Negation(exp) |
+	LogicalORExpression(exp))
 }
 
 void Negation(Node parent) : {Token t;}
@@ -592,13 +599,15 @@ void Factor(Node parent) : {Token l; Token r;}
 {
 	l = "("
 	{
+		Node exp = new Node(parent, "Expression");
+		parent.addChild(exp);
 		tokenList.add(new SyntaxToken("LPAREN", l.image));
 	}
-	LogicalORExpression(parent) r = ")"
+	LogicalORExpression(exp) r = ")"
 	{
 		tokenList.add(new SyntaxToken("RPAREN", r.image));
 	}
-	| LOOKAHEAD(Call()) Call(parent) | Variable(parent) | Constant(parent)
+	| LOOKAHEAD(Call(parent)) Call(parent) | Variable(parent) | Constant(parent)
 }
 
 void Call(Node parent) : {Token t; Token l; Token r;}
@@ -610,6 +619,7 @@ void Call(Node parent) : {Token t; Token l; Token r;}
 	}
 	(t = <IDENTIFIER> l = "("
 	{
+		id.setPayload(t.image);
 		tokenList.add(new SyntaxToken("IDENTIFIER", t.image));
 		tokenList.add(new SyntaxToken("LPAREN", l.image));
 	}
