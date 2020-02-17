@@ -1,3 +1,7 @@
+
+/** Creates a token with a value and type
+ * 
+ */
 public class SyntaxToken {
 	String type;
 	String image;

@@ -1,9 +1,12 @@
 import java.util.ArrayList;
 
+/** Creates a node for the Abstract Syntax Tree which contains the value, parent, and children.
+ * 
+ */
 public class Node{
 	public Node parent;
 	public ArrayList<Node> children;
-	public String payload;
+	public String payload;					//value of node
 
 	public Node(){
 		parent = null;
@@ -17,6 +20,7 @@ public class Node{
 		payload = info;
 	}
 
+	//Adds a child node to the list of children for this node.
 	public void addChild(Node child){
 		children.add(child);
 	}

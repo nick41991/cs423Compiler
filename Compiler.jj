@@ -2,6 +2,11 @@ PARSER_BEGIN(Compiler)
 
 import java.util.*;
 
+/** Compiler.jj defines grammar and can parse a .c file. When this file is compiled with jcc, it will create
+* Compiler.java, CompilerConstants.java, CompilerTokenManager.java, ParseException.java, SimpleCharStream.java,
+* Token.java, and TokenMgrError.java
+*/
+
 public class Compiler{
 	public static ArrayList<SyntaxToken> tokenList = new ArrayList<SyntaxToken>();
 	public static Node root = new Node();
@@ -16,6 +21,8 @@ public class Compiler{
 		}
 	}
 
+	
+	//Prints Abstract Syntax Tree from the root node
 	private static void printParseTree(Node node, int height){
 		int i;
 		for(i = 0; i < height; i++) {
@@ -42,7 +49,7 @@ public class Compiler{
 
     // Run the parser
 	public static void main ( String args [ ] ) {
-      		Compiler parser;
+      	Compiler parser;
 		boolean tokenBool = false;
 		boolean parseTreeBool = false;
 		boolean fileSet = false;
