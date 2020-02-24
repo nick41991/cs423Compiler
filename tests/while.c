@@ -1,5 +1,5 @@
 
-int my_func(int a){
+int my_func(int a, int b){
 	return a;
 }
 
@@ -22,7 +22,7 @@ LABEL:
 		goto LABEL;	
 	}
 	int b;
-	a = my_func(a);
+	a = my_func(a, b + 1);
 	
 	return a;
 }

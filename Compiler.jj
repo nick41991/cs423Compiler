@@ -21,7 +21,7 @@ public class Compiler{
 		}
 	}
 
-	
+
 	//Prints Abstract Syntax Tree from the root node
 	private static void printParseTree(Node node, int height){
 		int i;
@@ -242,19 +242,20 @@ void FuncDeclaration(Node parent) : {Token i; Token l; Token r;}
 // Parameters are in a list
 void Params(Node parent) : {Token v;}
 {
-	( LOOKAHEAD( ParamList(parent) ) ParamList(parent) | v = <VOID>
-	{tokenList.add(new SyntaxToken("VOID", v.image));}
+	( LOOKAHEAD( <VOID> ) <VOID> | ParamList(parent)
+	//{tokenList.add(new SyntaxToken("VOID", v.image));}
 	)
 }
 
 // Defines the list of parameters
-void ParamList(Node parent) : {Token c;}
+void ParamList(Node parent) : {Token t;}
 {
-	[(LOOKAHEAD( Param(parent) )  Param(parent) | Param(parent) (c = ","
+	[Param(parent) [ t = ","
 	{
-		tokenList.add(new SyntaxToken("COMMA", c.image));
+		tokenList.add(new SyntaxToken("COMMA", t.image));
 	}
-	Param(parent))+)]
+	ParamList(parent) ]]
+
 }
 
 // a parameter has a type and a name
@@ -656,9 +657,13 @@ void Call(Node parent) : {Token t; Token l; Token r;}
 }
 
 // An argument list can have 0 or more expressions
-void Args(Node parent) : {}
+void Args(Node parent) : {Token t;}
 {
-	(Expression(parent))*
+	[Expression(parent) [ t = ","
+	{
+		tokenList.add(new SyntaxToken("COMMA", t.image));
+	}
+	Expression(parent) ]]
 }
 
 //Constant
