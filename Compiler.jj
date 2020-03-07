@@ -11,6 +11,10 @@ public class Compiler{
 	public static ArrayList<SyntaxToken> tokenList = new ArrayList<SyntaxToken>();
 	public static Node root = new Node();
 
+	public Compiler() {
+		;
+	}
+
   	private static void printSuccess(){
   		System.out.println("Input Parsed Successfully!");
   	}
@@ -48,9 +52,10 @@ public class Compiler{
 	}
 
     // Run the parser
-	public static void main ( String args [ ] ) {
+	public static Node run(boolean tokenBool, boolean parseTreeBool, boolean fileSet, String fileName) {
       	Compiler parser;
-		boolean tokenBool = false;
+
+		/*boolean tokenBool = false;
 		boolean parseTreeBool = false;
 		boolean fileSet = false;
 		String fileName = null;
@@ -68,7 +73,7 @@ public class Compiler{
 				System.out.println("Error: More than one file passed as argument.");
 				return;
 			}
-		}
+		}*/
 
 		//Mostly for easy debugging, may not be in final version
 		if(!fileSet){
@@ -82,13 +87,13 @@ public class Compiler{
         			parser = new Compiler(new java.io.FileInputStream(fileName));
       			}
       			catch(java.io.FileNotFoundException e){
-        			System.out.println("C Parser:  File " + args[0] + " not found.");
-        			return;
+        			System.out.println("C Parser:  File " + fileName + " not found.");
+        			return null;
         		}
       		} else {
         		System.out.println("Compiler:  Usage is one of:");
         		System.out.println("         java Compiler [-t] [-pt] [fileName]");
-        		return;
+        		return null;
       		}
       		try {
         		parser.Program();
@@ -104,6 +109,7 @@ public class Compiler{
         		System.out.println("Compiler:  Encountered errors during parse.");
         		e.printStackTrace();
       		}
+			return root;
     	}
 }
 

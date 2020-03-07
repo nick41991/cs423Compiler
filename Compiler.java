@@ -10,6 +10,10 @@ public class Compiler implements CompilerConstants {
         public static ArrayList<SyntaxToken> tokenList = new ArrayList<SyntaxToken>();
         public static Node root = new Node();
 
+        public Compiler() {
+                ;
+        }
+
         private static void printSuccess(){
                 System.out.println("Input Parsed Successfully!");
         }
@@ -47,27 +51,28 @@ public class Compiler implements CompilerConstants {
         }
 
     // Run the parser
-        public static void main ( String args [ ] ) {
+        public static Node run(boolean tokenBool, boolean parseTreeBool, boolean fileSet, String fileName) {
         Compiler parser;
-                boolean tokenBool = false;
-                boolean parseTreeBool = false;
-                boolean fileSet = false;
-                String fileName = null;
+
+                /*boolean tokenBool = false;
+		boolean parseTreeBool = false;
+		boolean fileSet = false;
+		String fileName = null;
 
 
-                for(String s : args){
-                        if(s.equals("-t")){
-                                tokenBool = true;
-                        } else if (s.equals("-pt")){
-                                parseTreeBool = true;
-                        } else if (!fileSet){
-                                fileName = s;
-                                fileSet = true;
-                        } else {
-                                System.out.println("Error: More than one file passed as argument.");
-                                return;
-                        }
-                }
+		for(String s : args){
+			if(s.equals("-t")){
+				tokenBool = true;
+			} else if (s.equals("-pt")){
+				parseTreeBool = true;
+			} else if (!fileSet){
+				fileName = s;
+				fileSet = true;
+			} else {
+				System.out.println("Error: More than one file passed as argument.");
+				return;
+			}
+		}*/
 
                 //Mostly for easy debugging, may not be in final version
                 if(!fileSet){
@@ -81,13 +86,13 @@ public class Compiler implements CompilerConstants {
                                 parser = new Compiler(new java.io.FileInputStream(fileName));
                         }
                         catch(java.io.FileNotFoundException e){
-                                System.out.println("C Parser:  File " + args[0] + " not found.");
-                                return;
+                                System.out.println("C Parser:  File " + fileName + " not found.");
+                                return null;
                         }
                 } else {
                         System.out.println("Compiler:  Usage is one of:");
                         System.out.println("         java Compiler [-t] [-pt] [fileName]");
-                        return;
+                        return null;
                 }
                 try {
                         parser.Program();
@@ -103,6 +108,7 @@ public class Compiler implements CompilerConstants {
                         System.out.println("Compiler:  Encountered errors during parse.");
                         e.printStackTrace();
                 }
+                        return root;
         }
 
 // Rule defining a program, sets root of ast and prints success message upon return
@@ -236,8 +242,6 @@ public class Compiler implements CompilerConstants {
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
       case 31:
         t = jj_consume_token(31);
-                // Node op = new Node(parent, "||");
-                // parent.addChild(op);
                 tokenList.add(new SyntaxToken("COMMA", t.image));
         ParamList(parent);
         break;
@@ -910,8 +914,6 @@ public class Compiler implements CompilerConstants {
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
       case 31:
         t = jj_consume_token(31);
-                // Node op = new Node(parent, "||");
-                // parent.addChild(op);
                 tokenList.add(new SyntaxToken("COMMA", t.image));
         Expression(parent);
         break;
@@ -1054,6 +1056,11 @@ public class Compiler implements CompilerConstants {
     return false;
   }
 
+  static private boolean jj_3_2() {
+    if (jj_scan_token(VOID)) return true;
+    return false;
+  }
+
   static private boolean jj_3R_42() {
     if (jj_scan_token(42)) return true;
     if (jj_3R_39()) return true;
@@ -1074,11 +1081,6 @@ public class Compiler implements CompilerConstants {
 
   static private boolean jj_3R_29() {
     if (jj_3R_10()) return true;
-    return false;
-  }
-
-  static private boolean jj_3_2() {
-    if (jj_scan_token(VOID)) return true;
     return false;
   }
 
@@ -1264,11 +1266,6 @@ public class Compiler implements CompilerConstants {
     return false;
   }
 
-  static private boolean jj_3R_66() {
-    if (jj_scan_token(STRING_LITERAL)) return true;
-    return false;
-  }
-
   static private boolean jj_3R_13() {
     if (jj_3R_23()) return true;
     return false;
@@ -1301,6 +1298,11 @@ public class Compiler implements CompilerConstants {
     return false;
   }
 
+  static private boolean jj_3R_66() {
+    if (jj_scan_token(STRING_LITERAL)) return true;
+    return false;
+  }
+
   static private boolean jj_3R_7() {
     Token xsp;
     xsp = jj_scanpos;
@@ -1323,11 +1325,6 @@ public class Compiler implements CompilerConstants {
     return false;
   }
 
-  static private boolean jj_3R_65() {
-    if (jj_scan_token(CHARACTER_LITERAL)) return true;
-    return false;
-  }
-
   static private boolean jj_3R_37() {
     if (jj_3R_39()) return true;
     Token xsp;
@@ -1336,9 +1333,19 @@ public class Compiler implements CompilerConstants {
     return false;
   }
 
+  static private boolean jj_3R_21() {
+    if (jj_scan_token(VOID)) return true;
+    return false;
+  }
+
   static private boolean jj_3R_38() {
     if (jj_scan_token(31)) return true;
     if (jj_3R_19()) return true;
+    return false;
+  }
+
+  static private boolean jj_3R_65() {
+    if (jj_scan_token(CHARACTER_LITERAL)) return true;
     return false;
   }
 
@@ -1377,8 +1384,8 @@ public class Compiler implements CompilerConstants {
     return false;
   }
 
-  static private boolean jj_3R_64() {
-    if (jj_scan_token(INTEGER_LITERAL)) return true;
+  static private boolean jj_3R_20() {
+    if (jj_scan_token(INT)) return true;
     return false;
   }
 
@@ -1387,8 +1394,18 @@ public class Compiler implements CompilerConstants {
     return false;
   }
 
-  static private boolean jj_3R_21() {
-    if (jj_scan_token(VOID)) return true;
+  static private boolean jj_3R_64() {
+    if (jj_scan_token(INTEGER_LITERAL)) return true;
+    return false;
+  }
+
+  static private boolean jj_3R_11() {
+    Token xsp;
+    xsp = jj_scanpos;
+    if (jj_3R_20()) {
+    jj_scanpos = xsp;
+    if (jj_3R_21()) return true;
+    }
     return false;
   }
 
@@ -1405,11 +1422,6 @@ public class Compiler implements CompilerConstants {
     return false;
   }
 
-  static private boolean jj_3R_20() {
-    if (jj_scan_token(INT)) return true;
-    return false;
-  }
-
   static private boolean jj_3_7() {
     if (jj_3R_11()) return true;
     return false;
@@ -1421,13 +1433,8 @@ public class Compiler implements CompilerConstants {
     return false;
   }
 
-  static private boolean jj_3R_11() {
-    Token xsp;
-    xsp = jj_scanpos;
-    if (jj_3R_20()) {
-    jj_scanpos = xsp;
-    if (jj_3R_21()) return true;
-    }
+  static private boolean jj_3_1() {
+    if (jj_3R_5()) return true;
     return false;
   }
 
@@ -1473,8 +1480,10 @@ public class Compiler implements CompilerConstants {
     return false;
   }
 
-  static private boolean jj_3_1() {
-    if (jj_3R_5()) return true;
+  static private boolean jj_3R_5() {
+    if (jj_3R_11()) return true;
+    if (jj_scan_token(IDENTIFIER)) return true;
+    if (jj_scan_token(28)) return true;
     return false;
   }
 
@@ -1498,13 +1507,6 @@ public class Compiler implements CompilerConstants {
     xsp = jj_scanpos;
     if (jj_3R_18()) jj_scanpos = xsp;
     if (jj_scan_token(IDENTIFIER)) return true;
-    return false;
-  }
-
-  static private boolean jj_3R_5() {
-    if (jj_3R_11()) return true;
-    if (jj_scan_token(IDENTIFIER)) return true;
-    if (jj_scan_token(28)) return true;
     return false;
   }
 
