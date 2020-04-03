@@ -1,4 +1,4 @@
-PARSER_BEGIN(Compiler)
+PARSER_BEGIN(Parser)
 
 import java.util.*;
 
@@ -7,11 +7,11 @@ import java.util.*;
 * Token.java, and TokenMgrError.java
 */
 
-public class Compiler{
+public class Parser{
 	public static ArrayList<SyntaxToken> tokenList = new ArrayList<SyntaxToken>();
 	public static Node root = new Node();
 
-	public Compiler() {
+	public Parser() {
 		;
 	}
 
@@ -53,7 +53,7 @@ public class Compiler{
 
     // Run the parser
 	public static Node run(boolean tokenBool, boolean parseTreeBool, boolean fileSet, String fileName) {
-      	Compiler parser;
+      	Parser parser;
 
 		/*boolean tokenBool = false;
 		boolean parseTreeBool = false;
@@ -78,13 +78,13 @@ public class Compiler{
 		//Mostly for easy debugging, may not be in final version
 		if(!fileSet){
         		System.out.println("C Parser:  Reading from standard input . . .");
-        		parser = new Compiler(System.in);
+        		parser = new Parser(System.in);
       		}
 
       		else if(fileSet){
         		System.out.println("C Parser:  Reading from file " + fileName + " . . ." );
       			try {
-        			parser = new Compiler(new java.io.FileInputStream(fileName));
+        			parser = new Parser(new java.io.FileInputStream(fileName));
       			}
       			catch(java.io.FileNotFoundException e){
         			System.out.println("C Parser:  File " + fileName + " not found.");
@@ -113,7 +113,7 @@ public class Compiler{
     	}
 }
 
-PARSER_END(Compiler)
+PARSER_END(Parser)
 
 SKIP : {
  " "
