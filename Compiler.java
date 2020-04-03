@@ -5,6 +5,7 @@ public class Compiler {
         Parser c = new Parser();
         boolean tokenBool = false;
 		boolean parseTreeBool = false;
+        boolean symbolTableBool = false;
 		boolean fileSet = false;
 		String fileName = null;
 
@@ -14,7 +15,9 @@ public class Compiler {
                 System.out.println("-t");
 			} else if (s.equals("-pt")){
 				parseTreeBool = true;
-			} else if (!fileSet){
+			} else if (s.equals("-s")) {
+                symbolTableBool = true;
+            } else if (!fileSet){
 				fileName = s;
 				fileSet = true;
 			} else {
@@ -22,5 +25,11 @@ public class Compiler {
 			}
 		}
         Node root = c.run(tokenBool, parseTreeBool, fileSet, fileName);
+        if(symbolTableBool) {
+            SymbolTable symRoot;
+            symRoot = SymbolTable.createSymbolTable(root);
+            SymbolTable.printSymbolTable(symRoot);
+        }
+
     }
 }
