@@ -1,10 +1,12 @@
 
 int my_func(int a, int b){
+	int c;	
 	return a;
 }
 
 int main(){
 	int a;
+	int b;
 	a = 1;
 LABEL:
 	while(!(a > 10)){
@@ -21,7 +23,7 @@ LABEL:
 		a = a;
 		goto LABEL;	
 	}
-	int b;
+	//int b;
 	a = my_func(a, b + 1);
 	
 	return a;

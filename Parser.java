@@ -41,10 +41,10 @@ public class Parser implements ParserConstants {
                                 System.out.print("\u005ct");
                         }
                         System.out.println("|");
-                        for(i = 0; i < height + 1; i++) {
-                                System.out.print("\u005ct");
-                        }
-                        System.out.println("|");
+                        // for(i = 0; i < height + 1; i++) {
+                        // 	System.out.print("\t");
+                        // }
+                        // System.out.println("|");
 
                         printParseTree(n, height + 1);
                 }
