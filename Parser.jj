@@ -609,16 +609,13 @@ void AdditiveExpression(Node parent) : {Token t;}
 		parent.addChild(op);
 		tokenList.add(new SyntaxToken("ADDOP", t.image));
 	}
-	AdditiveExpression(parent)
+	Expression(parent)
 	]
 }
 
 void MultiplicativeExpression(Node parent) : {Token t;}
 {
-	Factor(parent) [ ( t = "*"
-	| t = "/"
-	| t = "%"
-	)
+	Factor(parent) [ ( t = "*" | t = "/" | t = "%")
 	{
 		Node op = new Node(parent, t.image);
 		parent.addChild(op);
