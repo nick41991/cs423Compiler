@@ -40,8 +40,6 @@ public class SymbolTable {
     public static SymbolTable createSymbolTable(Node node) {
         SymbolTable symRoot = new SymbolTable();
         Symbol sym;
-        Node tmp;
-        Node tmp2;
 
         for(Node n : node.children) {
             //This is an indication that the current node is a function
@@ -60,7 +58,7 @@ public class SymbolTable {
     }
 
     /* Checks for any declarations
-     * Recursively traverses tree until it finds an int 
+     * Recursively traverses tree until it finds an int
      */
     public static SymbolTable getSymbols(SymbolTable st, Node node, String scope) {
         Symbol sym;
