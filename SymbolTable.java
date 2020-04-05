@@ -25,7 +25,7 @@ public class SymbolTable {
     public SymbolTable() {
         children = new ArrayList<SymbolTable>();
         symbols = new ArrayList<Symbol>();
-        name = "";
+        name = "Program";
     }
 
     public void addSymbol(Symbol s) {
