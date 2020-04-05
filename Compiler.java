@@ -30,6 +30,7 @@ public class Compiler {
             symRoot = SymbolTable.createSymbolTable(root);
             SymbolTable.printSymbolTable(symRoot);
         }
-
+	Intermediate n = new Intermediate();
+	n.run(root);
     }
 }
