@@ -1,4 +1,3 @@
-
 int my_func(int a, int b){
 	int c;	
 	return a;
@@ -22,7 +21,7 @@ LABEL:
 		a = a;
 		goto LABEL;	
 	}
-	int b;
+	int b = 1;
 	a = my_func(a, b + 1);
 	
 	return a;

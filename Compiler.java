@@ -25,12 +25,15 @@ public class Compiler {
 			}
 		}
         Node root = c.run(tokenBool, parseTreeBool, fileSet, fileName);
-        if(symbolTableBool) {
-            SymbolTable symRoot;
-            symRoot = SymbolTable.createSymbolTable(root);
+
+        SymbolTable symRoot;
+        symRoot = SymbolTable.createSymbolTable(root);
+
+	Intermediate n = new Intermediate(symRoot);
+	n.run(root);
+
+	if(symbolTableBool) {
             SymbolTable.printSymbolTable(symRoot);
         }
-	Intermediate n = new Intermediate();
-	n.run(root);
     }
 }
