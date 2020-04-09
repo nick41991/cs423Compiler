@@ -35,7 +35,7 @@ Compiler.java controls the main logic of the Compiler. Compiler.jj handles all l
 | -t    | Output a token list |:heavy_check_mark:|
 | -pt   | Output a parse tree |:heavy_check_mark:|
 | -s    | Output symbol table |:heavy_check_mark:|
-| -ir   | Output IR|:x:|
+| -ir   | Output IR|:heavy_check_mark:|
 | -f    | Output IR to a specified file|:x:|
 | -r    | Read in IR instead of source file|:x:|
 
@@ -51,19 +51,19 @@ Currently we recognize:
 
 |Features|Scanner|Parser|IR|
 |--------|-------|------|--|
-|Identifiers|:heavy_check_mark:|:heavy_check_mark:|:x:|
-|Variables|:heavy_check_mark:|:heavy_check_mark:|:x:|
-|Functions|:heavy_check_mark:|:heavy_check_mark:|:x:|
-|Keywords|:heavy_check_mark:|:heavy_check_mark:|:x:|
-|Arithmetic Expressions|:heavy_check_mark:|:heavy_check_mark:|:x:|
-|Assignment|:heavy_check_mark:|:heavy_check_mark:|:x:|
-|Boolean Expressions|:heavy_check_mark:|:heavy_check_mark:|:x:|
-|GOTO Statements|:heavy_check_mark:|:heavy_check_mark:|:x:|
-|If/Else Control Flow|:heavy_check_mark:|:heavy_check_mark:|:x:|
-|Unary Operators|:heavy_check_mark:|:heavy_check_mark:|:x:|
-|Return Statements|:heavy_check_mark:|:heavy_check_mark:|:x:|
-|Break Statements|:heavy_check_mark:|:heavy_check_mark:|:x:|
-|While Loops|:heavy_check_mark:|:heavy_check_mark:|:x:|
+|Identifiers|:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|
+|Variables|:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|
+|Functions|:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|
+|Keywords|:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|
+|Arithmetic Expressions|:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|
+|Assignment|:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|
+|Boolean Expressions|:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|
+|GOTO Statements|:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|
+|If/Else Control Flow|:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|
+|Unary Operators|:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|
+|Return Statements|:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|
+|Break Statements|:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|
+|While Loops|:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|
 
 #### Optional Language Features
 
@@ -71,15 +71,17 @@ Currently we recognize:
 |--------|-------|------|--|
 |++|:x:|:x:|:x:|
 |--|:x:|:x:|:x:|
-|-=|:heavy_check_mark:|:heavy_check_mark:|:x:|
-|+=|:heavy_check_mark:|:heavy_check_mark:|:x:|
-|*=|:heavy_check_mark:|:heavy_check_mark:|:x:|
-|/=|:heavy_check_mark:|:heavy_check_mark:|:x:|
-|>|:heavy_check_mark:|:heavy_check_mark:|:x:|
-|<|:heavy_check_mark:|:heavy_check_mark:|:x:|
-|>=|:heavy_check_mark:|:heavy_check_mark:|:x:|
-|<=|:heavy_check_mark:|:heavy_check_mark:|:x:|
-|==|:heavy_check_mark:|:heavy_check_mark:|:x:|
+|-=|:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|
+|+=|:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|
+|*=|:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|
+|/=|:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|
+|>|:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|
+|<|:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|
+|\|\||:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|
+|&&|:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|
+|>=|:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|
+|<=|:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|
+|==|:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|
 |Types Other</br>Than Integers|:x:|:x:|:x:|
 |For Loops|:x:|:x:|:x:|
 |Binary Operators|:x:|:x:|:x:|
@@ -91,3 +93,18 @@ Currently we recognize:
 |Type Specs|:x:|:x:|:x:|
 
 ## Intermediate Language Design
+In designing our Intermediate representation, we aimed for simplicity mimicking the general structure of c code but without the indentations and identifiers.
+ - The IR is essentially a list of strings, which each represent 1 instruction, function, or operation.
+ - Functions are represented by their name and parameters and are followed by a compound statement:
+ 	main(a, b){}
+ - Compound Statements are contained by pairs of parenthesis.
+ - Compound Statements have a local declaration block and a statement list.
+ - Our IR ignores local declarations because they are already contained within the symbol table.
+ - Expressions are restructured in a three address form.
+ - This requires the use of placeholders, represented in the IR by Lx (where x is a number).
+ - They take the form of Lz = Lx + Ly. where Lx and Ly are also placeholders which may be a similar expression or a base case such as a variable or constant. For large expressions, this can form a long chain.
+ - In generating the IR, a placeholder's chain must be followed, writing the base cases of the placeholder to the IR before it can be written to the IR. In the above example x and y would have to be resolved and expanded before z could.
+ - Keywords with a mathematical or conditional expression such as return, if, and while appear as they normally would, followed by a placeholder representing their expression.
+ - Many placeholders hold single numbers or variables currently. This can be optimized later with constant folding and propagation.
+
+ For samples of the IR, please see files ending in "_IR_Sample" in the folder SampleOutputs
