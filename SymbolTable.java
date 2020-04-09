@@ -32,6 +32,11 @@ public class SymbolTable {
         symbols.add(s);
     }
 
+    public void addSymbol(String scope, String type, String sym) {
+	Symbol s = new Symbol(scope, type, sym);
+        symbols.add(s);
+    }
+
     public void addChild(SymbolTable child) {
         children.add(child);
     }
@@ -55,6 +60,16 @@ public class SymbolTable {
         }
 
         return symRoot;
+    }
+
+	/*Get a symbol table by name*/
+    public SymbolTable getTable(String name) {
+	    for(SymbolTable st: children){
+		    if(st.name == name){
+			    return st;
+		    }
+	    }
+	    return null;
     }
 
     /* Checks for any declarations

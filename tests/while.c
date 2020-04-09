@@ -14,14 +14,15 @@ LABEL:
 		}
 	}
 
-	if( (a > 10) && (a == 5) || (my_func(a) == a))
+	if( (a > 10) && (a == 5) || (my_func(a, a) == a))
 		a = a - 1;
 		
 	else {
-		a = a;
+		a = a - 5;
 		goto LABEL;	
 	}
 	int b = 1;
+	a = 1 | 5;
 	a = my_func(a, b + 1);
 	
 	return a;

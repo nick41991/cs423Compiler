@@ -15,12 +15,6 @@ int main()
 			*
 				5
 				6
-		
-	l1 = 3 + 4
-	l2 = l1 * 
-	
-	
-
 	*/
-	return 1;
+	return a;
 }
