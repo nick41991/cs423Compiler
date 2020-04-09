@@ -13,33 +13,33 @@ public class Compiler {
 		if(s.equals("-t")){
 			tokenBool = true;
                 	System.out.println("-t");
-                	
+
 		} else if (s.equals("-pt")){
 			parseTreeBool = true;
-			
+
 		} else if (s.equals("-s")) {
                 	symbolTableBool = true;
-                	
+
             	} else if (!fileSet){
 			fileName = s;
 			fileSet = true;
-			
+
 		} else {
 			System.out.println("Error: More than one file passed as argument.");
-			
+
 		}
 	}
-	
+
         Node root = c.run(tokenBool, parseTreeBool, fileSet, fileName);
         if (parseTreeBool) {
         	root.printParseTree(root,0);
 	}
-	
+
         SymbolTable symRoot;
         symRoot = SymbolTable.createSymbolTable(root);
 
-	Intermediate n = new Intermediate(symRoot);
-	n.run(root);
+	//Intermediate n = new Intermediate(symRoot);
+	//n.run(root);
 
 	if(symbolTableBool) {
             SymbolTable.printSymbolTable(symRoot);

@@ -42,10 +42,6 @@ public class Parser{
 				System.out.print("\t");
 			}
 			System.out.println("|");
-			// for(i = 0; i < height + 1; i++) {
-			// 	System.out.print("\t");
-			// }
-			// System.out.println("|");
 
 			printParseTree(n, height + 1);
 		}
@@ -363,13 +359,15 @@ void SelectionStatement(Node parent) : {Token i; Token l; Token r; Token e;}
 	Expression(ifExp) r = ")" Statement(ifStmt)
 	{
 		tokenList.add(new SyntaxToken("RPAREN", r.image));
-		Node elseTok = new Node(ifTok, "else");
+		Node elseTok = new Node(parent, "else");
 		Node elseStmt = new Node(elseTok, "elseStatment");
 	}
 	[ LOOKAHEAD(2) e = <ELSE> Statement(elseStmt)
 	{
-		ifTok.addChild(elseTok);
-		tokenList.add(new SyntaxToken("ELSE", e.image));}
+		parent.addChild(elseTok);
+		elseTok.addChild(elseStmt);
+		tokenList.add(new SyntaxToken("ELSE", e.image));
+	}
 	] )
 }
 
