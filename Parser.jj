@@ -52,7 +52,7 @@ public class Parser{
 	}
 
     // Run the parser
-	public static Node run(boolean tokenBool, boolean parseTreeBool, boolean fileSet, String fileName) {
+	public static Node run(boolean tokenBool, boolean fileSet, String fileName) {
       	Parser parser;
 
 		/*boolean tokenBool = false;
@@ -99,9 +99,6 @@ public class Parser{
         		parser.Program();
 			if(tokenBool){
 				printTokens();
-			}
-			if(parseTreeBool){
-				printParseTree(root, 0);
 			}
         		System.out.println("Compiler:  C program parsed successfully.");
       		}
@@ -324,9 +321,7 @@ void LabeledStatement(Node parent) : {Token i; Token c;}
 {
 	{
 		Node id = new Node(parent, "");
-		Node stmt = new Node(id, "");
 		parent.addChild(id);
-		id.addChild(stmt);
 	}
 	( i = <IDENTIFIER> c = ":"
 	{
@@ -334,7 +329,7 @@ void LabeledStatement(Node parent) : {Token i; Token c;}
 		tokenList.add(new SyntaxToken("IDENTIFIER", i.image));
 		tokenList.add(new SyntaxToken("COLON", c.image));
 	}
-	Statement(stmt) )
+	Statement(id) )
 }
 
 // Expression Statements
@@ -369,6 +364,7 @@ void SelectionStatement(Node parent) : {Token i; Token l; Token r; Token e;}
 	[ LOOKAHEAD(2) e = <ELSE> Statement(elseStmt)
 	{
 		ifTok.addChild(elseTok);
+		elseTok.addChild(elseStmt);
 		tokenList.add(new SyntaxToken("ELSE", e.image));}
 	] )
 }
