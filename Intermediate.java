@@ -419,7 +419,7 @@ public class Intermediate
 				expandPlaceholder(ph.name, ph.expression, ir);
 			}
 		}
-		name = child.concat("= " + exp);
+		name = child.concat("=" + exp);
 		ir.addLine(name);
 
 	}
