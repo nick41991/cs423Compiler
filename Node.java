@@ -32,4 +32,29 @@ public class Node{
 	public void setPayload(String newPayload){
 		payload = newPayload;
 	}
+	
+	//Prints Abstract Syntax Tree from the root node
+        public void printParseTree(Node node, int height){
+                int i;
+                for(i = 0; i < height; i++) {
+                        System.out.print("\u005ct");
+                }
+                if(height != 0){
+                        System.out.println("-------- " + node.getPayload());
+                } else {
+                        System.out.println(node.getPayload());
+                }
+                for(Node n : node.children) {
+                        for(i = 0; i < height + 1; i++) {
+                                System.out.print("\u005ct");
+                        }
+                        System.out.println("|");
+                        // for(i = 0; i < height + 1; i++) {
+                        // 	System.out.print("\t");
+                        // }
+                        // System.out.println("|");
+
+                        printParseTree(n, height + 1);
+                }
+        }
 }
