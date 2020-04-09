@@ -34,7 +34,6 @@ public class Compiler {
 
 		}
 	}
-
         Node root = c.run(tokenBool, fileSet, fileName);
         if (parseTreeBool) {
         	root.printParseTree(root,0);
