@@ -80,7 +80,7 @@ public class Intermediate
 		Placeholder expression = new Placeholder("L" + ph_num, exp, context.name, height);
 		placeholders.add(expression);
 		/*Add ph to Symbol table*/
-		context.addSymbol(context.name, "int", expression.name);
+		context.addSymbol("int", expression.name);
 		/*Update node with ph info*/
 		root.setPayload(expression.name);
 		root.children.clear();
@@ -146,7 +146,7 @@ public class Intermediate
 					/*Create new placeholder*/
 					exp = p.expression.substring(0, j - 1);
 					Placeholder sub_expression = new Placeholder("L" + ph_num, exp, context.name, p.height + 1);
-					context.addSymbol(context.name, "int", sub_expression.name);
+					context.addSymbol("int", sub_expression.name);
 					p.expression = sub_expression.name.concat(p.expression.substring(j - 1));
 					newPlaceholders.add(sub_expression);
 					ph_num++;
@@ -255,7 +255,7 @@ public class Intermediate
 				/*Create new placeholder*/
 				exp = p.expression.substring(0, j - 1);
 				Placeholder sub_expression = new Placeholder("L" + ph_num, exp, context.name, p.height + 1);
-				context.addSymbol(context.name, "int", sub_expression.name);
+				context.addSymbol("int", sub_expression.name);
 				p.expression = sub_expression.name.concat(p.expression.substring(j - 1));
 				newPlaceholders.add(sub_expression);
 				ph_num++;

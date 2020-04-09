@@ -40,8 +40,8 @@ public class SymbolTable {
         symbols.add(s);
     }
 
-    public void addSymbol(String scope, String type, String sym) {
-	Symbol s = new Symbol(scope, type, sym);
+    public void addSymbol(String type, String sym) {
+	Symbol s = new Symbol(type, sym);
         symbols.add(s);
     }
 
