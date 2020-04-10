@@ -9,7 +9,7 @@
 
 For our compiler we decided to use Java because the Java Virtual Machine (JVM) allows for the program to be widely used, as well as the language was widely understood by our team members. We also used the JavaCC parser generator in order to help us generate our parser. The program offers a very understandable way to implement our generated grammar. Both of these factors should make it easier to develop the compiler and allow for ease of use by users. The compiler will be usable from the command line of Linux systems.
 
-Compiler.java controls the main logic of the Compiler. Compiler.jj handles all logic in regards to scannning and parsing. SymbolTable.java handles all logic in regards to the SymbolTable.
+Compiler.java controls the main logic of the Compiler. Parser.jj handles all logic in regards to scannning and parsing. SymbolTable.java handles all logic in regards to the SymbolTable.
 
 ## Usage
 
@@ -17,6 +17,8 @@ Compiler.java controls the main logic of the Compiler. Compiler.jj handles all l
 - JDK 11
 
 #### To use the compiler:
+
+	$ javac Compiler.java
 
     $ java Compiler [flags] [.c file path]
 
