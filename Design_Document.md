@@ -24,7 +24,7 @@ Compiler.java controls the main logic of the Compiler. Parser.jj handles all log
 
 #### To use -f option
 
-    $ java Compiler -f [.c file path] [output file path]
+    $ java Compiler -f [output file path] [.c file path] 
 
 #### To use -r option
 
