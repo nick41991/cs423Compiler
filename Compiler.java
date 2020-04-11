@@ -4,15 +4,57 @@ public class Compiler {
     public static void main(String[] args) {
         Parser c = new Parser();
 
-        boolean tokenBool = false;
-	boolean parseTreeBool = false;
-        boolean symbolTableBool = false;
-	boolean irBool = false;
-	boolean fileSet = false;
-	String fileName = null;
-	//test
+    	boolean tokenBool = false;
+		boolean parseTreeBool = false;
+    	boolean symbolTableBool = false;
+		boolean irBool = false;
+		boolean setFileName = false;
+		boolean setIRName = false;
+		boolean IRWriteBool = false;
+		String fileName = null;
+		String IRFileName = null;
+	
+	
+		for(int i = 0; i < args.length; i++){
+        
+        	switch(args[i]){
+				case "-t":
+					tokenBool = true;
+					break;
+				
+				case "-pt":
+					parseTreeBool = true;
+					break;
+				
+				case "-s":
+					symbolTableBool = true;
+					break;
+				
+				case "-ir":
+					irBool = true;
+					break;
+				
+				case "-f":
+					IRWriteBool = true;
+					setIRName = true;
+					break;
+					
+				default:
+					if (setIRName){
+					
+						IRFileName = args[i];
+						setIRName = false;
+					}
+					else {
+						fileName = args[i];
+						setFileName = true;	
+					}
+					break;
+        	
+        	}
+        }
 
-        for(String s : args){
+        /**for(String s : args){
 		if(s.equals("-t")){
 			tokenBool = true;
                 	System.out.println("-t");
@@ -34,24 +76,28 @@ public class Compiler {
 			System.out.println("Error: More than one file passed as argument.");
 
 		}
-	}
-        Node root = c.run(tokenBool, fileSet, fileName);
+	}**/
+        Node root = c.run(tokenBool, setFileName, fileName);
         if (parseTreeBool) {
         	root.printParseTree(root,0);
-	}
+		}
 
         SymbolTable symRoot;
         symRoot = SymbolTable.createSymbolTable(root);
 
-	Intermediate n = new Intermediate(symRoot);
-	IntRep ir = n.run(root);
+		Intermediate n = new Intermediate(symRoot);
+		IntRep ir = n.run(root);
 
-	if(symbolTableBool) {
+		if(symbolTableBool) {
             SymbolTable.printSymbolTable(symRoot);
         }
 
-	if(irBool){
-		ir.write();
-	}
+		if(irBool){
+			ir.write();
+		}
+		
+		if (IRWriteBool){
+			ir.toFile(IRFileName);
+		}
     }
 }

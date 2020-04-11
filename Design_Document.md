@@ -38,7 +38,7 @@ Compiler.java controls the main logic of the Compiler. Parser.jj handles all log
 | -pt   | Output a parse tree |:heavy_check_mark:|
 | -s    | Output symbol table |:heavy_check_mark:|
 | -ir   | Output IR|:heavy_check_mark:|
-| -f    | Output IR to a specified file|:x:|
+| -f    | Output IR to a specified file|:heavy_check_mark:|
 | -r    | Read in IR instead of source file|:x:|
 
 
