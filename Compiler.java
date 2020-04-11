@@ -11,10 +11,12 @@ public class Compiler {
 		boolean setFileName = false;
 		boolean setIRName = false;
 		boolean IRWriteBool = false;
+		boolean irReadInBool = false;
 		String fileName = null;
 		String IRFileName = null;
+
 	
-	
+		// worked on by daniel and alden
 		for(int i = 0; i < args.length; i++){
         
         	switch(args[i]){
@@ -33,6 +35,11 @@ public class Compiler {
 				case "-ir":
 					irBool = true;
 					break;
+				
+				case "-r":
+					irReadInBool = true;
+					break;
+				
 				
 				case "-f":
 					IRWriteBool = true;
@@ -77,20 +84,43 @@ public class Compiler {
 
 		}
 	}**/
-        Node root = c.run(tokenBool, setFileName, fileName);
-        if (parseTreeBool) {
-        	root.printParseTree(root,0);
+
+
+
+	
+// split to avoid trying to parse and scan an IR representation, worked on by daniel and alden
+	if(irReadInBool){
+
+		//System.out.println("in reading section");
+
+		IntRep ir = new IntRep(fileName);
+	
+		
+		if(irBool){
+			ir.write();
 		}
 
-        SymbolTable symRoot;
-        symRoot = SymbolTable.createSymbolTable(root);
+
+		if (IRWriteBool){
+			ir.toFile(IRFileName);
+		}
+
+	}else{
+      
+        	Node root = c.run(tokenBool, setFileName, fileName);
+        	if (parseTreeBool) {
+        		root.printParseTree(root,0);
+		}
+
+       	 	SymbolTable symRoot;
+        	symRoot = SymbolTable.createSymbolTable(root);
 
 		Intermediate n = new Intermediate(symRoot);
 		IntRep ir = n.run(root);
 
 		if(symbolTableBool) {
-            SymbolTable.printSymbolTable(symRoot);
-        }
+            	SymbolTable.printSymbolTable(symRoot);
+        	}
 
 		if(irBool){
 			ir.write();
@@ -99,5 +129,6 @@ public class Compiler {
 		if (IRWriteBool){
 			ir.toFile(IRFileName);
 		}
+	}
     }
 }
