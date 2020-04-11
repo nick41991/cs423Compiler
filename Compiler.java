@@ -10,6 +10,7 @@ public class Compiler {
 	boolean irBool = false;
 	boolean fileSet = false;
 	String fileName = null;
+	//test
 
         for(String s : args){
 		if(s.equals("-t")){
