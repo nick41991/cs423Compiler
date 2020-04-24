@@ -21,12 +21,14 @@ public class SymbolTable {
     public ArrayList<Symbol> symbols; //keeps track of symbols in table
     public String name;
     public int level;
+    public int num_params;
 
     public SymbolTable() {
         parent = null;
         children = new ArrayList<SymbolTable>();
         symbols = new ArrayList<Symbol>();
         name = "Program";
+	num_params = 0;
     }
 
     public SymbolTable(String n) {
@@ -34,6 +36,7 @@ public class SymbolTable {
         children = new ArrayList<SymbolTable>();
         symbols = new ArrayList<Symbol>();
         name = n;
+	num_params = 0;
     }
 
     public void addSymbol(Symbol s) {
@@ -99,7 +102,10 @@ public class SymbolTable {
             } else if(n.payload.equals("params")) {
                 SymbolTable s = new SymbolTable(n.parent.payload);
                 s.level = level;
+		//Params
                 s = getSymbols(s, n, level + 1);
+		s.num_params = s.symbols.size();
+		//Local Declarations
                 s = getSymbols(s, node.children.get(2), level + 1);
                 st.addChild(s);
                 s.parent = st;

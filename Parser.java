@@ -416,7 +416,7 @@ public class Parser implements ParserConstants {
     Statement(ifStmt);
                 tokenList.add(new SyntaxToken("RPAREN", r.image));
                 Node elseTok = new Node(parent, "else");
-                Node elseStmt = new Node(elseTok, "elseStatment");
+                Node elseStmt = new Node(elseTok, "elseStatement");
     if (jj_2_4(2)) {
       e = jj_consume_token(ELSE);
       Statement(elseStmt);
