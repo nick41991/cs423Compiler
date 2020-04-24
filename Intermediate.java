@@ -29,7 +29,7 @@ public class Intermediate
 		// 	System.out.println(p.name + ": " + p.expression + ", " + p.height);
 		// }
 		/*Post flattening tree print for debugging*/
-		//root.printParseTree(root,0);
+		root.printParseTree(root,0);
 		write_IR(root, 0, ir);
 		return ir;
 	}
@@ -284,12 +284,15 @@ public class Intermediate
 		} else if(height == 1){ /*Function declarations*/
 
 			s = s.concat(node.getPayload() + "(");
-			if(node.children.get(1).children.size() > 0){
-				for(Node c : node.children.get(1).children){
-					s = s.concat(c.getPayload() + ", ");
-				}
-				s = s.substring(0, s.length() - 2);
-			}
+			// Code for adding parameters in IR.
+			// With addition of parameter count in Symbol table, we do not need to do this.
+			// Instead, parameters will be added from table.
+			// if(node.children.get(1).children.size() > 0){
+			// 	for(Node c : node.children.get(1).children){
+			// 		s = s.concat(c.getPayload() + ", ");
+			// 	}
+			// 	s = s.substring(0, s.length() - 2);
+			// }
 			s = s.concat("){");
 			ir.addLine(s);
 			write_IR(node.children.get(2), height + 1, ir);
@@ -328,8 +331,8 @@ public class Intermediate
 	private void write_Statement(Node node, IntRep ir){
 		/**
 		Cases to handle:
-			LabeledStatement	-
-		  	ExpressionStatement	-
+			LabeledStatement	+
+		  	ExpressionStatement	+
 		  	SelectionStatement	+
 		  	IterationStatement	+
 		  	JumpStatement     	+
@@ -339,27 +342,38 @@ public class Intermediate
 		String condition;
 
 		if(payload.equals("if")){
-			condition = node.children.get(0).children.get(0).getPayload(); //if condition
-			expandPlaceholder(condition, findPlaceholder(condition).expression, ir);
-			s = s.concat("if " + condition + " {");
-			ir.addLine(s);
-			s = "";
-			write_Compound_Statement(node.children.get(1), ir);
-			s = s.concat("}");
-			/*Handle elses'*/
-			if(node.children.size() == 3){
-				s = s.concat(" else {");
+			boolean chained = true;
+			Node tmp = node;
+			while(chained) {
+				chained = false;
+				condition = tmp.children.get(0).children.get(0).getPayload(); //if condition
+				expandPlaceholder(condition, findPlaceholder(condition).expression, ir);
+				s = s.concat("if " + condition + " {");
 				ir.addLine(s);
 				s = "";
-				write_Compound_Statement(node.children.get(2).children.get(0), ir);
-				s = s.concat("\n}");
-				ir.addLine(s);
-				s = "";
-			} else {
-				ir.addLine(s);
-				s = "";
+				write_Compound_Statement(tmp.children.get(1), ir);
+				s = s.concat("}");
+				/*Handle elses'*/
+				if(tmp.children.size() == 3){
+					//Check if else-if chained
+					if(tmp.children.get(2).children.get(0).children.get(0).getPayload().equals("if")){//else-if chaining
+						tmp = tmp.children.get(2).children.get(0).children.get(0);
+						s = s.concat(" else ");
+						chained = true;
+					} else {
+						s = s.concat(" else {");
+						ir.addLine(s);
+						s = "";
+						write_Compound_Statement(tmp.children.get(2).children.get(0), ir);
+						s = s.concat("\n}");
+						ir.addLine(s);
+						s = "";
+					}
+				} else {
+					ir.addLine(s);
+					s = "";
+				}
 			}
-
 		} else if(payload.equals("while")){
 			condition = node.children.get(0).children.get(0).getPayload(); //if condition
 			expandPlaceholder(condition, findPlaceholder(condition).expression, ir);
@@ -367,6 +381,9 @@ public class Intermediate
 			ir.addLine(s);
 			s = "";
 			write_Compound_Statement(node.children.get(1), ir);
+			/*Need to recalculate condition at end of loop.
+			Putting it here again makes it easy for testing in asm*/
+			expandPlaceholder(condition, findPlaceholder(condition).expression, ir);
 			s = s.concat("}");
 			ir.addLine(s);
 			s = "";
@@ -393,7 +410,7 @@ public class Intermediate
 		} else if(payload.charAt(0) == 'L' && findPlaceholder(payload) != null){ /*All expressions in the tree have been replaced with placeholders*/
 			expandPlaceholder(payload, findPlaceholder(payload).expression, ir);
 		} else { //If all else fails, assume its a Label
-			s = s.concat(payload + ": ");
+			s = s.concat(payload + ":");
 			ir.addLine(s);
 			write_Statement(node.children.get(0), ir);
 		}
