@@ -6,7 +6,7 @@ int my_func(int a, int b){
 int main(){
 	int a;
 	a = 1;
-L1:
+LABEL:
 	while(!(a > 10)){
 		a = a + 1;
 		if ((a % 1) == 0){
@@ -14,12 +14,14 @@ L1:
 		}
 	}
 
-	if( (a > 10) && (a == 5) || (my_func(a) == a)) {
+	if( (a > 10) && (a == 5) || (my_func(a, b) == a)) {
 		a = a - 1;
 
-	} else {
+	} else if(a == 1) {
 		a = a;
 		goto LABEL;
+	} else {
+		a = a;
 	}
 	int b = 1;
 	a = 1 | 5;
