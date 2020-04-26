@@ -29,7 +29,7 @@ public class Intermediate
 		// 	System.out.println(p.name + ": " + p.expression + ", " + p.height);
 		// }
 		/*Post flattening tree print for debugging*/
-		root.printParseTree(root,0);
+		//root.printParseTree(root,0);
 		write_IR(root, 0, ir);
 		return ir;
 	}

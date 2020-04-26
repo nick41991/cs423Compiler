@@ -9,6 +9,9 @@ public class Backend {
 	public IntRep ir;
 	private SymbolTable st; // Store main symbol table
 	private SymbolTable context; // Working table
+	private ArrayList<String> functions; //Functions written
+
+	private boolean mainSet;
 
 	private int jumpLabel;
 
@@ -18,10 +21,29 @@ public class Backend {
 		ir = irep;
 		st = sym;
 		jumpLabel = 0;
+		mainSet = false;
+	}
+
+	public void print(){
+		for(String s: output){
+			System.out.println(s);
+		}
 	}
 
 	public void run(){
-		state_switch(0, 0);
+		init();
+		state_switch(0);
+		if(!mainSet){
+			System.out.println("Error: function main() was not found, entry point was not set");
+		}
+		print();
+	}
+
+	/*Write the three necessary data sections to output*/
+	public void init(){
+		output.add(".section .data");
+		output.add(".section .bss");
+		output.add(".section .text");
 	}
 
 	/**
@@ -36,55 +58,86 @@ public class Backend {
 	*/
 
 	//Main control function, controls state of backend
-	public int state_switch(int i, int indent){
+	public int state_switch(int i){
 		String s;
 		for(; i < ir.rep.size(); i++){
 			s = ir.rep.get(i);
 			//Function Declaration
 			if(Pattern.matches("[a-z][a-zA-Z_0-9]*[(][)][{]", s)){
-				functionHeader(s);
+				functionHeader(s, i);
 			} else if (Pattern.matches("[A-Z][a-zA-Z_0-9]*[:]", s)){
-				label(s);
+				label(s,i);
 			} else if (Pattern.matches("jmp [a-zA-Z][a-zA-Z_0-9]*", s)){
-				jump(s);
+				jump(s, i);
 			} else if (Pattern.matches("while [a-zA-Z][a-zA-Z_0-9]* [{]", s)){
-				iterator(s);
+				iterator(s, i);
 			} else if (Pattern.matches("if [a-zA-Z][a-zA-Z_0-9]* [{]", s)){
-				selectionIf(s);
+				selectionIf(s, i);
 			} else if (Pattern.matches("[}] else if [a-zA-Z][a-zA-Z_0-9]* [{]", s)){
 				popLabel();
-				selectionIf(s);
+				selectionIf(s, i);
 			} else if (Pattern.matches("[}] else [{]", s)){
 				popLabel();
 
 			} else if (Pattern.matches("return [a-zA-Z][a-zA-Z_0-9]*", s)){
-				returns(s);
+				returns(s, i);
 
 			} else if (Pattern.matches("[}]", s)){
+				//End of ifs (w/out else), elses, whiles, and functions
+				//Signals end of block
 				//return i;
 			} else {
 				//Assume expression
+				expression(s, i);
 			}
 
-			//TestPrint
-			System.out.println(s + " " + Pattern.matches("[}] else if [a-zA-Z][a-zA-Z_0-9]* [{]", s));
+			//Regex Test Print
+			//System.out.println(s + " " + Pattern.matches("[}] else if [a-zA-Z][a-zA-Z_0-9]* [{]", s));
 		}
+		return 0;
 	}
 
-	private void functionHeader(String s){
+	private void functionHeader(String s, int i){
 		// write function head. Allocate space for variables on stack via symbol table.
 		// call state_switch() to write function until "}" forces return
+
+		//Get function name-- S format: "name(){"
+		String name = "";
+		for(int j = 0; j < s.length(); j++){
+			if(s.charAt(j) == '('){
+				name = s.substring(0, j);
+				break;
+			}
+		}
+		if(name.equals("")){ //Name resolution error should not happen without a significant bug
+			System.out.println("Error: Function was identified but name could not be resolved: " + s);
+			return;
+		}
+		//Set entry point, using _start for main makes life easier
+		if(name.equals("main") && !mainSet){
+			output.add(".globl _start");
+			output.add("_start:");
+			mainSet = true;
+		} else {
+			output.add(".globl _" + name);
+			output.add("_" + name + ":");
+		}
+
+		//Use this table to allocate space on stack for local variables
+		SymbolTable namespace = st.getTable(name);
+
+
 	}
 
-	private void label(String s){
+	private void label(String s, int i){
 		//A user defined label in the code
 	}
 
-	private void jump(String s){
+	private void jump(String s, int i){
 		//Unconditional YEET to a label
 	}
 
-	private void iterator(String s){
+	private void iterator(String s, int i){
 		//For s == "while cond {"
 
 		/* code to be written
@@ -101,7 +154,7 @@ public class Backend {
 
 	}
 
-	private void selectionIf(String s){ //if else
+	private void selectionIf(String s, int i){ //if else
 		//FOR: s == "if cond {"
 		//Should also work for s = "} else if cond {"
 
@@ -127,14 +180,14 @@ public class Backend {
 
 	}
 
-	private void selectionElse(String s){
+	private void selectionElse(String s, int i){
 		//FOR: s == "else {"
 
 		//write code via state_switch() until "}" is encountered
 		//Place label y for bottom of chained statement here.
 	}
 
-	private void returns(String s){
+	private void returns(String s, int i){
 		//FOR s == "return exp"
 
 		/*
@@ -144,8 +197,12 @@ public class Backend {
 		*/
 	}
 
-	private void expression(String s){
+	private void expression(String s, int i){
 		//Expressions including function calls.
+	}
+
+	private void popLabel(){
+
 	}
 
 }
