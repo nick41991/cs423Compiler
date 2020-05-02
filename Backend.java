@@ -248,6 +248,7 @@ public class Backend {
 			ret
 		*/
 		//output.add("movl $1, %eax"); //<= see expression
+		//Currently assuming return has been preloaded into %eax. Need code to enforce this.
 		output.add("popq %rbp");
 		output.add("ret");
 
@@ -271,7 +272,7 @@ public class Backend {
 		//tokens[0] is destination of expression
 		// Resolve what is in tokens[1]
 		if(Pattern.matches("[0-9]*", tokens[1])) { // Constant asssigned to LHS
-			String r = memory.grabRegister(); //Greedy and unsafe method. Will clear a register.
+			String r = memory.grabRegister(tokens[0]); //Greedy and unsafe method. Will clear a register.
 			output.add("movl $" + tokens[1] + ", " + r);
 		}
 		//break down tokens[1] further to implement

@@ -64,7 +64,12 @@ public class MemoryManager{
 		return access;
 	}
 
-	public String grabRegister(){
+	public String grabRegister(String name){
+		for(MemoryUnit m : units){
+			if(m.name.equals(name)){
+				return m.register;
+			}
+		}
 		return registers.gpr_allocate();
 	}
 
