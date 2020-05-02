@@ -14,7 +14,7 @@ LABEL:
 		}
 	}
 
-	if( (a > 10) && (a == 5) || (my_func(a, b) == a)) {
+	if( (a > 10) && (a == 5) || (my_func(a, a) == a)) {
 		a = a - 1;
 
 	} else if(a == 1) {

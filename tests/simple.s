@@ -5,18 +5,17 @@
 main:
 .LFB0:
 	.cfi_startproc
-	pushl	%ebp
-	.cfi_def_cfa_offset 8
-	.cfi_offset 5, -8
-	movl	%esp, %ebp
-	.cfi_def_cfa_register 5
+	pushq	%rbp
+	.cfi_def_cfa_offset 16
+	.cfi_offset 6, -16
+	movq	%rsp, %rbp
+	.cfi_def_cfa_register 6
 	movl	$1, %eax
-	popl	%ebp
-	.cfi_restore 5
-	.cfi_def_cfa 4, 4
+	popq	%rbp
+	.cfi_def_cfa 7, 8
 	ret
 	.cfi_endproc
 .LFE0:
 	.size	main, .-main
-	.ident	"GCC: (Ubuntu 8.4.0-1ubuntu1~18.04) 8.4.0"
+	.ident	"GCC: (Ubuntu 7.5.0-3ubuntu1~18.04) 7.5.0"
 	.section	.note.GNU-stack,"",@progbits
