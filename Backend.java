@@ -305,6 +305,7 @@ public class Backend {
 		String[] tokens = s.split("=");
 		String[] expression = null;
 		String op = "";
+		String cmp = "";
 		//tokens[0] is destination of expression
 		// Resolve what is in tokens[1]
 		if(tokens.length > 1){
@@ -337,21 +338,27 @@ public class Backend {
 			} else if(Pattern.matches("[a-zA-Z_0-9]*<[a-zA-Z_0-9]*", tokens[1])){ //Less Than
 				expression = tokens[1].split("<");
 				op = "cmp";
+				cmp = "<";
 			} else if(Pattern.matches("[a-zA-Z_0-9]*>[a-zA-Z_0-9]*", tokens[1])){ //Greater Than
 				expression = tokens[1].split(">");
 				op = "cmp";
+				cmp = ">";
 			} else if(Pattern.matches("[a-zA-Z_0-9]*<=[a-zA-Z_0-9]*", tokens[1])){ //Less Than or Equal
 				expression = tokens[1].split("<=");
 				op = "cmp";
+				cmp = "<=";
 			} else if(Pattern.matches("[a-zA-Z_0-9]*>=[a-zA-Z_0-9]*", tokens[1])){ //Greater Than or Equal
 				expression = tokens[1].split(">=");
 				op = "cmp";
+				cmp = ">=";
 			} else if(Pattern.matches("[a-zA-Z_0-9]*==[a-zA-Z_0-9]*", tokens[1])){ //Equal to
 				expression = tokens[1].split("==");
 				op = "cmp";
+				cmp = "==";
 			} else if(Pattern.matches("[a-zA-Z_0-9]*!=[a-zA-Z_0-9]*", tokens[1])){ //Not Equal to
 				expression = tokens[1].split("!=");
 				op = "cmp";
+				cmp = "!=";
 			} else if(Pattern.matches("[a-zA-Z_0-9]*[&][a-zA-Z_0-9]*", tokens[1])){ //And- binary
 				expression = tokens[1].split("[&]");
 				op = "and";
@@ -459,6 +466,57 @@ public class Backend {
 					rhs = memory.accessReference(expression[1], context);
 					writeAccess(rhs);
 				}
+			}
+			if(op.equals("cmp") && !lhf && !rhf){
+				if(cmp.equals("==")){
+					output.add("nand " + lhs.get(lhs.size() - 1) + ", " + rhs.get(rhs.size() - 1));
+					//Equal to 0 if true;
+					ArrayList<String> dest = memory.accessReference(tokens[0], context);
+					writeAccess(dest);
+					output.add("movl " + rhs.get(rhs.size() - 1) + ", " + dest.get(dest.size() - 1));
+				} else if(cmp.equals("!=")){
+					output.add("and " + lhs.get(lhs.size() - 1) + ", " + rhs.get(rhs.size() - 1));
+					//Equal to 0 if true;
+					ArrayList<String> dest = memory.accessReference(tokens[0], context);
+					writeAccess(dest);
+					output.add("movl " + rhs.get(rhs.size() - 1) + ", " + dest.get(dest.size() - 1));
+				} else if(cmp.equals("<")){
+					output.add("sub " + lhs.get(lhs.size() - 1) + ", " + rhs.get(rhs.size() - 1));
+					output.add("nand 0x80000000, " + rhs.get(rhs.size() - 1));
+					//Equal to 0 if true;
+					ArrayList<String> dest = memory.accessReference(tokens[0], context);
+					writeAccess(dest);
+					output.add("movl " + rhs.get(rhs.size() - 1) + ", " + dest.get(dest.size() - 1));
+				} else if(cmp.equals(">")){
+					output.add("sub " + lhs.get(lhs.size() - 1) + ", " + rhs.get(rhs.size() - 1));
+					//0x10000000 indicates negative
+					output.add("and 0x80000000, " + rhs.get(rhs.size() - 1));
+					//Equal to 0 if true;
+					ArrayList<String> dest = memory.accessReference(tokens[0], context);
+					writeAccess(dest);
+					output.add("movl " + rhs.get(rhs.size() - 1) + ", " + dest.get(dest.size() - 1));
+				} else if(cmp.equals("<=")){
+						//a <= b  ====  (a - 1) < b
+					output.add("sub  $1, " + lhs.get(lhs.size() - 1));
+					output.add("sub " + lhs.get(lhs.size() - 1) + ", " + rhs.get(rhs.size() - 1));
+					//0x10000000 indicates negative
+					output.add("nand 0x80000000, " + rhs.get(rhs.size() - 1));
+					//Equal to 0 if true;
+					ArrayList<String> dest = memory.accessReference(tokens[0], context);
+					writeAccess(dest);
+					output.add("movl " + rhs.get(rhs.size() - 1) + ", " + dest.get(dest.size() - 1));
+				} else if(cmp.equals(">=")){
+						//a >= b  ====  (a + 1) > b
+					output.add("add  $1, " + lhs.get(lhs.size() - 1));
+					output.add("sub " + lhs.get(lhs.size() - 1) + ", " + rhs.get(rhs.size() - 1));
+					//0x10000000 indicates negative
+					output.add("and 0x80000000, " + rhs.get(rhs.size() - 1));
+					//Equal to 0 if true;
+					ArrayList<String> dest = memory.accessReference(tokens[0], context);
+					writeAccess(dest);
+					output.add("movl " + rhs.get(rhs.size() - 1) + ", " + dest.get(dest.size() - 1));
+				}
+				return i;
 			}
 			/*Temporary while functions are not supported*/
 			if(!lhf && !rhf){

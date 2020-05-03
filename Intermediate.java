@@ -378,8 +378,8 @@ public class Intermediate
 			}
 		} else if(payload.equals("while")){
 			condition = node.children.get(0).children.get(0).getPayload(); //if condition
-			ir.addLine("TOP_WHILE" + while_label + ":");
 			expandPlaceholder(condition, findPlaceholder(condition).expression, ir);
+			ir.addLine("TOP_WHILE" + while_label + ":");
 			s = s.concat("while " + condition + " {");
 			ir.addLine(s);
 			s = "";
