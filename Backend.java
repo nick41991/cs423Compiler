@@ -262,7 +262,7 @@ public class Backend {
 			output.add("movl " + reference.get(reference.size() - 1) + ", %eax");
 		}
 		output.add("popq %rbp");
-		output.add("ret");
+		output.add("ret\n");
 
 		//Default return
 		return i;
@@ -289,65 +289,62 @@ public class Backend {
 			if(Pattern.matches("[0-9]*", tokens[1])) { // Constant asssigned to LHS
 				ArrayList<String> dest = memory.accessReference(tokens[0], context);
 				writeAccess(dest);
-				// for(String x: r){	//Debug print
-				// 	System.out.println(x);
-				// }
 				output.add("movl $" + tokens[1] + ", " + dest.get(dest.size() - 1));
 				return i;
 
 			//Now check for arithmetic in tokens[1]. Stroe lhs and rhs in expression
 			//Expression will be handled post if-else chain
-			} else if(Pattern.matches("[a-zA-Z][a-zA-Z_0-9]*[+][a-zA-Z][a-zA-Z_0-9]*", tokens[1])){ //Addition
+			} else if(Pattern.matches("[a-zA-Z_0-9]*[+][a-zA-Z_0-9]*", tokens[1])){ //Addition
 				expression = tokens[1].split("[+]");
 				op = "add";
-			} else if(Pattern.matches("[a-zA-Z][a-zA-Z_0-9]*-[a-zA-Z][a-zA-Z_0-9]*", tokens[1])){ //Subtraction
+			} else if(Pattern.matches("[a-zA-Z_0-9]*-[a-zA-Z_0-9]*", tokens[1])){ //Subtraction
 				expression = tokens[1].split("-");
 				op = "sub";
-			} else if(Pattern.matches("[a-zA-Z][a-zA-Z_0-9]*[*][a-zA-Z][a-zA-Z_0-9]*", tokens[1])){ //Multiplication
+			} else if(Pattern.matches("[a-zA-Z_0-9]*[*][a-zA-Z_0-9]*", tokens[1])){ //Multiplication
 				expression = tokens[1].split("[*]");
 				op = "imul";
-			} else if(Pattern.matches("[a-zA-Z][a-zA-Z_0-9]*/[a-zA-Z][a-zA-Z_0-9]*", tokens[1])){ //Division
+			} else if(Pattern.matches("[a-zA-Z_0-9]*/[a-zA-Z_0-9]*", tokens[1])){ //Division
 				expression = tokens[1].split("/");
 				op = "idiv";
-			} else if(Pattern.matches("[a-zA-Z][a-zA-Z_0-9]*>>[a-zA-Z][a-zA-Z_0-9]*", tokens[1])){ //Right Shift
+			} else if(Pattern.matches("[a-zA-Z_0-9]*>>[a-zA-Z_0-9]*", tokens[1])){ //Right Shift
 				expression = tokens[1].split(">>");
-				op = "idiv";
-			} else if(Pattern.matches("[a-zA-Z][a-zA-Z_0-9]*<<[a-zA-Z][a-zA-Z_0-9]*", tokens[1])){ //Left Shift
+				op = "rshift";
+			} else if(Pattern.matches("[a-zA-Z_0-9]*<<[a-zA-Z_0-9]*", tokens[1])){ //Left Shift
 				expression = tokens[1].split("<<");
-				op = "idiv";
-			} else if(Pattern.matches("[a-zA-Z][a-zA-Z_0-9]*<[a-zA-Z][a-zA-Z_0-9]*", tokens[1])){ //Less Than
+				op = "lshift";
+			} else if(Pattern.matches("[a-zA-Z_0-9]*<[a-zA-Z_0-9]*", tokens[1])){ //Less Than
 				expression = tokens[1].split("<");
-				op = "idiv";
-			} else if(Pattern.matches("[a-zA-Z][a-zA-Z_0-9]*>[a-zA-Z][a-zA-Z_0-9]*", tokens[1])){ //Greater Than
+				op = "cmp";
+			} else if(Pattern.matches("[a-zA-Z_0-9]*>[a-zA-Z_0-9]*", tokens[1])){ //Greater Than
 				expression = tokens[1].split(">");
-				op = "idiv";
-			} else if(Pattern.matches("[a-zA-Z][a-zA-Z_0-9]*<=[a-zA-Z][a-zA-Z_0-9]*", tokens[1])){ //Less Than or Equal
+				op = "cmp";
+			} else if(Pattern.matches("[a-zA-Z_0-9]*<=[a-zA-Z_0-9]*", tokens[1])){ //Less Than or Equal
 				expression = tokens[1].split("<=");
-				op = "idiv";
-			} else if(Pattern.matches("[a-zA-Z][a-zA-Z_0-9]*>=[a-zA-Z][a-zA-Z_0-9]*", tokens[1])){ //Greater Than or Equal
+				op = "cmp";
+			} else if(Pattern.matches("[a-zA-Z_0-9]*>=[a-zA-Z_0-9]*", tokens[1])){ //Greater Than or Equal
 				expression = tokens[1].split(">=");
-				op = "idiv";
-			} else if(Pattern.matches("[a-zA-Z][a-zA-Z_0-9]*==[a-zA-Z][a-zA-Z_0-9]*", tokens[1])){ //Equal to
+				op = "cmp";
+			} else if(Pattern.matches("[a-zA-Z_0-9]*==[a-zA-Z_0-9]*", tokens[1])){ //Equal to
 				expression = tokens[1].split("==");
-				op = "idiv";
-			} else if(Pattern.matches("[a-zA-Z][a-zA-Z_0-9]*!=[a-zA-Z][a-zA-Z_0-9]*", tokens[1])){ //Not Equal to
+				op = "cmp";
+			} else if(Pattern.matches("[a-zA-Z_0-9]*!=[a-zA-Z_0-9]*", tokens[1])){ //Not Equal to
 				expression = tokens[1].split("!=");
-				op = "idiv";
-			} else if(Pattern.matches("[a-zA-Z][a-zA-Z_0-9]*[&][a-zA-Z][a-zA-Z_0-9]*", tokens[1])){ //And- binary
+				op = "cmp";
+			} else if(Pattern.matches("[a-zA-Z_0-9]*[&][a-zA-Z_0-9]*", tokens[1])){ //And- binary
 				expression = tokens[1].split("[&]");
-				op = "idiv";
-			} else if(Pattern.matches("[a-zA-Z][a-zA-Z_0-9]*^[a-zA-Z][a-zA-Z_0-9]*", tokens[1])){ //Xor- binary
+				op = "Band";
+			} else if(Pattern.matches("[a-zA-Z_0-9]*\\^[a-zA-Z_0-9]*", tokens[1])){ //Xor- binary
 				expression = tokens[1].split("^");
-				op = "idiv";
-			} else if(Pattern.matches("[a-zA-Z][a-zA-Z_0-9]*[|][a-zA-Z][a-zA-Z_0-9]*", tokens[1])){ //OR- binary
+				op = "bxor";
+			} else if(Pattern.matches("[a-zA-Z_0-9]*[|][a-zA-Z_0-9]*", tokens[1])){ //OR- binary
 				expression = tokens[1].split("|");
-				op = "idiv";
-			} else if(Pattern.matches("[a-zA-Z][a-zA-Z_0-9]*[&][&][a-zA-Z][a-zA-Z_0-9]*", tokens[1])){ //And- Logic
+				op = "bor";
+			} else if(Pattern.matches("[a-zAzA-Z_0-9]*[&][&][a-zA-Z_0-9]*", tokens[1])){ //And- Logic
 				expression = tokens[1].split("[&][&]");
-				op = "idiv";
-			} else if(Pattern.matches("[a-zA-Z][a-zA-Z_0-9]*[|][|][a-zA-Z][a-zA-Z_0-9]*", tokens[1])){ //OR- Logic
+				op = "land";
+			} else if(Pattern.matches("[a-zAzA-Z_0-9]*[|][|][a-zA-Z_0-9]*", tokens[1])){ //OR- Logic
 				expression = tokens[1].split("[|][|]");
-				op = "idiv";
+				op = "lor";
 			} else if(Pattern.matches("[!][a-zA-Z][a-zA-Z_0-9]*", tokens[1])){ //Not
 				expression = tokens[1].split("!");
 				ArrayList<String> src = memory.accessReference(tokens[1], context);
@@ -359,17 +356,19 @@ public class Backend {
 				return i;
 			} else { //expression is a function call or variable
 				for(String f: functions){
-					if(f.length() <= tokens[1].length() && f.equals(tokens[1].substring(0, f.length()))){
+					if(f.length() <= tokens[1].length() /*&& f.equals(tokens[1].substring(0, f.length()))*/){
+						System.out.println("tokens[1] "+ tokens[1].substring(0, f.length()));
 						//Found a function call
 						//Save currrent registers
 						//get arguments
 						//Call function
-
+						System.out.println("Found function: " + tokens[1]);
 
 						//Result should be in eax
 						// assign to tokens[0]
-						ArrayList<String> dest = memory.accessReference(tokens[0], context);
-						output.add("movl %eax, " + dest.get(dest.size() - 1));
+			/****NO CURRENT SUPPORT FOR FUNCTION CALLS****/
+						// ArrayList<String> dest = memory.accessReference(tokens[0], context);
+						// output.add("movl %eax, " + dest.get(dest.size() - 1));
 						return i;
 					}
 				}
@@ -382,28 +381,76 @@ public class Backend {
 				output.add("movl " + src.get(src.size() - 1) + ", " + dest.get(dest.size() - 1));
 				return i;
 			}
+			//Need to load both sides of op
+			boolean lhf = false;
+			boolean rhf = false;
+			ArrayList<String> lhs = null; //Expression[0]
+			ArrayList<String> rhs = null; //Expression[1]
+			/*Check for function calls on both sides*/
 			for(String f: functions){
-				if(f.length() <= tokens[1].length() && f.equals(tokens[1].substring(0, f.length()))){
-					//Found a function call
-					//Save currrent registers
-					//get arguments
-					//Call function
+				/*LHS*/
+				//Debug: System.out.println("f: " + f + " Expression[0] " + expression[0] + "Expression[1] " + expression[1]);
+				if(f.length() <= expression[0].length() && f.equals(expression[0].substring(0, f.length()))){
 
+					lhf = true;
+					System.out.println("Found lhs function: " + expression[0] + " OP: " + op);
 
-					//Result should be in eax
-					// assign to tokens[0]
-					ArrayList<String> dest = memory.accessReference(tokens[0], context);
-					output.add("movl %eax, " + dest.get(dest.size() - 1));
-					return i;
+		/****NO CURRENT SUPPORT FOR FUNCTION CALLS****/
+					// ArrayList<String> dest = memory.accessReference(tokens[0], context);
+					// output.add("movl %eax, " + dest.get(dest.size() - 1));
+				}
+				/*RHS*/
+				if(f.length() <= expression[1].length() && f.equals(expression[1].substring(0, f.length()))){
+
+					System.out.println("Found rhs function: " + expression[1] + " OP: " + op);
+
+		/****NO CURRENT SUPPORT FOR FUNCTION CALLS****/
+					// ArrayList<String> dest = memory.accessReference(tokens[0], context);
+					// output.add("movl %eax, " + dest.get(dest.size() - 1));
 				}
 			}
-			//If we don't return from for loop, there was no function call.
-			//we must have a variable on variable operation
-			ArrayList<String> src = memory.accessReference(tokens[1], context);
-			writeAccess(src);
-			ArrayList<String> dest = memory.accessReference(tokens[0], context);
-			writeAccess(dest);
-			output.add(op + " " + src.get(src.size() - 1) + ", " + dest.get(dest.size() - 1));
+			boolean lhc = false;
+			if(!lhf){ //lhs is not a function
+				//check if variable or constant
+				if(Pattern.matches("[0-9]*", expression[0])) { // Constant asssigned to LHS
+					lhs = new ArrayList<String>();
+					lhs.add("$" + expression[0]);
+					lhc = true;
+				} else {
+					lhs = memory.accessReference(expression[0], context);
+					writeAccess(lhs);
+				}
+			}
+			if(!rhf){ //rhs is not a function
+				if(Pattern.matches("[0-9]*", expression[1])) { // Constant asssigned to RHS
+					/*Small optimization to save memory if rhs is a constant but lhs is not*/
+					if(lhc){ /*If left hand side is a constant, allocate a destination register for rhs*/
+						rhs = memory.accessReference(expression[1], context);
+						writeAccess(rhs);
+						output.add("movl $" + expression[1] + ", " + rhs.get(rhs.size() - 1));
+					} else { /*Use lhs as destination register.*/
+						rhs = lhs;
+						lhs = new ArrayList<String>();
+						lhs.add("$" + expression[1]);
+					}
+				} else {
+					rhs = memory.accessReference(expression[1], context);
+					writeAccess(rhs);
+				}
+			}
+			/*Temporary while functions are not supported*/
+			if(!lhf && !rhf){
+				output.add(op + " " + lhs.get(lhs.size() - 1) + ", " + rhs.get(rhs.size() - 1));
+				ArrayList<String> dest = memory.accessReference(tokens[0], context);
+				writeAccess(dest);
+				output.add("movl " + rhs.get(rhs.size() - 1) + ", " + dest.get(dest.size() - 1));
+			}
+
+			// ArrayList<String> src = memory.accessReference(tokens[1], context);
+			// writeAccess(src);
+			// ArrayList<String> dest = memory.accessReference(tokens[0], context);
+			// writeAccess(dest);
+			// output.add(op + " " + src.get(src.size() - 1) + ", " + dest.get(dest.size() - 1));
 			//break down tokens[1] further to implement
 		}
 		//Default return
