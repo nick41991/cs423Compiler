@@ -388,6 +388,7 @@ public class Intermediate
 			Putting it here again makes it easy for testing in asm*/
 			expandPlaceholder(condition, findPlaceholder(condition).expression, ir);
 			ir.addLine("goto TOP_WHILE" + while_label + ":");
+			while_label++;
 			s = s.concat("}");
 			ir.addLine(s);
 			s = "";
