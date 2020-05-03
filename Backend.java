@@ -460,7 +460,7 @@ public class Backend {
 					output.add("movl " + rhs.get(rhs.size() - 1) + ", " + dest.get(dest.size() - 1));
 				} else if(cmp.equals("<")){
 					output.add("sub " + lhs.get(lhs.size() - 1) + ", " + rhs.get(rhs.size() - 1));
-					output.add("nand 0x10000000, " + rhs.get(rhs.size() - 1));
+					output.add("nand 0x80000000, " + rhs.get(rhs.size() - 1));
 					//Equal to 0 if true;
 					ArrayList<String> dest = memory.accessReference(tokens[0], context);
 					writeAccess(dest);
@@ -468,7 +468,7 @@ public class Backend {
 				} else if(cmp.equals(">")){
 					output.add("sub " + lhs.get(lhs.size() - 1) + ", " + rhs.get(rhs.size() - 1));
 					//0x10000000 indicates negative
-					output.add("and 0x10000000, " + rhs.get(rhs.size() - 1));
+					output.add("and 0x80000000, " + rhs.get(rhs.size() - 1));
 					//Equal to 0 if true;
 					ArrayList<String> dest = memory.accessReference(tokens[0], context);
 					writeAccess(dest);
@@ -478,7 +478,7 @@ public class Backend {
 					output.add("sub  $1, " + lhs.get(lhs.size() - 1));
 					output.add("sub " + lhs.get(lhs.size() - 1) + ", " + rhs.get(rhs.size() - 1));
 					//0x10000000 indicates negative
-					output.add("nand 0x10000000, " + rhs.get(rhs.size() - 1));
+					output.add("nand 0x80000000, " + rhs.get(rhs.size() - 1));
 					//Equal to 0 if true;
 					ArrayList<String> dest = memory.accessReference(tokens[0], context);
 					writeAccess(dest);
@@ -488,7 +488,7 @@ public class Backend {
 					output.add("add  $1, " + lhs.get(lhs.size() - 1));
 					output.add("sub " + lhs.get(lhs.size() - 1) + ", " + rhs.get(rhs.size() - 1));
 					//0x10000000 indicates negative
-					output.add("and 0x10000000, " + rhs.get(rhs.size() - 1));
+					output.add("and 0x80000000, " + rhs.get(rhs.size() - 1));
 					//Equal to 0 if true;
 					ArrayList<String> dest = memory.accessReference(tokens[0], context);
 					writeAccess(dest);
