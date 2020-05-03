@@ -308,10 +308,10 @@ public class Backend {
 				op = "idiv";
 			} else if(Pattern.matches("[a-zA-Z_0-9]*>>[a-zA-Z_0-9]*", tokens[1])){ //Right Shift
 				expression = tokens[1].split(">>");
-				op = "shr";
+				op = "rshift";
 			} else if(Pattern.matches("[a-zA-Z_0-9]*<<[a-zA-Z_0-9]*", tokens[1])){ //Left Shift
 				expression = tokens[1].split("<<");
-				op = "shl";
+				op = "lshift";
 			} else if(Pattern.matches("[a-zA-Z_0-9]*<[a-zA-Z_0-9]*", tokens[1])){ //Less Than
 				expression = tokens[1].split("<");
 				op = "cmp";
@@ -332,19 +332,19 @@ public class Backend {
 				op = "cmp";
 			} else if(Pattern.matches("[a-zA-Z_0-9]*[&][a-zA-Z_0-9]*", tokens[1])){ //And- binary
 				expression = tokens[1].split("[&]");
-				op = "and";
+				op = "Band";
 			} else if(Pattern.matches("[a-zA-Z_0-9]*\\^[a-zA-Z_0-9]*", tokens[1])){ //Xor- binary
 				expression = tokens[1].split("^");
-				op = "xor";
+				op = "bxor";
 			} else if(Pattern.matches("[a-zA-Z_0-9]*[|][a-zA-Z_0-9]*", tokens[1])){ //OR- binary
 				expression = tokens[1].split("|");
-				op = "or";
+				op = "bor";
 			} else if(Pattern.matches("[a-zAzA-Z_0-9]*[&][&][a-zA-Z_0-9]*", tokens[1])){ //And- Logic
 				expression = tokens[1].split("[&][&]");
-				op = "and";
+				op = "land";
 			} else if(Pattern.matches("[a-zAzA-Z_0-9]*[|][|][a-zA-Z_0-9]*", tokens[1])){ //OR- Logic
 				expression = tokens[1].split("[|][|]");
-				op = "or";
+				op = "lor";
 			} else if(Pattern.matches("[!][a-zA-Z][a-zA-Z_0-9]*", tokens[1])){ //Not
 				expression = tokens[1].split("!");
 				ArrayList<String> src = memory.accessReference(tokens[1], context);
