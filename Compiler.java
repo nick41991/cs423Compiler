@@ -12,6 +12,7 @@ public class Compiler {
 		boolean setIRName = false;
 		boolean IRWriteBool = false;
 		boolean irReadInBool = false;
+        boolean asmBool = false;
 		String fileName = null;
 		String IRFileName = null;
 
@@ -45,6 +46,9 @@ public class Compiler {
 					IRWriteBool = true;
 					setIRName = true;
 					break;
+
+                case "-S":
+                    asmBool = true;
 
 				default:
 					if (setIRName){
@@ -113,7 +117,7 @@ public class Compiler {
         	Node root = c.run(tokenBool, setFileName, fileName);
         	if (parseTreeBool) {
         		root.printParseTree(root,0);
-		}
+		    }
 
         	symRoot = SymbolTable.createSymbolTable(root);
 
@@ -139,5 +143,8 @@ public class Compiler {
 	//Write ASM
 	Backend backend = new Backend(ir, symRoot);
 	backend.run();
+    if(asmBool) {
+        backend.print();
+    }
     }
 }
