@@ -25,7 +25,6 @@ public class Backend {
 		ir = irep;
 		st = sym;
 		jumpLabel = 0;
-		mainSet = false;
 		memory = new MemoryManager();
 	}
 
@@ -38,9 +37,6 @@ public class Backend {
 	public void run(){
 		init();
 		state_switch(0);
-		if(!mainSet){
-			System.out.println("Error: function main() was not found, entry point was not set");
-		}
 		print();
 	}
 
@@ -59,7 +55,7 @@ public class Backend {
 		IterationStatement	+	-
 		JumpStatement     	+	-
 		returns			+	-
-		ExpressionStatement	-	- //Fallthrough case
+		ExpressionStatement	+	- //Fallthrough case
 	*/
 
 	//Main control function, controls state of backend
@@ -170,7 +166,6 @@ public class Backend {
 
 	private int selectionIf(String s, int i){ //if else
 		//FOR: s == "if cond {"
-		//Should also work for s = "} else if cond {"
 
 		// For asm: test ph
 		// jump to label x if test fails //label x is the next test for chained statements
@@ -182,7 +177,7 @@ public class Backend {
 		/*
 			test cond
 			jump if false to label x		push z to label stack then push x
-				code for if true
+				code for if true		written by call to state_switch()
 				jump (unconditionally) to z
 			label x:
 			//if else will function just like a basic if.
@@ -268,12 +263,14 @@ public class Backend {
 
 		//Identify pattern of code:
 		String[] tokens = s.split("=");
-		System.out.println(s + " " + tokens.length);
 		//tokens[0] is destination of expression
 		// Resolve what is in tokens[1]
 		if(Pattern.matches("[0-9]*", tokens[1])) { // Constant asssigned to LHS
-			String r = memory.grabRegister(tokens[0]); //Greedy and unsafe method. Will clear a register.
-			output.add("movl $" + tokens[1] + ", " + r);
+			ArrayList<String> r = memory.accessReference(tokens[0], "main");
+			// for(String x: r){	//Debug print
+			// 	System.out.println(x);
+			// }
+			output.add("movl $" + tokens[1] + ", " + r.get(r.size() - 1));
 		}
 		//break down tokens[1] further to implement
 		//Default return
