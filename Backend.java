@@ -242,8 +242,17 @@ public class Backend {
 			then load exp into %rax
 			ret
 		*/
-		//output.add("movl $1, %eax"); //<= see expression
+		String [] tokens = s.split(" ");
+
 		//Currently assuming return has been preloaded into %eax. Need code to enforce this.
+		ArrayList<String> reference = memory.accessReference(tokens[1], "main");
+		if(!reference.get(reference.size() - 1).equals("%eax")){
+			/*Move return value into eax*/
+			for(int j = 0; j < reference.size() - 1; j++){ //In case htere was anything done to get return value into register.
+				output.add(reference.get(j));
+			}
+			output.add("movl " + reference.get(reference.size() - 1) + ", %eax");
+		}
 		output.add("popq %rbp");
 		output.add("ret");
 

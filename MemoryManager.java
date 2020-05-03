@@ -76,9 +76,10 @@ public class MemoryManager{
 		return access;
 	}
 
-	public String grabRegister(String name){
+	// Grab a register by its name
+	public String grabRegister(String register){
 		for(MemoryUnit m : units){
-			if(m.name.equals(name)){
+			if(m.name.equals(register)){
 				return m.register;
 			}
 		}
