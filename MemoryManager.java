@@ -5,6 +5,7 @@ public class MemoryManager{
 	private RegisterManager registers;
 	private ArrayList<MemoryUnit> units;
 
+	/*Unit of memory. Every variable gets a space in the stack when allocated, regardless of temporality*/
 	public class MemoryUnit{
 		String name; // reference
 		String scope; // scope
@@ -62,14 +63,14 @@ public class MemoryManager{
 					/*Move unit from register back to stack*/
 					m.register = "";
 					m.inRegister = false;
-					access.add("movl " + alloced + ", [%ebp - " + (4 * m.offset) + "]"); //Need proper addressing scheme
+					access.add("movl " + alloced + ", -" + (4 * m.offset)+ "(%ebp)"); //Need proper addressing scheme
 					break; /*Should only be one unit in a register, so save cycles*/
 				}
 			}
 			/*Move value into register*/
 			reference.register = alloced;
 			reference.inRegister = true;
-			access.add("movl [%ebp - " + (4 * reference.offset) + "], " + alloced);
+			access.add("movl -" + (4 * reference.offset)+ "(%ebp), " + alloced);
 			access.add(reference.register);
 		}
 
@@ -79,7 +80,7 @@ public class MemoryManager{
 	// Grab a register by its name
 	public String grabRegister(String register){
 		for(MemoryUnit m : units){
-			if(m.name.equals(register)){
+			if(m.register.equals(register)){
 				return m.register;
 			}
 		}
