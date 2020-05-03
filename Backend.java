@@ -265,7 +265,7 @@ public class Backend {
 		String[] tokens = s.split("=");
 		//tokens[0] is destination of expression
 		// Resolve what is in tokens[1]
-		if(Pattern.matches("[0-9]*", tokens[1])) { // Constant asssigned to LHS
+		if(tokens.length > 1 && Pattern.matches("[0-9]*", tokens[1])) { // Constant asssigned to LHS
 			ArrayList<String> r = memory.accessReference(tokens[0], "main");
 			// for(String x: r){	//Debug print
 			// 	System.out.println(x);
