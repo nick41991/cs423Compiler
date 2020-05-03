@@ -8,6 +8,7 @@ public class Intermediate
 	private ArrayList<Placeholder> placeholders; // Store placeholders
 	private SymbolTable st; // Store main symbol table
 	private SymbolTable context; // Working table
+	private int while_label;
 
 	/*Constructor for class to generate IR from parse tree*/
 	public Intermediate(SymbolTable sym){
@@ -15,6 +16,7 @@ public class Intermediate
 		ph_num = 1;
 		placeholders = new ArrayList<Placeholder>();
 		context = sym;
+		while_label = 0;
 	}
 
 	/*Generates an IR from a parse tree*/
@@ -376,6 +378,7 @@ public class Intermediate
 			}
 		} else if(payload.equals("while")){
 			condition = node.children.get(0).children.get(0).getPayload(); //if condition
+			ir.addLine("TOP_WHILE" + while_label + ":");
 			expandPlaceholder(condition, findPlaceholder(condition).expression, ir);
 			s = s.concat("while " + condition + " {");
 			ir.addLine(s);
@@ -384,6 +387,7 @@ public class Intermediate
 			/*Need to recalculate condition at end of loop.
 			Putting it here again makes it easy for testing in asm*/
 			expandPlaceholder(condition, findPlaceholder(condition).expression, ir);
+			ir.addLine("goto TOP_WHILE" + while_label + ":");
 			s = s.concat("}");
 			ir.addLine(s);
 			s = "";
