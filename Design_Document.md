@@ -24,7 +24,7 @@ Compiler.java controls the main logic of the Compiler. Parser.jj handles all log
 
 #### To use -f option
 
-    $ java Compiler -f [output file path] [.c file path] 
+    $ java Compiler -f [output file path] [.c file path]
 
 #### To use -r option
 
@@ -40,6 +40,7 @@ Compiler.java controls the main logic of the Compiler. Parser.jj handles all log
 | -ir   | Output IR|:heavy_check_mark:|
 | -f    | Output IR to a specified file|:heavy_check_mark:|
 | -r    | Read in IR instead of source file|:heavy_check_mark:|
+| -S    | Output .s file | :x: |
 
 
 ## Design Discussion
