@@ -82,6 +82,14 @@ public class RegisterManager
 		return r.name;
 	}
 
+	//Allocate register by name
+	public String allocateByName(String name){
+		Register r = getByName(name);
+		tick();
+		r.access();
+		return r.name;
+	}
+
 	// Updates a value stored in a register
 	public void update(String name, String value){
 		Register r = getByName(name);

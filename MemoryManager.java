@@ -20,6 +20,13 @@ public class MemoryManager{
 			inRegister = false;
 			register = "";
 		}
+		public MemoryUnit(String n, String s, int o, String r){
+			name = n;
+			scope = s;
+			offset = o;
+			inRegister = true;
+			register = r;
+		}
 	}
 
 
@@ -77,14 +84,31 @@ public class MemoryManager{
 		return access;
 	}
 
-	// Grab a register by its name
-	public String grabRegister(String register){
+	// Grab a register by its name for a specific value
+	public ArrayList<String> grabRegister(String name, String scope, String register){
+		ArrayList<String> access = new ArrayList<String>();
+		//move contents of requested register to the stack
 		for(MemoryUnit m : units){
 			if(m.register.equals(register)){
-				return m.register;
+				m.register = "";
+				m.inRegister = false;
+				//access.add("movl " + alloced + ", -" + (4 * m.offset)+ "(%ebp)"); //Need proper addressing scheme
+
+				return access;
 			}
 		}
-		return registers.gpr_allocate();
+		MemoryUnit reference = null;
+		//Locate name, scope pair
+		for(MemoryUnit m : units){
+			if(m.name.equals(name) && m.scope.equals(scope)){
+				reference.register = registers.allocateByName(register);
+				return access;
+			}
+		}
+		if(reference == null){
+			reference = new MemoryUnit(name, scope, stack.push(name), registers.allocateByName(register));
+		}
+		return access;
 	}
 
 }
