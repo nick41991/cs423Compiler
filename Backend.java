@@ -18,7 +18,9 @@ public class Backend {
 	private boolean mainSet;
 
 	private int jumpLabel;
-
+	public int if_lbl_count = 0;
+	public int ifelse_lbl_count = 0;
+	public int while_lbl_count = 0;
 
 	public Backend(IntRep irep, SymbolTable sym){
 		output = new ArrayList<String>();
@@ -34,6 +36,8 @@ public class Backend {
 			System.out.println(s);
 		}
 	}
+
+	
 
 	public void run(){
 		init();
@@ -195,6 +199,24 @@ public class Backend {
 		*/
 
 		//Default return
+
+
+		String label = new String("if" + if_lbl_count);
+		if_lbl_count++;
+
+		String [] tokens = s.split(" ");
+		//System.out.println("in if condtional token[1] = "+ tokens[1] +"\n");
+
+		ArrayList<String> condtional_regi = memory.accessReference(tokens[1], context);
+		output.add("cmp " + condtional_regi.get(condtional_regi.size() - 1) + ", 0");
+		output.add("jne " + label);
+		i = state_switch(i+1);
+		output.add(label + ":");
+		
+
+
+	
+
 		return i;
 
 	}
@@ -256,7 +278,7 @@ public class Backend {
 		ArrayList<String> reference = memory.accessReference(tokens[1], "main");
 		if(!reference.get(reference.size() - 1).equals("%eax")){
 			/*Move return value into eax*/
-			for(int j = 0; j < reference.size() - 1; j++){ //In case htere was anything done to get return value into register.
+			for(int j = 0; j < reference.size() - 1; j++){ //In case there was anything done to get return value into register.
 				output.add(reference.get(j));
 			}
 			output.add("movl " + reference.get(reference.size() - 1) + ", %eax");
