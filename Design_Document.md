@@ -1,3 +1,4 @@
+#
 # Compiler - CSE 423 - Spring 2020
 ## Contributors
 - Nicholas Smith
@@ -52,48 +53,48 @@ Currently we recognize:
 
 #### Required Language Features
 
-|Features|Scanner|Parser|IR|
-|--------|-------|------|--|
-|Identifiers|:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|
-|Variables|:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|
-|Functions|:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|
-|Keywords|:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|
-|Arithmetic Expressions|:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|
-|Assignment|:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|
-|Boolean Expressions|:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|
-|GOTO Statements|:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|
-|If/Else Control Flow|:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|
-|Unary Operators|:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|
-|Return Statements|:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|
-|Break Statements|:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|
-|While Loops|:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|
+|Features|Scanner|Parser|IR|Back End |
+|--------|-------|------|--|---------|
+|Identifiers|:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|
+|Variables|:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|
+|Functions|:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|:x:|
+|Keywords|:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|
+|Arithmetic Expressions|:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|
+|Assignment|:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|
+|Boolean Expressions|:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|
+|GOTO Statements|:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|
+|If/Else Control Flow|:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|
+|Unary Operators|:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|
+|Return Statements|:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|
+|Break Statements|:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|
+|While Loops|:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|:x:|
 
 #### Optional Language Features
 
-|Features|Scanner|Parser|IR|
-|--------|-------|------|--|
-|++|:x:|:x:|:x:|
-|--|:x:|:x:|:x:|
-|-=|:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|
-|+=|:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|
-|*=|:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|
-|/=|:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|
-|>|:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|
-|<|:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|
-|\|\||:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|
-|&&|:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|
-|>=|:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|
-|<=|:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|
-|==|:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|
-|Types Other</br>Than Integers|:x:|:x:|:x:|
-|For Loops|:x:|:x:|:x:|
-|Binary Operators|:x:|:x:|:x:|
-|Switch Statements|:x:|:x:|:x:|
-|Pointers, Arrays, Strings|:x:|:x:|:x:|
-|Preprocessor Statements|:x:|:x:|:x:|
-|Struct, Enum|:x:|:x:|:x:|
-|Casting, Type Promotion|:x:|:x:|:x:|
-|Type Specs|:x:|:x:|:x:|
+|Features|Scanner|Parser|IR|Back End |
+|--------|-------|------|--|---------|
+|++|:x:|:x:|:x:|:x:|
+|--|:x:|:x:|:x:|:x:|
+|-=|:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|:x:|
+|+=|:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|:x:|
+|*=|:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|:x:|
+|/=|:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|:x:|
+|>|:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|
+|<|:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|
+|\|\||:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|
+|&&|:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|
+|>=|:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|
+|<=|:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|
+|==|:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|
+|Types Other</br>Than Integers|:x:|:x:|:x:|:x:|
+|For Loops|:x:|:x:|:x:|:x:|
+|Binary Operators|:x:|:x:|:x:|:x:|
+|Switch Statements|:x:|:x:|:x:|:x:|
+|Pointers, Arrays, Strings|:x:|:x:|:x:|:x:|
+|Preprocessor Statements|:x:|:x:|:x:|:x:|
+|Struct, Enum|:x:|:x:|:x:|:x:|
+|Casting, Type Promotion|:x:|:x:|:x:|:x:|
+|Type Specs|:x:|:x:|:x:|:x:|
 
 ## Intermediate Language Design
 In designing our Intermediate representation, we aimed for simplicity mimicking the general structure of c code but without the indentations and identifiers.
@@ -111,3 +112,21 @@ In designing our Intermediate representation, we aimed for simplicity mimicking 
  - Many placeholders hold single numbers or variables currently. This can be optimized later with constant folding and propagation.
 
  For samples of the IR, please see files ending in "_IR_Sample" in the folder SampleOutputs
+
+## Back End Design and Overview
+### Current Status
+- See language specification for features implemented in the backend.
+- The back end produces assembly code given an intermediate representation.
+- The back end reads lines of the IR one at a time.
+- The back end generates assembly code for each line, the main function, switch_state(), for doing this switches states based on what it reads.
+- This allows the back end to structure the code in blocks, via nesting states.
+- Memory is managed by the MemoryManager class. This class monitors variable locations both in registers, managed by RegisterManager, and the stack, managed by StackManager.
+	- The RegisterManager employs a LRU algorithm for general allocation, copying registers' contents to memory before giving the register over to the variable that needs it. There is also a function in place which demands a specific register. This function is only currently used for the niche of division.
+
+#### Issues with Compiler
+- Due to time constraints, several features are not implemented
+	- Function calls
+		- Functions themselves compile, however, the calling conventions are not implemented and thus they can not be called. The compiler will produce code with unknown behavior when function calls exist.
+	- While loops
+	- Optimization
+		- As it is, the IR is extremely unoptimized. As such, this leads to a lot of unnecessary memory operations and variable assignments in the back end.
