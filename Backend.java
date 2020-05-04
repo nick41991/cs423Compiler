@@ -71,7 +71,6 @@ public class Backend {
 		String s;
 		for(; i < ir.rep.size(); i++){
 			s = ir.rep.get(i);
-			System.out.println(i + " " + s);
 			//Function Declaration
 			if(Pattern.matches("[a-z][a-zA-Z_0-9]*[(][)][{]", s)){
 				i = functionHeader(s, i);
@@ -221,7 +220,7 @@ public class Backend {
 		String label = new String("IF" + if_lbl_count);
 		if_lbl_count++;
 
-		
+
 
 		String [] tokens = s.split(" ");
 		//System.out.println("in if condtional token[1] = "+ tokens[1] +"\n");

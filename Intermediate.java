@@ -361,10 +361,10 @@ public class Intermediate
 					s = s.concat(" else {");
 					ir.addLine(s);
 					s = "";
-					System.out.println("if block:" + tmp.children.get(2).children.get(0).children.get(0).getPayload());
+					//System.out.println("if block:" + tmp.children.get(2).children.get(0).children.get(0).getPayload());
 
 					if(tmp.children.get(2).children.get(0).children.get(0).getPayload().equals("if")){
-						System.out.println("if block:" + tmp.children.get(2).children.get(0).children.get(0).getPayload());
+						//System.out.println("if block:" + tmp.children.get(2).children.get(0).children.get(0).getPayload());
 
 						write_Statement(tmp.children.get(2).children.get(0).children.get(0), ir);
 					} else {
