@@ -156,6 +156,7 @@ public class Backend {
 
 	private int jump(String s, int i){
 		//Unconditional YEET to a label
+		//s = jmp LABEL
 		output.add(s);
 		//Default return
 		return i;
@@ -229,7 +230,9 @@ public class Backend {
 		writeAccess(condtional_regi);
 		output.add("cmp " + condtional_regi.get(condtional_regi.size() - 1) + ", 0");
 		output.add("jne " + label);
+		System.out.println("Before:" + i);
 		i = state_switch(i+1);
+		System.out.println("after:" + i);
 
 		if(lse_flag == 1){
 			output.add("ELSE" + ifelse_lbl_count + ":");
@@ -263,7 +266,9 @@ public class Backend {
 		output.add("jmp " + "ELSE" + ifelse_lbl_count);
 		output.add(label + ":");
 
+		System.out.println("Before:" + i);
 		i = state_switch(i+1);
+		System.out.println("after:" + i);
 
 		return i;
 	}
