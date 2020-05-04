@@ -93,7 +93,7 @@ public class Backend {
 					Z = labelStack.pop();
 					labelStack.push(Z);
 					labelStack.push(X);
-					output.add(X);
+					output.add(X + ":");
 
 			} else if (Pattern.matches("[}] else [{]", s)){
 				i = selectionElse(s, i);
@@ -349,16 +349,16 @@ public class Backend {
 			//Expression will be handled post if-else chain
 			} else if(Pattern.matches("[a-zA-Z_0-9]*[+][a-zA-Z_0-9]*", tokens[1])){ //Addition
 				expression = tokens[1].split("[+]");
-				op = "add";
+				op = "addl";
 			} else if(Pattern.matches("[a-zA-Z_0-9]*-[a-zA-Z_0-9]*", tokens[1])){ //Subtraction
 				expression = tokens[1].split("-");
-				op = "sub";
+				op = "subl";
 			} else if(Pattern.matches("[a-zA-Z_0-9]*[*][a-zA-Z_0-9]*", tokens[1])){ //Multiplication
 				expression = tokens[1].split("[*]");
-				op = "imul";
+				op = "imull";
 			} else if(Pattern.matches("[a-zA-Z_0-9]*/[a-zA-Z_0-9]*", tokens[1])){ //Division
 				expression = tokens[1].split("/");
-				op = "idiv";
+				op = "idivl";
 			} else if(Pattern.matches("[a-zA-Z_0-9]*>>[a-zA-Z_0-9]*", tokens[1])){ //Right Shift
 				expression = tokens[1].split(">>");
 				op = "shr";
@@ -391,26 +391,26 @@ public class Backend {
 				cmp = "!=";
 			} else if(Pattern.matches("[a-zA-Z_0-9]*[&][a-zA-Z_0-9]*", tokens[1])){ //And- binary
 				expression = tokens[1].split("[&]");
-				op = "and";
+				op = "andl";
 			} else if(Pattern.matches("[a-zA-Z_0-9]*\\^[a-zA-Z_0-9]*", tokens[1])){ //Xor- binary
 				expression = tokens[1].split("^");
-				op = "xor";
+				op = "xorl";
 			} else if(Pattern.matches("[a-zA-Z_0-9]*[|][a-zA-Z_0-9]*", tokens[1])){ //OR- binary
 				expression = tokens[1].split("|");
-				op = "or";
+				op = "orl";
 			} else if(Pattern.matches("[a-zAzA-Z_0-9]*[&][&][a-zA-Z_0-9]*", tokens[1])){ //And- Logic
 				expression = tokens[1].split("[&][&]");
-				op = "and";
+				op = "andl";
 			} else if(Pattern.matches("[a-zAzA-Z_0-9]*[|][|][a-zA-Z_0-9]*", tokens[1])){ //OR- Logic
 				expression = tokens[1].split("[|][|]");
-				op = "or";
+				op = "orl";
 			} else if(Pattern.matches("[!][a-zA-Z][a-zA-Z_0-9]*", tokens[1])){ //Not
 				expression = tokens[1].split("!");
 				ArrayList<String> src = memory.accessReference(tokens[1], context);
 				writeAccess(src);
 				ArrayList<String> dest = memory.accessReference(tokens[0], context);
 				writeAccess(dest);
-				output.add("not " + src.get(src.size() - 1)); //negate src
+				output.add("notl " + src.get(src.size() - 1)); //negate src
 				output.add("movl " + src.get(src.size() - 1) + ", " + dest.get(dest.size() - 1)); //Store result
 				return i;
 			} else { //expression is a function call or variable
@@ -469,13 +469,13 @@ public class Backend {
 				}
 			}
 			boolean lhc = false;
-			if(op.equals("idiv") && !lhf && !rhf){
+			if(op.equals("idivl") && !lhf && !rhf){
 				//Division has some special behavior
 				lhs = memory.grabRegister(expression[0], context, "%eax");
 				writeAccess(lhs);
 				rhs = memory.accessReference(expression[1], context);
 				writeAccess(rhs);
-				output.add("idiv " + rhs.get(rhs.size() - 1));
+				output.add("idivl " + rhs.get(rhs.size() - 1));
 				ArrayList<String> dest = memory.accessReference(tokens[0], context);
 				writeAccess(dest);
 				output.add("movl " + lhs.get(lhs.size() - 1) + ", " + dest.get(dest.size() - 1));
@@ -511,48 +511,48 @@ public class Backend {
 			//Enables complex logic via registers
 			if(op.equals("cmp") && !lhf && !rhf){
 				if(cmp.equals("==")){
-					output.add("nand " + lhs.get(lhs.size() - 1) + ", " + rhs.get(rhs.size() - 1));
+					output.add("nandl " + lhs.get(lhs.size() - 1) + ", " + rhs.get(rhs.size() - 1));
 					//Equal to 0 if true;
 					ArrayList<String> dest = memory.accessReference(tokens[0], context);
 					writeAccess(dest);
 					output.add("movl " + rhs.get(rhs.size() - 1) + ", " + dest.get(dest.size() - 1));
 				} else if(cmp.equals("!=")){
-					output.add("and " + lhs.get(lhs.size() - 1) + ", " + rhs.get(rhs.size() - 1));
+					output.add("andl " + lhs.get(lhs.size() - 1) + ", " + rhs.get(rhs.size() - 1));
 					//Equal to 0 if true;
 					ArrayList<String> dest = memory.accessReference(tokens[0], context);
 					writeAccess(dest);
 					output.add("movl " + rhs.get(rhs.size() - 1) + ", " + dest.get(dest.size() - 1));
 				} else if(cmp.equals("<")){
-					output.add("sub " + lhs.get(lhs.size() - 1) + ", " + rhs.get(rhs.size() - 1));
-					output.add("nand 0x80000000, " + rhs.get(rhs.size() - 1));
+					output.add("subl " + lhs.get(lhs.size() - 1) + ", " + rhs.get(rhs.size() - 1));
+					output.add("nandl $0x80000000, " + rhs.get(rhs.size() - 1));
 					//Equal to 0 if true;
 					ArrayList<String> dest = memory.accessReference(tokens[0], context);
 					writeAccess(dest);
 					output.add("movl " + rhs.get(rhs.size() - 1) + ", " + dest.get(dest.size() - 1));
 				} else if(cmp.equals(">")){
-					output.add("sub " + lhs.get(lhs.size() - 1) + ", " + rhs.get(rhs.size() - 1));
+					output.add("subl " + lhs.get(lhs.size() - 1) + ", " + rhs.get(rhs.size() - 1));
 					//0x10000000 indicates negative
-					output.add("and 0x80000000, " + rhs.get(rhs.size() - 1));
+					output.add("and $0x80000000, " + rhs.get(rhs.size() - 1));
 					//Equal to 0 if true;
 					ArrayList<String> dest = memory.accessReference(tokens[0], context);
 					writeAccess(dest);
 					output.add("movl " + rhs.get(rhs.size() - 1) + ", " + dest.get(dest.size() - 1));
 				} else if(cmp.equals("<=")){
 						//a <= b  ====  (a - 1) < b
-					output.add("sub  $1, " + lhs.get(lhs.size() - 1));
-					output.add("sub " + lhs.get(lhs.size() - 1) + ", " + rhs.get(rhs.size() - 1));
+					output.add("subl  $1, " + lhs.get(lhs.size() - 1));
+					output.add("subl " + lhs.get(lhs.size() - 1) + ", " + rhs.get(rhs.size() - 1));
 					//0x10000000 indicates negative
-					output.add("nand 0x80000000, " + rhs.get(rhs.size() - 1));
+					output.add("nandl $0x80000000, " + rhs.get(rhs.size() - 1));
 					//Equal to 0 if true;
 					ArrayList<String> dest = memory.accessReference(tokens[0], context);
 					writeAccess(dest);
 					output.add("movl " + rhs.get(rhs.size() - 1) + ", " + dest.get(dest.size() - 1));
 				} else if(cmp.equals(">=")){
 						//a >= b  ====  (a + 1) > b
-					output.add("add  $1, " + lhs.get(lhs.size() - 1));
-					output.add("sub " + lhs.get(lhs.size() - 1) + ", " + rhs.get(rhs.size() - 1));
+					output.add("addl  $1, " + lhs.get(lhs.size() - 1));
+					output.add("subl " + lhs.get(lhs.size() - 1) + ", " + rhs.get(rhs.size() - 1));
 					//0x10000000 indicates negative
-					output.add("and 0x80000000, " + rhs.get(rhs.size() - 1));
+					output.add("andl $0x80000000, " + rhs.get(rhs.size() - 1));
 					//Equal to 0 if true;
 					ArrayList<String> dest = memory.accessReference(tokens[0], context);
 					writeAccess(dest);
