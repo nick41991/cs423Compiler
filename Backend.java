@@ -25,6 +25,7 @@ public class Backend {
 	public int lse_flag = 0;
 
 	public Backend(IntRep irep, SymbolTable sym){
+		
 		output = new ArrayList<String>();
 		ir = irep;
 		st = sym;
@@ -78,7 +79,6 @@ public class Backend {
 
 		for(; i < ir.rep.size(); i++){
 			s = ir.rep.get(i);
-			System.out.println(i + " " + s);
 			//Function Declaration
 			if(Pattern.matches("[a-z][a-zA-Z_0-9]*[(][)][{]", s)){
 				i = functionHeader(s, i);

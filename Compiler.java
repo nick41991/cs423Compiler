@@ -47,8 +47,8 @@ public class Compiler {
 					setIRName = true;
 					break;
 
-                case "-S":
-                    asmBool = true;
+                		case "-S":
+                    			asmBool = true;
 
 				default:
 					if (setIRName){
@@ -64,33 +64,6 @@ public class Compiler {
 
         	}
         }
-
-        /**for(String s : args){
-		if(s.equals("-t")){
-			tokenBool = true;
-                	System.out.println("-t");
-
-		} else if (s.equals("-pt")){
-			parseTreeBool = true;
-
-		} else if (s.equals("-s")) {
-                	symbolTableBool = true;
-
-            	} else if (s.equals("-ir")) {
-                	irBool = true;
-
-            	} else if (!fileSet){
-			fileName = s;
-			fileSet = true;
-
-		} else {
-			System.out.println("Error: More than one file passed as argument.");
-
-		}
-	}**/
-
-
-
 
 // split to avoid trying to parse and scan an IR representation, worked on by daniel and alden
 
@@ -130,7 +103,6 @@ public class Compiler {
 		if(symbolTableBool) {
             		SymbolTable.printSymbolTable(symRoot);
         	}
-
 		if(irBool){
 			ir.write();
 		}

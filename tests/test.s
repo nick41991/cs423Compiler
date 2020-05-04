@@ -52,7 +52,7 @@ movl %ecx, %edx
 movl %ebx, -12(%ebp)
 movl -64(%ebp), %ebx
 movl %edx, %ebx
-cmp %ebx, 0
+cmpl %ebx, 0
 jne IF0
 jmp WHILE0
 IF0:
@@ -78,7 +78,7 @@ movl -76(%ebp), %r9d
 movl %edi, %r9d
 movl %r10d, -32(%ebp)
 movl -80(%ebp), %r10d
-cmp %r10d, 0
+cmpl %r10d, 0
 jne IF1
 movl %r12d, -36(%ebp)
 movl -84(%ebp), %r12d
@@ -90,39 +90,59 @@ movl %r12d, %r13d
 movl %r14d, -44(%ebp)
 movl -92(%ebp), %r14d
 movl %edi, %r14d
-jmp ELSE1
+jmp ELSE0
 IF1:
-jmp LABEL
-ELSE1:
 movl %r15d, -48(%ebp)
 movl -96(%ebp), %r15d
-movl $1, %r15d
+movl $4, %r15d
+subl $10, %r15d
+and $0x80000000, %r15d
 movl %eax, -52(%ebp)
 movl -100(%ebp), %eax
+movl %r15d, %eax
+cmpl %eax, 0
+jne IF2
 movl %ecx, -56(%ebp)
 movl -104(%ebp), %ecx
-movl %eax, %ecx
+movl $1, %ecx
 movl %edx, -60(%ebp)
 movl -108(%ebp), %edx
-orl $1, %edx
+movl %edi, %edx
+jmp LABEL
+jmp ELSE1
+IF2:
+jmp LABEL2
+ELSE1:
+IF2:
 movl %ebx, -64(%ebp)
 movl -112(%ebp), %ebx
-movl %edx, %ebx
+movl $1, %ebx
 movl %esi, -68(%ebp)
 movl -116(%ebp), %esi
-movl %edi, %esi
 movl %edi, -16(%ebp)
 movl -120(%ebp), %edi
-movl %edi, %edi
+movl %esi, %edi
 movl %r8d, -72(%ebp)
-movl -16(%ebp), %r8d
+movl -124(%ebp), %r8d
+orl $1, %r8d
 movl %r9d, -76(%ebp)
-movl -124(%ebp), %r9d
+movl -128(%ebp), %r9d
 movl %r8d, %r9d
 movl %r10d, -80(%ebp)
-movl -128(%ebp), %r10d
-movl %r8d, %r10d
-movl %r10d, %eax
+movl -16(%ebp), %r10d
+movl %r12d, -84(%ebp)
+movl -132(%ebp), %r12d
+movl %r10d, %r12d
+movl %r13d, -88(%ebp)
+movl -136(%ebp), %r13d
+movl %r10d, %r13d
+movl %r14d, -92(%ebp)
+movl -140(%ebp), %r14d
+movl %r10d, %r14d
+movl %r15d, -96(%ebp)
+movl -144(%ebp), %r15d
+movl %r10d, %r15d
+movl %r15d, %eax
 popq %rbp
 ret
 
