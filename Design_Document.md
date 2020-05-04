@@ -134,12 +134,10 @@ In designing our Intermediate representation, we aimed for simplicity mimicking 
 	- We have issues with daisy chained if-else statements.
 
 ### Best Results
-If you want to check out what our compiler can do, try running it with the following files in the tests folder:
+If you want to check out what our compiler can do, try running it with the following file(s) in the tests folder:
 	- simple.c
-	- longstatement.c
-	- if.c
-	- variable.c
-Things start to go wrong with while.c
+
+The rest of our test files were unable to produce valid assembly that could be executed. However, the assembly of simple.c can be assembled and executed. (Shown Below).
 
 ### To compile and run the a.s file
 
