@@ -18,7 +18,7 @@ public class StackManager
 
 	public StackManager(){
 		stack = new ArrayList<Entry>();
-		size = 0;
+		size = 1;
 	}
 
 	public int push(String s){
