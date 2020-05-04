@@ -8,7 +8,6 @@ int main(){
 	a = 1;
 LABEL:
 
-LABEL2:
 	while(!(a > 10)){
 		a = a + 1;
 		if ((a % 1) == 0){
@@ -23,11 +22,7 @@ LABEL2:
 		a = 1;
 		goto LABEL;
 
-	} else{
-
-		a = 10;
-		int b = 10;
-	}
+	} 
 	int b = 1;
 	a = 1 | 5;
 	a = my_func(a, b + 1);
