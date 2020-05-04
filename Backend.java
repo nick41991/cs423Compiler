@@ -21,6 +21,7 @@ public class Backend {
 	public int if_lbl_count = 0;
 	public int ifelse_lbl_count = 0;
 	public int while_lbl_count = 0;
+	public int lse_flag = 0;
 
 	public Backend(IntRep irep, SymbolTable sym){
 		output = new ArrayList<String>();
@@ -82,8 +83,6 @@ public class Backend {
 				i = iterator(s, i);
 			} else if (Pattern.matches("if [a-zA-Z][a-zA-Z_0-9]* [{]", s)){
 				i = selectionIf(s, i);
-			} else if (Pattern.matches("[}] else if [a-zA-Z][a-zA-Z_0-9]* [{]", s)){
-				i = selectionElseIf(s, i);
 			} else if (Pattern.matches("[}] else [{]", s)){
 				i = selectionElse(s, i);
 			} else if (Pattern.matches("return [a-zA-Z][a-zA-Z_0-9]*", s)){
@@ -232,59 +231,16 @@ public class Backend {
 		output.add("cmp " + condtional_regi.get(condtional_regi.size() - 1) + ", 0");
 		output.add("jne " + label);
 		i = state_switch(i+1);
-		output.add(label + ":");
+
+		if(lse_flag == 1){
+			output.add("ELSE" + ifelse_lbl_count + ":");
+			ifelse_lbl_count++;
+			lse_flag = 0;
+		}else{
+			output.add(label + ":");
 
 
-
-
-
-		return i;
-
-	}
-
-	private int selectionElseIf(String s, int i){ //if else
-		//FOR: s == "if cond {"
-		//Should also work for s = "} else if cond {"
-
-		/*Pop label x from previous if*/
-		//popLabel();
-
-		/*
-			//if else will function just like a basic if except z will not be pushed to stack,
-			// since it is already there.
-			label x:
-			test cond
-			jump if false to label y		push label y to stack
-				code for if true
-				jump (unconditionally) to z
-			label y:
-
-			label z:
-				continuation of code outside this structure
-		*/
-
-		//Default return
-
-		//String label = new String("IF" + if_lbl_count);
-		//if_lbl_count++;
-
-		String label = new String("ELSEIF" + ifelse_lbl_count);
-		ifelse_lbl_count++;
-
-		String [] tokens = s.split(" ");
-		//System.out.println("in if condtional token[1] = "+ tokens[1] +"\n");
-
-		ArrayList<String> condtional_regi = memory.accessReference(tokens[2], context);
-		writeAccess(condtional_regi);
-		output.add("cmp " + condtional_regi.get(condtional_regi.size() - 1) + ", 0");
-		output.add("jne " + label);
-		i = state_switch(i+1);
-		output.add(label + ":");
-
-
-
-
-
+		}
 
 
 
@@ -292,6 +248,8 @@ public class Backend {
 		return i;
 
 	}
+
+	
 
 	private int selectionElse(String s, int i){
 		//FOR: s == "else {"
@@ -301,6 +259,13 @@ public class Backend {
 		//popLabel(); //Place final label (label z)
 
 		//Default return
+		lse_flag = 1;
+		String label = new String("IF" + (if_lbl_count-1));
+		output.add("jmp " + "ELSE" + ifelse_lbl_count);
+		output.add(label + ":");
+
+		i = state_switch(i+1);
+
 		return i;
 	}
 
