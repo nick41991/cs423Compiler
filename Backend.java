@@ -37,7 +37,7 @@ public class Backend {
 		}
 	}
 
-	
+
 
 	public void run(){
 		init();
@@ -68,6 +68,7 @@ public class Backend {
 		String s;
 		for(; i < ir.rep.size(); i++){
 			s = ir.rep.get(i);
+			System.out.println(i + " " + s);
 			//Function Declaration
 			if(Pattern.matches("[a-z][a-zA-Z_0-9]*[(][)][{]", s)){
 				i = functionHeader(s, i);
@@ -85,6 +86,9 @@ public class Backend {
 				i = selectionElse(s, i);
 			} else if (Pattern.matches("return [a-zA-Z][a-zA-Z_0-9]*", s)){
 				i = returns(s, i);
+
+			} else if (Pattern.matches("break", s)){
+				i = breaks(s, i);
 
 			} else if (Pattern.matches("[}]", s)){
 				//End of ifs (w/out else), elses, whiles, and functions
@@ -138,14 +142,21 @@ public class Backend {
 
 	private int label(String s, int i){
 		//A user defined label in the code
+		output.add(s);
+		//Default return
+		return i;
+	}
 
+	private int breaks(String s, int i){
+		//A user defined break in the code
+		output.add("jmp WHILE" + while_lbl_count);
 		//Default return
 		return i;
 	}
 
 	private int jump(String s, int i){
 		//Unconditional YEET to a label
-
+		output.add(s);
 		//Default return
 		return i;
 	}
@@ -212,10 +223,10 @@ public class Backend {
 		output.add("jne " + label);
 		i = state_switch(i+1);
 		output.add(label + ":");
-		
 
 
-	
+
+
 
 		return i;
 
