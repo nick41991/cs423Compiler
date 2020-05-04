@@ -70,14 +70,14 @@ public class MemoryManager{
 					/*Move unit from register back to stack*/
 					m.register = "";
 					m.inRegister = false;
-					access.add("movl " + alloced + ", -" + (4 * m.offset)+ "(%ebp)");
+					access.add("movl " + alloced + ", -" + (4 * m.offset)+ "(%rbp)");
 					break; /*Should only be one unit in a register, so save cycles*/
 				}
 			}
 			/*Move value into register*/
 			reference.register = alloced;
 			reference.inRegister = true;
-			access.add("movl -" + (4 * reference.offset)+ "(%ebp), " + alloced);
+			access.add("movl -" + (4 * reference.offset)+ "(%rbp), " + alloced);
 			access.add(reference.register);
 		}
 
@@ -108,7 +108,7 @@ public class MemoryManager{
 			if(m.register.equals(register)){
 				m.register = "";
 				m.inRegister = false;
-				access.add("movl " + register + ", -" + (4 * m.offset)+ "(%ebp)");
+				access.add("movl " + register + ", -" + (4 * m.offset)+ "(%rbp)");
 
 			}
 		}
@@ -118,7 +118,7 @@ public class MemoryManager{
 		} else {
 			reference.register = register;
 		}
-		access.add("movl -" + (4 * reference.offset)+ "(%ebp), " + reference.register);
+		access.add("movl -" + (4 * reference.offset)+ "(%rbp), " + reference.register);
 		access.add(register);
 
 		return access;
