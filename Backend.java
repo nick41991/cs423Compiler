@@ -39,10 +39,12 @@ public class Backend {
 
 
 
-	public void run(){
+	public void run(boolean asmBool){
 		init();
 		state_switch(0);
-		print();
+		if(asmBool) {
+			print();
+		}
 	}
 
 	/*Write the three necessary data sections to output*/

@@ -142,9 +142,6 @@ public class Compiler {
 	//Begin Backend
 	//Write ASM
 	Backend backend = new Backend(ir, symRoot);
-	backend.run();
-    if(asmBool) {
-        backend.print();
-    }
+	backend.run(asmBool);
     }
 }
