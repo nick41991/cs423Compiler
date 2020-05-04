@@ -116,6 +116,7 @@ In designing our Intermediate representation, we aimed for simplicity mimicking 
 ## Back End Design and Overview
 ### Current Status
 - See language specification for features implemented in the backend.
+- Successful execution of Back End result in the file "a.s"
 - The back end produces assembly code given an intermediate representation.
 - The back end reads lines of the IR one at a time.
 - The back end generates assembly code for each line, the main function, switch_state(), for doing this switches states based on what it reads.
@@ -130,3 +131,12 @@ In designing our Intermediate representation, we aimed for simplicity mimicking 
 	- While loops
 	- Optimization
 		- As it is, the IR is extremely unoptimized. As such, this leads to a lot of unnecessary memory operations and variable assignments in the back end.
+	- We have issues with daisy chained if-else statements.
+
+### Best Results
+If you want to check out what our compiler can do, try running it with the following files in the tests folder:
+	- simple.c
+	- longstatement.c
+	- if.c
+	- variable.c
+Things start to go wrong with while.c
