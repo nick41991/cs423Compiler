@@ -18,12 +18,12 @@ LABEL:
 		a = a - 1;
 
 	} else if(10 > 4){
-
+		a = 1;
 		goto LABEL;
 
 	} else{
 
-		goto label2;
+		goto LABEL2;
 
 	}
 	int b = 1;
