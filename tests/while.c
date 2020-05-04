@@ -17,9 +17,15 @@ LABEL:
 	if( (a > 10) && (a == 5) || (my_func(a, a) == a)) {
 		a = a - 1;
 
-	} else {
+	} else if(10 > 4){
+
 		goto LABEL;
-	} 
+
+	} else{
+
+		goto label2;
+
+	}
 	int b = 1;
 	a = 1 | 5;
 	a = my_func(a, b + 1);
