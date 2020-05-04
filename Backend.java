@@ -3,7 +3,8 @@
 import java.util.ArrayList;
 import java.util.Stack;
 import java.util.regex.*;
-
+import java.nio.file.*;
+import java.io.*;
 
 public class Backend {
 	public ArrayList<String> output;
@@ -25,7 +26,7 @@ public class Backend {
 	public int lse_flag = 0;
 
 	public Backend(IntRep irep, SymbolTable sym){
-		
+
 		output = new ArrayList<String>();
 		ir = irep;
 		st = sym;
@@ -40,7 +41,34 @@ public class Backend {
 		}
 	}
 
+	public void toFile(){
+		try {
 
+			File IR = new File("a.s");
+			IR.createNewFile();
+
+
+		} catch (IOException e) {
+			System.out.println("Error: ");
+			e.printStackTrace();
+		}
+
+		try {
+			FileWriter fWriter = new FileWriter("a.s");
+
+			BufferedWriter writer = new BufferedWriter(fWriter);
+
+			for(String s: output){
+				writer.write(s + '\n');
+			}
+
+			writer.close();
+			System.out.println("Succesfuly created a.s");
+		} catch (IOException e) {
+			System.out.println("An error occurred.");
+			e.printStackTrace();
+		}
+	}
 
 	public void run(boolean asmBool){
 		init();
@@ -48,6 +76,7 @@ public class Backend {
 		if(asmBool) {
 			print();
 		}
+		toFile();
 	}
 
 	/*Write the three necessary data sections to output*/
@@ -162,7 +191,7 @@ public class Backend {
 
 	private int breaks(String s, int i){
 		//A user defined break in the code
-		output.add("jmp WHILE" + (while_lbl_count - 1));
+		//output.add("jmp WHILE" + (while_lbl_count - 1));
 		//Default return
 		return i;
 	}

@@ -109,11 +109,8 @@ movl %edx, -60(%ebp)
 movl -108(%ebp), %edx
 movl %edi, %edx
 jmp LABEL
-jmp ELSE1
 IF2:
-jmp LABEL2
-ELSE1:
-IF2:
+ELSE0:
 movl %ebx, -64(%ebp)
 movl -112(%ebp), %ebx
 movl $1, %ebx
