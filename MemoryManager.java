@@ -70,7 +70,7 @@ public class MemoryManager{
 					/*Move unit from register back to stack*/
 					m.register = "";
 					m.inRegister = false;
-					access.add("movl " + alloced + ", -" + (4 * m.offset)+ "(%ebp)"); //Need proper addressing scheme
+					access.add("movl " + alloced + ", -" + (4 * m.offset)+ "(%ebp)");
 					break; /*Should only be one unit in a register, so save cycles*/
 				}
 			}
@@ -87,27 +87,38 @@ public class MemoryManager{
 	// Grab a register by its name for a specific value
 	public ArrayList<String> grabRegister(String name, String scope, String register){
 		ArrayList<String> access = new ArrayList<String>();
+
+		MemoryUnit reference = null;
+		//Locate name, scope pair
+		for(MemoryUnit m : units){
+			if(m.name.equals(name) && m.scope.equals(scope)){
+				reference = m;
+			}
+		}
+		if(reference != null){
+			if(reference.register.equals(register)){
+				//Register is alrady held by reference!
+				access.add(register);
+				return access;
+			}
+		}
+
 		//move contents of requested register to the stack
 		for(MemoryUnit m : units){
 			if(m.register.equals(register)){
 				m.register = "";
 				m.inRegister = false;
-				//access.add("movl " + alloced + ", -" + (4 * m.offset)+ "(%ebp)"); //Need proper addressing scheme
+				access.add("movl " + register + ", -" + (4 * m.offset)+ "(%ebp)");
+				return access;
+			}
+		}
 
-				return access;
-			}
-		}
-		MemoryUnit reference = null;
-		//Locate name, scope pair
-		for(MemoryUnit m : units){
-			if(m.name.equals(name) && m.scope.equals(scope)){
-				reference.register = registers.allocateByName(register);
-				return access;
-			}
-		}
 		if(reference == null){
 			reference = new MemoryUnit(name, scope, stack.push(name), registers.allocateByName(register));
 		}
+		access.add("movl -" + (4 * reference.offset)+ "(%ebp), " + reference.register);
+
+
 		return access;
 	}
 

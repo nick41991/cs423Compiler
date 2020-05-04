@@ -342,12 +342,13 @@ public class Intermediate
 		String payload = node.getPayload();
 		String s = "";
 		String condition;
+		//System.out.println(payload);
 
 		if(payload.equals("if")){
-			boolean chained = true;
+			//boolean chained = true;
 			Node tmp = node;
-			while(chained) {
-				chained = false;
+			//while(chained) {
+			//	chained = false;
 				condition = tmp.children.get(0).children.get(0).getPayload(); //if condition
 				expandPlaceholder(condition, findPlaceholder(condition).expression, ir);
 				s = s.concat("if " + condition + " {");
@@ -357,25 +358,38 @@ public class Intermediate
 				s = s.concat("}");
 				/*Handle elses'*/
 				if(tmp.children.size() == 3){
-					//Check if else-if chained
-					if(tmp.children.get(2).children.get(0).children.get(0).getPayload().equals("if")){//else-if chaining
-						tmp = tmp.children.get(2).children.get(0).children.get(0);
-						s = s.concat(" else ");
-						chained = true;
+					s = s.concat(" else {");
+					ir.addLine(s);
+					s = "";
+					System.out.println("if block:" + tmp.children.get(2).children.get(0).children.get(0).getPayload());
+
+					if(tmp.children.get(2).children.get(0).children.get(0).getPayload().equals("if")){
+						System.out.println("if block:" + tmp.children.get(2).children.get(0).children.get(0).getPayload());
+
+						write_Statement(tmp.children.get(2).children.get(0).children.get(0), ir);
 					} else {
-						s = s.concat(" else {");
-						ir.addLine(s);
-						s = "";
 						write_Compound_Statement(tmp.children.get(2).children.get(0), ir);
-						s = s.concat("\n}");
-						ir.addLine(s);
-						s = "";
 					}
+					ir.addLine("}");
+					//Check if else-if chained
+					// if(tmp.children.get(2).children.get(0).children.get(0).getPayload().equals("if")){//else-if chaining
+					// 	tmp = tmp.children.get(2).children.get(0).children.get(0);
+					// 	s = s.concat(" else ");
+					// 	chained = true;
+					// } else {
+					// 	s = s.concat(" else {");
+					// 	ir.addLine(s);
+					// 	s = "";
+					// 	write_Compound_Statement(tmp.children.get(2).children.get(0), ir);
+					// 	s = s.concat("\n}");
+					// 	ir.addLine(s);
+					// 	s = "";
+					// }
 				} else {
 					ir.addLine(s);
 					s = "";
 				}
-			}
+			//}
 		} else if(payload.equals("while")){
 			condition = node.children.get(0).children.get(0).getPayload(); //if condition
 			expandPlaceholder(condition, findPlaceholder(condition).expression, ir);
@@ -417,6 +431,7 @@ public class Intermediate
 		} else { //If all else fails, assume its a Label
 			s = s.concat(payload + ":");
 			ir.addLine(s);
+			//System.out.println(node.getPayload());
 			write_Statement(node.children.get(0), ir);
 		}
 

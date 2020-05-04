@@ -56,13 +56,13 @@ public class Backend {
 
 	/**
 	Cases to handle:		id ir	write asm`
-		Function declaration	+	-
-		LabeledStatement	+	-
+		Function declaration	+	+
+		LabeledStatement	+	+
 		SelectionStatement	+	-
 		IterationStatement	+	-
-		JumpStatement     	+	-
-		returns			+	-
-		ExpressionStatement	+	- //Fallthrough case
+		JumpStatement     	+	+
+		returns			+	+
+		ExpressionStatement	+	+ //Fallthrough case
 	*/
 
 	//Main control function, controls state of backend
