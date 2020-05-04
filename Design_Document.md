@@ -111,7 +111,7 @@ In designing our Intermediate representation, we aimed for simplicity mimicking 
  - Keywords with a mathematical or conditional expression such as return, if, and while appear as they normally would, followed by a placeholder representing their expression.
  - Many placeholders hold single numbers or variables currently. This can be optimized later with constant folding and propagation.
 
- For samples of the IR, please see files ending in "_IR_Sample" in the folder SampleOutputs
+ For samples of the IR, please see files ending in "\_IR_Sample" in the folder SampleOutputs
 
 ## Back End Design and Overview
 ### Current Status
@@ -140,3 +140,13 @@ If you want to check out what our compiler can do, try running it with the follo
 	- if.c
 	- variable.c
 Things start to go wrong with while.c
+
+### To compile and run the a.s file
+
+	$ gcc a.s
+
+This produces an a.out file. If you want a different file name use:
+
+	$ gcc -o [name] a.s
+
+This will give and execution file of the desired name.
