@@ -179,6 +179,11 @@ public class Backend {
 		*/
 
 		//Default return
+
+		String label = new String("WHILE" + while_lbl_count);
+		while_lbl_count++;
+
+
 		return i;
 
 	}
@@ -214,13 +219,16 @@ public class Backend {
 		//Default return
 
 
-		String label = new String("if" + if_lbl_count);
+		String label = new String("IF" + if_lbl_count);
 		if_lbl_count++;
+
+		
 
 		String [] tokens = s.split(" ");
 		//System.out.println("in if condtional token[1] = "+ tokens[1] +"\n");
 
 		ArrayList<String> condtional_regi = memory.accessReference(tokens[1], context);
+		writeAccess(condtional_regi);
 		output.add("cmp " + condtional_regi.get(condtional_regi.size() - 1) + ", 0");
 		output.add("jne " + label);
 		i = state_switch(i+1);
@@ -256,6 +264,31 @@ public class Backend {
 		*/
 
 		//Default return
+
+		//String label = new String("IF" + if_lbl_count);
+		//if_lbl_count++;
+
+		String label = new String("ELSEIF" + ifelse_lbl_count);
+		ifelse_lbl_count++;
+
+		String [] tokens = s.split(" ");
+		//System.out.println("in if condtional token[1] = "+ tokens[1] +"\n");
+
+		ArrayList<String> condtional_regi = memory.accessReference(tokens[2], context);
+		writeAccess(condtional_regi);
+		output.add("cmp " + condtional_regi.get(condtional_regi.size() - 1) + ", 0");
+		output.add("jne " + label);
+		i = state_switch(i+1);
+		output.add(label + ":");
+
+
+
+
+
+
+
+
+
 		return i;
 
 	}
