@@ -7,6 +7,8 @@ int main(){
 	int a;
 	a = 1;
 LABEL:
+
+LABEL2:
 	while(!(a > 10)){
 		a = a + 1;
 		if ((a % 1) == 0){
@@ -23,8 +25,8 @@ LABEL:
 
 	} else{
 
-		goto LABEL2;
-
+		a = 10;
+		int b = 10;
 	}
 	int b = 1;
 	a = 1 | 5;

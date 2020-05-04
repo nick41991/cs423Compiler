@@ -95,7 +95,6 @@ public class Backend {
 
 			} else if (Pattern.matches("[}] else [{]", s)){
 				i = selectionElse(s, i);
-				//popLabel();
 				return i;
 			} else if (Pattern.matches("return [a-zA-Z][a-zA-Z_0-9]*", s)){
 				i = returns(s, i);
@@ -273,7 +272,7 @@ public class Backend {
 	//*/
 		String z_lab = new String("ELSE" + ifelse_lbl_count);
 		ifelse_lbl_count++;
-		labelStack.push(z_lab);
+		elseStack.push(z_lab);
 
 		output.add("jmp " + z_lab);
 		popElse();
