@@ -248,7 +248,7 @@ public class Backend {
 
 	}
 
-	
+
 
 	private int selectionElse(String s, int i){
 		//FOR: s == "else {"
@@ -449,6 +449,17 @@ public class Backend {
 				}
 			}
 			boolean lhc = false;
+			if(op.equals("idiv") && !lhf && !rhf){
+				//Division has some special behavior
+				lhs = memory.grabRegister(expression[0], context, "%eax");
+				writeAccess(lhs);
+				rhs = memory.accessReference(expression[1], context);
+				writeAccess(rhs);
+				output.add("idiv " + rhs.get(rhs.size() - 1));
+				ArrayList<String> dest = memory.accessReference(tokens[0], context);
+				writeAccess(dest);
+				output.add("movl " + lhs.get(lhs.size() - 1) + ", " + dest.get(dest.size() - 1));
+			}
 			if(!lhf){ //lhs is not a function
 				//check if variable or constant
 				if(Pattern.matches("[0-9]*", expression[0])) { // Constant asssigned to LHS
@@ -477,6 +488,7 @@ public class Backend {
 					writeAccess(rhs);
 				}
 			}
+			//Enables complex logic via registers
 			if(op.equals("cmp") && !lhf && !rhf){
 				if(cmp.equals("==")){
 					output.add("nand " + lhs.get(lhs.size() - 1) + ", " + rhs.get(rhs.size() - 1));

@@ -32,7 +32,7 @@ public class Intermediate
 		// }
 		/*Post flattening tree print for debugging*/
 		//root.printParseTree(root,0);
-		//write_IR(root, 0, ir);
+		write_IR(root, 0, ir);
 		return ir;
 	}
 

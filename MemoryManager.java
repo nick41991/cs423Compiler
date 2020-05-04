@@ -109,15 +109,17 @@ public class MemoryManager{
 				m.register = "";
 				m.inRegister = false;
 				access.add("movl " + register + ", -" + (4 * m.offset)+ "(%ebp)");
-				return access;
+
 			}
 		}
 
 		if(reference == null){
 			reference = new MemoryUnit(name, scope, stack.push(name), registers.allocateByName(register));
+		} else {
+			reference.register = register;
 		}
 		access.add("movl -" + (4 * reference.offset)+ "(%ebp), " + reference.register);
-
+		access.add(register);
 
 		return access;
 	}
