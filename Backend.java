@@ -69,10 +69,10 @@ public class Backend {
 	//Main control function, controls state of backend
 	public int state_switch(int i){
 		String s;
-		String X;		
+		String X;
 		String Z;
-		
-		
+
+
 
 
 		for(; i < ir.rep.size(); i++){
@@ -89,15 +89,16 @@ public class Backend {
 				i = iterator(s, i);
 			} else if (Pattern.matches("if [a-zA-Z][a-zA-Z_0-9]* [{]", s)){
 				i = selectionIf(s, i);
-					X = labelStack.pop();		
+					X = labelStack.pop();
 					Z = labelStack.pop();
 					labelStack.push(Z);
 					labelStack.push(X);
 					output.add(X);
-				
+
 			} else if (Pattern.matches("[}] else [{]", s)){
 				i = selectionElse(s, i);
 				popLabel();
+				return i;
 			} else if (Pattern.matches("return [a-zA-Z][a-zA-Z_0-9]*", s)){
 				i = returns(s, i);
 
@@ -163,7 +164,7 @@ public class Backend {
 
 	private int breaks(String s, int i){
 		//A user defined break in the code
-		output.add("jmp WHILE" + while_lbl_count);
+		output.add("jmp WHILE" + (while_lbl_count - 1));
 		//Default return
 		return i;
 	}
@@ -201,7 +202,7 @@ public class Backend {
 
 	}
 
-private int selectionIf(String s, int i){ //if else
+	private int selectionIf(String s, int i){ //if else
 		//FOR: s == "if cond {"
 
 		// For asm: test ph
@@ -235,6 +236,7 @@ private int selectionIf(String s, int i){ //if else
 		String x_lab = new String("IF" + if_lbl_count);
 		String z_lab = new String("ELSE" + ifelse_lbl_count);
 		if_lbl_count++;
+		ifelse_lbl_count++;
 		labelStack.push(z_lab);
 		labelStack.push(x_lab);
 
@@ -245,23 +247,22 @@ private int selectionIf(String s, int i){ //if else
 		writeAccess(condtional_regi);
 		output.add("cmp " + condtional_regi.get(condtional_regi.size() - 1) + ", 0");
 		output.add("jne " + x_lab);
-		
-		return i = state_switch(i+1);
 
-		
-		
-
-
-		
+		i = state_switch(i+1);
+		return i;
 
 
 
 
-		
+
+
+
+
+
 
 	}
 
-	
+
 
 	private int selectionElse(String s, int i){
 		//FOR: s == "else {"
@@ -271,10 +272,10 @@ private int selectionIf(String s, int i){ //if else
 		//popLabel(); //Place final label (label z)
 
 		//Default return
-		
-		output.remove(output.size() -1);
 
-		String X = labelStack.pop();		
+		//output.remove(output.size() -1);
+
+		String X = labelStack.pop();
 		String Z = labelStack.pop();
 		labelStack.push(Z);
 		labelStack.push(X);
